@@ -5,4 +5,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :recipes
+
+  # validates :username, presence: true, uniqueness: true, length: { minimum: 3 }
 end

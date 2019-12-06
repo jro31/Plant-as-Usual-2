@@ -5,3 +5,11 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+puts "Generating units..."
+units = ['gram', 'millilitre', 'pinch', 'splash', 'teaspoon', 'tablespoon', 'cup', 'dash', 'litre', 'kilogram', 'piece', 'inch', 'centimetre', 'can', 'pack', 'clove', 'whole', 'large', 'medium', 'small', 'leaf', 'pound', 'ounce', 'pint', 'fluid ounce', 'quart', 'gallon']
+units.each do |u|
+  unless Unit.where(measurement: u.downcase).exists?
+    Unit.create!(measurement: u.downcase)
+  end
+end
