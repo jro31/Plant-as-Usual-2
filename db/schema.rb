@@ -19,7 +19,9 @@ ActiveRecord::Schema.define(version: 2019_12_06_173434) do
     t.bigint "recipe_id", null: false
     t.string "name"
     t.float "amount"
-    t.bigint "unit_id", null: false
+    t.string "amount_description"
+    t.bigint "unit_id"
+    t.string "preparation"
     t.boolean "optional", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
