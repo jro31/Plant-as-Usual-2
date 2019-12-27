@@ -23,6 +23,10 @@ group :development do
   gem 'web-console', '>= 3.3.0'
 end
 
+group :test do
+  gem 'shoulda-matchers'
+end
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -30,4 +34,6 @@ group :development, :test do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'dotenv-rails'
+  gem 'rspec-rails', '~> 3.9.0'
+  gem 'capybara'
 end
