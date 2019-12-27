@@ -1,7 +1,10 @@
-%h1= @recipe.name
-%p Servings: #{@recipe.servings}
-%p Cooking time: #{@recipe.cooking_time_minutes}
-%p Ingredients:
-- @recipe.ingredients.each do |ingredient|
-  %p= ingredient.name
-%p= @recipe.method
+.container
+  .row
+    .col-6
+      %h1= @recipe.name
+      %p Servings: #{@recipe.servings}
+      %p Cooking time: #{@recipe.cooking_time_minutes}
+      %p Ingredients:
+      - @recipe.ingredients.each do |ingredient|
+        %p= ingredient.name
+      %p= @recipe.method
