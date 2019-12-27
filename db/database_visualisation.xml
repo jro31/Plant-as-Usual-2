@@ -93,6 +93,9 @@
 <row name="password" null="1" autoincrement="0">
 <datatype>TEXT</datatype>
 <default>NULL</default></row>
+<row name="dark_mode" null="0" autoincrement="0">
+<datatype>BOOLEAN</datatype>
+<default>'false'</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
