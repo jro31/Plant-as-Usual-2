@@ -1,5 +1,5 @@
 .navbar-lewagon
-  justify-content: space-between
+  justify-content: space-around
 
 .navbar-lewagon .navbar-collapse
   flex-grow: 0
@@ -8,7 +8,23 @@
   width: 40px
 
 .navbar-light-mode
-  background: white
+  background: $light-mode-default-background
+  .fa-bars
+    color: $light-mode-paragraph-text
+  .nav-link
+    color: $light-mode-paragraph-text
+  .dropdown-menu
+    background: $light-mode-default-background
+    .dropdown-item
+      color: $light-mode-paragraph-text
 
 .navbar-dark-mode
-  background: black
+  background: $dark-mode-default-background
+  .fa-bars
+    color: $dark-mode-paragraph-text
+  .nav-link
+    color: $dark-mode-paragraph-text
+  .dropdown-menu
+    background: $dark-mode-default-background
+    .dropdown-item
+      color: $dark-mode-paragraph-text

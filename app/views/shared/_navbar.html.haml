@@ -1,9 +1,9 @@
-.navbar.navbar-expand-sm.navbar-light.navbar-lewagon{class: "navbar-#{display_mode}"}
+.navbar.navbar-expand-sm.navbar-lewagon{class: display_mode('navbar')}
   = link_to "#", class: "navbar-brand" do
     = image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png"
 
   %button.navbar-toggler{type: :button, 'data-toggle' => :collapse, 'data-target' => "#navbarSupportedContent", 'aria-controls' => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation"}
-    %span.navbar-toggler-icon
+    %i.fas.fa-bars
 
   .collapse.navbar-collapse#navbarSupportedContent
     %ul.navbar-nav.mr-auto
