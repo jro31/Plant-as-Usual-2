@@ -25,6 +25,7 @@ end
 
 group :test do
   gem 'shoulda-matchers'
+  gem 'rr', require: false
 end
 
 group :development, :test do
@@ -32,8 +33,10 @@ group :development, :test do
   gem 'pry-rails'
   gem 'listen', '~> 3.0.5'
   gem 'spring'
+  gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'dotenv-rails'
   gem 'rspec-rails', '~> 3.9.0'
   gem 'capybara'
+  gem 'factory_bot_rails'
 end
