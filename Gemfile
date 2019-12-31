@@ -19,6 +19,7 @@ gem 'webpacker'
 gem 'haml'
 gem 'pundit'
 gem 'faker'
+gem 'cloudinary', '~> 1.13.1'
 
 group :development do
   gem 'web-console', '>= 3.3.0'

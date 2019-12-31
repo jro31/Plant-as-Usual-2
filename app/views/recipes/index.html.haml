@@ -1,1 +1,9 @@
-%h1 Waddup
+.container-fluid.recipe-index-page
+  - recipe_iterator = 0
+  - @recipes.each do |recipe|
+    .row
+      .col-6{class: recipe_iterator.odd? ? "order-first" : "order-last"}
+        = cl_image_tag recipe.photo, class: 'recipe-index-photo'
+      .col-6
+        = recipe.name
+    - recipe_iterator += 1

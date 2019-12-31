@@ -2,7 +2,7 @@ class RecipesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
 
   def index
-    @recipes = Recipe.all # UPDATE THIS
+    @recipes = Recipe.last(10)
   end
 
   def show
