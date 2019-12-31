@@ -3,6 +3,7 @@ class RecipesController < ApplicationController
 
   def index
     @recipes = Recipe.last(10)
+    @recipe_iterator = 0
   end
 
   def show

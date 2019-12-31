@@ -1,7 +1,11 @@
 module ApplicationHelper
-  def display_mode(component)
-    return "#{component}-light-mode" unless user_signed_in?
+  def component_classes(component)
+    "#{component} #{display_mode(component)}"
+  end
 
-    current_user.dark_mode ? "#{component}-dark-mode" : "#{component}-light-mode"
+  def display_mode(element)
+    return "#{element}-light-mode" unless user_signed_in?
+
+    current_user.dark_mode ? "#{element}-dark-mode" : "#{element}-light-mode"
   end
 end
