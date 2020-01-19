@@ -4,4 +4,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   resources :recipes
+
+  get 'current_user_id' => "users#current_user_id"
+  post '/users/toggle_dark_mode/:id', to: 'users#toggle_dark_mode'
 end
