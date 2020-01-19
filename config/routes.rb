@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   resources :recipes
 
   get 'current_user_id' => "users#current_user_id"
-  post '/users/view_mode/:id', to: 'users#view_mode'
+  post '/users/toggle_dark_mode/:id', to: 'users#toggle_dark_mode'
 end

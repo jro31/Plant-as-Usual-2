@@ -12,7 +12,11 @@
 @import "components/index"
 @import "pages/index"
 
-body.body-light-mode
+.page-container
+  padding: 0
+  margin: 0
+
+.page-container-light-mode
   background: $light-mode-default-background
   color: $light-mode-paragraph-text
   h1
@@ -22,7 +26,7 @@ body.body-light-mode
   h3
     color: $light-mode-h3-text
 
-body.body-dark-mode
+.page-container-dark-mode
   background: $dark-mode-default-background
   color: $dark-mode-paragraph-text
   h1

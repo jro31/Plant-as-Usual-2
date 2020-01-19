@@ -5,7 +5,7 @@ class UserPolicy < ApplicationPolicy
     end
   end
 
-  def view_mode
-    true # Should this be true?
-  end
+  # def toggle_dark_mode
+  #   true # Should this be true?
+  # end
 end
