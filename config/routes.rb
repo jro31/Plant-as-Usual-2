@@ -5,6 +5,6 @@ Rails.application.routes.draw do
 
   resources :recipes
 
-  get 'current_user_id' => "users#current_user_id"
-  post '/users/toggle_dark_mode/:id', to: 'users#toggle_dark_mode'
+  get 'current_user_data' => "users#current_user_data"
+  patch '/users/toggle_dark_mode/:id', to: 'users#toggle_dark_mode'
 end
