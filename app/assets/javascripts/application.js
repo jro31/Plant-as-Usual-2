@@ -19,11 +19,14 @@ function toggleClasses() {
 
 
 function selectMode() {
-  $.get('/current_user_id', function(result) {
+  $.get('/current_user_data', function(result) {
     var url = `/users/toggle_dark_mode/${result.id}`
+    var newDarkMode = !result.dark_mode
     $.ajax({
-      type: 'post',
-      url: url
+      type: 'patch',
+      url: url,
+      dataType: 'json',
+      data: { 'user' : { 'dark_mode' : newDarkMode } }
     });
   });
 };
