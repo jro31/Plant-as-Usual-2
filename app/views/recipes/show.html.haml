@@ -1,10 +1,13 @@
 .container
   .row
-    .col-6
-      %h1= @recipe.name
-      %p Servings: #{@recipe.servings}
-      %p Cooking time: #{@recipe.cooking_time_minutes}
-      %p Ingredients:
+    .col-12
+      = cl_image_tag @recipe.photo, class: 'recipe-index-photo'
+    .col-8
+      %p
+        = @recipe.process
+    .col-4
       - @recipe.ingredients.each do |ingredient|
-        %p= ingredient.name
-      %p= @recipe.process
+        %p
+          = ingredient.amount || ingredient.amount_description
+          = ingredient&.unit&.name
+          = ingredient.name.humanize
