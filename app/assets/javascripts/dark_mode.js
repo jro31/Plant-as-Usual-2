@@ -2,10 +2,18 @@ var darkModeClasses = ['navbar', 'page-container', 'recipe-card']
 
 $(function() {
   $('#dark-mode').click(function() {
-      toggleClasses();
-      selectMode();
+      toggleDarkMode();
   });
 });
+
+function toggleDarkMode() {
+  $.get('/current_user_data', function(result) {
+    if(result != null) {
+      toggleClasses();
+      selectMode(result);
+    }
+  });
+}
 
 function toggleClasses() {
   $(darkModeClasses).each(function() {
@@ -14,15 +22,13 @@ function toggleClasses() {
 }
 
 
-function selectMode() {
-  $.get('/current_user_data', function(result) {
-    var url = `/users/toggle_dark_mode/${result.id}`
-    var newDarkMode = !result.dark_mode
-    $.ajax({
-      type: 'patch',
-      url: url,
-      dataType: 'json',
-      data: { 'user' : { 'dark_mode' : newDarkMode } }
-    });
+function selectMode(user) {
+  var url = `/users/toggle_dark_mode/${user.id}`
+  var newDarkMode = !user.dark_mode
+  $.ajax({
+    type: 'patch',
+    url: url,
+    dataType: 'json',
+    data: { 'user' : { 'dark_mode' : newDarkMode } }
   });
 };
