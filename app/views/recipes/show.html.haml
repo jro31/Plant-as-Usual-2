@@ -3,8 +3,13 @@
     .col-12
       = cl_image_tag @recipe.photo, class: 'recipe-index-photo'
     .col-8
-      %p
+      #process-display.input-display
         = @recipe.process
+      / %input{ type: "text", class: 'w-100', value: @recipe.process, style: "height: 500px" }
+      / %textarea.w-100
+      /   = @recipe.process
+      = simple_form_for @recipe do |f|
+        = f.input :process, disabled: true, label: false, input_html: { id: 'process-input', class: 'input-edit d-none' }
     .col-4
       - @recipe.ingredients.each do |ingredient|
         %p
