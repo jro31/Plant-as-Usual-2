@@ -1,34 +1,41 @@
-const inputs = ['name', 'process']
+const inputIdPrefixes = ['name', 'process']
 
 $(function() {
   $(document).click(function(click) {
-    inputs.forEach((input) => {
-      if(inputIsEnabled(input) && clickIsOutsideInput(click, input)) {
+    inputIdPrefixes.forEach((prefix) => {
+      if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
         // Save input
         // After save, disable/hide input and show display
       }
     })
   })
 
-  $('#name-display').click(function() {
-    $('#name-input').height($(this).height());
-    $(this).hide();
-    $('#name-input').removeClass('d-none');
-    $('#name-input').prop('disabled', false)
-  });
-
-  $('#process-display').click(function() {
-    $('#process-input').height($(this).height());
-    $(this).hide();
-    $('#process-input').removeClass('d-none');
-    $('#process-input').prop('disabled', false)
-  });
+  inputIdPrefixes.forEach((prefix) => {
+    $(`#${prefix}-display`).click(function() {
+      matchInputHeightToDisplayElement(prefix, this)
+      hideDisplayElement(this)
+      showInput(prefix)
+    })
+  })
 });
 
-function inputIsEnabled(input) {
-  return $(`#${input}-input`).prop('disabled') === false
+function matchInputHeightToDisplayElement(prefix, displayElement) {
+  $(`#${prefix}-input`).height($(displayElement).height());
 }
 
-function clickIsOutsideInput(click, input) {
-  return click.target.id !== `${input}-input`
+function hideDisplayElement(displayElement) {
+  $(displayElement).hide();
+}
+
+function showInput(prefix) {
+  $(`#${prefix}-input`).removeClass('d-none');
+  $(`#${prefix}-input`).prop('disabled', false)
+}
+
+function inputIsEnabled(prefix) {
+  return $(`#${prefix}-input`).prop('disabled') === false
+}
+
+function clickIsOutsideInput(click, prefix) {
+  return click.target.id !== `${prefix}-input`
 }
