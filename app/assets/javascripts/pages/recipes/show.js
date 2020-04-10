@@ -6,6 +6,7 @@ $(function() {
       if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
         // Save input
         // After save, disable/hide input and show display
+        // Break loop
       }
     })
   })
@@ -19,23 +20,8 @@ $(function() {
   })
 });
 
-function matchInputHeightToDisplayElement(prefix, displayElement) {
-  $(`#${prefix}-input`).height($(displayElement).height());
-}
-
-function hideDisplayElement(displayElement) {
-  $(displayElement).hide();
-}
-
-function showInput(prefix) {
-  $(`#${prefix}-input`).removeClass('d-none');
-  $(`#${prefix}-input`).prop('disabled', false)
-}
-
-function inputIsEnabled(prefix) {
-  return $(`#${prefix}-input`).prop('disabled') === false
-}
-
-function clickIsOutsideInput(click, prefix) {
-  return click.target.id !== `${prefix}-input`
-}
+const matchInputHeightToDisplayElement = (prefix, displayElement) => $(`#${prefix}-input`).height($(displayElement).height());
+const hideDisplayElement = (displayElement) => $(displayElement).hide();
+const showInput = (prefix) => $(`#${prefix}-input`).removeClass('d-none').prop('disabled', false);
+const inputIsEnabled = (prefix) => $(`#${prefix}-input`).prop('disabled') === false
+const clickIsOutsideInput = (click, prefix) => click.target.id !== `${prefix}-input`
