@@ -1,13 +1,18 @@
 .container
   .row
-    .col-12
+    .col-12.text-center
       = cl_image_tag @recipe.photo, class: 'recipe-index-photo'
+  .row
+    .col-12.text-center
+      %h1#name-display.input-display
+        = @recipe.name
+      = simple_form_for @recipe do |f|
+        = f.input :name, disabled: true, label: false, input_html: { id: 'name-input', class: 'input-edit d-none text-center' }
+  .row
     .col-8
+      / If not the user's recipe, do not add #process-display. Make sure that pundit works for this. Also spec that the classes only exist when the user is the current user.
       #process-display.input-display
         = @recipe.process
-      / %input{ type: "text", class: 'w-100', value: @recipe.process, style: "height: 500px" }
-      / %textarea.w-100
-      /   = @recipe.process
       = simple_form_for @recipe do |f|
         = f.input :process, disabled: true, label: false, input_html: { id: 'process-input', class: 'input-edit d-none' }
     .col-4
