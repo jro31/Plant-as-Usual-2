@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     render json: { id: current_user.id, dark_mode: current_user.dark_mode }
   end
 
-  def toggle_dark_mode # Spec this
+  def toggle_dark_mode
     @user = User.find(params[:id])
     # authorize @user
     @user.update(user_params)
