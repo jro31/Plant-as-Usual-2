@@ -2,18 +2,18 @@ const inputIdPrefixes = ['name', 'process']
 
 $(function() {
   $(document).click(function(click) {
+    let noInputWasEnabled = true
     inputIdPrefixes.forEach((prefix) => {
       if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
         // Save input
 
-        // After save, disable/hide input and show display
         hideInput(prefix)
         showDisplayElement(prefix)
-
-        // Break loop
-        return false
+        noInputWasEnabled = false
       }
-      if(click.target.id === `${prefix}-display`){
+    })
+    inputIdPrefixes.forEach((prefix) => {
+      if(click.target.id === `${prefix}-display` && noInputWasEnabled){
         matchInputHeightToDisplayElement(prefix, click.target)
         hideDisplayElement(click.target)
         showInput(prefix)
@@ -23,9 +23,7 @@ $(function() {
 });
 
 const hideInput = (prefix) => $(`#${prefix}-input`).prop('disabled', true).addClass('d-none');
-function showDisplayElement(prefix){
-  $(`#${prefix}-display`).removeClass('d-none');
-}
+const showDisplayElement = (prefix) => $(`#${prefix}-display`).removeClass('d-none');
 
 const matchInputHeightToDisplayElement = (prefix, displayElement) => $(`#${prefix}-input`).height($(displayElement).height());
 const hideDisplayElement = (displayElement) => $(displayElement).addClass('d-none');
