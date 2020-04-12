@@ -2,13 +2,17 @@ const inputIdPrefixes = ['name', 'process']
 const recipeId = $('body').data('params-id');
 
 $(function() {
+  inputIdPrefixes.forEach((prefix) => {
+    populateDisplayElement(prefix)
+  })
+
   $(document).click(function(click) {
     let noInputWasEnabled = true
     inputIdPrefixes.forEach((prefix) => {
       if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
         saveInput(prefix)
         hideInput(prefix)
-        updateDisplayElement(prefix)
+        populateDisplayElement(prefix)
         showDisplayElement(prefix)
         noInputWasEnabled = false
       }
@@ -35,12 +39,12 @@ function saveInput(prefix) {
 }
 
 const hideInput = (prefix) => $(`#${prefix}-input`).prop('disabled', true).addClass('d-none');
-const updateDisplayElement = (prefix) => $(`#${prefix}-display`).text($(`#${prefix}-input`).val())
+const populateDisplayElement = (prefix) => $(`#${prefix}-display`).text($(`#${prefix}-input`).val())
 const showDisplayElement = (prefix) => $(`#${prefix}-display`).removeClass('d-none');
 
 const matchInputHeightToDisplayElement = (prefix, displayElement) => $(`#${prefix}-input`).height($(displayElement).height());
 const hideDisplayElement = (displayElement) => $(displayElement).addClass('d-none');
-const showInput = (prefix) => $(`#${prefix}-input`).removeClass('d-none').prop('disabled', false);
+const showInput = (prefix) => $(`#${prefix}-input`).removeClass('d-none').prop('disabled', false).focus(); // Try to get the cursor to appear at the end of the input
 
 const inputIsEnabled = (prefix) => $(`#${prefix}-input`).prop('disabled') === false
 const clickIsOutsideInput = (click, prefix) => click.target.id !== `${prefix}-input`

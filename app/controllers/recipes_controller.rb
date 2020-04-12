@@ -19,6 +19,7 @@ class RecipesController < ApplicationController
       # Show positive flash message somehow
     else
       # Show positive flash message somehow
+      render :show
     end
   end
 
