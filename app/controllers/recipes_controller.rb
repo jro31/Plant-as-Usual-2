@@ -14,9 +14,12 @@ class RecipesController < ApplicationController
 
   def update
     # Return unless the current user is admin or the recipe owner
-    puts "💪💪💪💪💪💪💪💪💪"
     @recipe = Recipe.find(params[:id])
-    @recipe.update(recipe_params)
+    if @recipe.update(recipe_params)
+      # Show positive flash message somehow
+    else
+      # Show positive flash message somehow
+    end
   end
 
   private
