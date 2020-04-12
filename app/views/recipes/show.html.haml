@@ -14,8 +14,24 @@
       = simple_form_for @recipe do |f|
         = f.input :process, disabled: true, label: false, input_html: { id: 'process-input', class: 'input-edit d-none' }
     .col-4
-      - @recipe.ingredients.each do |ingredient|
-        %p
-          = ingredient.amount || ingredient.amount_description
-          = ingredient&.unit&.name
-          = ingredient.name.humanize
+      - @ingredients.each_with_index do |ingredient, index|
+        %p.input-display{ id: "ingredient-#{index + 1}-display" }
+          %span.ingredient-amount-display
+            = ingredient.amount || ingredient.amount_description
+          %span.ingredient-unit-display
+            = ingredient&.unit&.name
+          %span.ingredient-name-display
+            = ingredient.name.humanize
+          %span.ingredient-preparation-display
+            = "(#{ingredient.preparation})"
+
+
+
+:javascript
+  let inputIdPrefixes = ['name', 'process']
+
+  for (let i = 1; i < "#{@ingredients.count}"; i++) {
+    inputIdPrefixes.push(`ingredient-${i}`)
+  }
+
+

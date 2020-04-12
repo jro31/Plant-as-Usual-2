@@ -1,7 +1,8 @@
-const inputIdPrefixes = ['name', 'process']
 const recipeId = $('body').data('params-id');
 
 $(function() {
+  console.log(inputIdPrefixes)
+
   inputIdPrefixes.forEach((prefix) => {
     populateDisplayElement(prefix)
   })
