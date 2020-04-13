@@ -30,18 +30,13 @@ $(function() {
 
 function saveInput(prefix) {
   if(isIngredientPrefix(prefix)) {
-    const ingredientId = prefix.replace('ingredient-', '')
-    const url = `/recipes/${recipeId}/ingredients/${ingredientId}`
+    let url = `/recipes/${recipeId}/ingredients/${prefix.replace('ingredient-', '')}`
+    let data = 'coming_soon'
   } else {
-    const url = `/recipes/${recipeId}`
-    // Read up on if you need to do something here in the event of an error
-    $.ajax({
-      type: 'patch',
-      url: url,
-      dataType: 'json',
-      data: { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
-    });
+    let url = `/recipes/${recipeId}`
+    let data = { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
   }
+  ajaxRequest('patch', url, data)
 }
 
 const hideInput = (prefix) => $(`#${prefix}-input`).prop('disabled', true).addClass('d-none');
@@ -80,3 +75,13 @@ const inputIsEnabled = (prefix) => !$(`#${prefix}-input`).hasClass('d-none')
 const clickIsOutsideInput = (click, prefix) => click.target.id !== `${prefix}-input`
 
 const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
+
+function ajaxRequest(type, url, data) {
+  // Read up on if you need to do something here in the event of an error
+  $.ajax({
+    type: type,
+    url: url,
+    dataType: 'json',
+    data: data
+  });
+}
