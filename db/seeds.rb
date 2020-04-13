@@ -1,3 +1,5 @@
+# YOU NEED TO UPDATE THIS TO HAVE UNIT AS COLUMN TYPE STRING ON INGREDIENT
+
 CASHEW_SAUCE_PASTA = "Wholewheat pasta with cashew-cheese sauce".freeze
 TOMATO_OLIVE_BASIL_PIZZA = "Tomato, olive and basil wholewheat pizza".freeze
 
