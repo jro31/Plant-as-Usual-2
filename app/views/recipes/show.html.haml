@@ -1,3 +1,6 @@
+:javascript
+  let inputIdPrefixes = []
+
 .container
   .row
     .col-12.text-center
@@ -14,35 +17,24 @@
       = simple_form_for @recipe do |f|
         = f.input :process, disabled: true, label: false, input_html: { id: 'process-input', class: 'input-edit d-none' }
     .col-4
-      - @ingredients.each_with_index do |ingredient, index|
-        %p.input-display{ id: "ingredient-#{index + 1}-display" }
-          %span{ id: "ingredient-#{index + 1}-amount-display" }
+      - @ingredients.each do |ingredient|
+        %p.input-display{ id: "ingredient-#{ingredient.id}-display" }
+          %span{ id: "ingredient-#{ingredient.id}-amount-display" }
             = ingredient.amount || ingredient.amount_description
-          %span{ id: "ingredient-#{index + 1}-unit-display" }
+          %span{ id: "ingredient-#{ingredient.id}-unit-display" }
             = ingredient&.unit&.name
-          %span{ id: "ingredient-#{index + 1}-name-display" }
+          %span{ id: "ingredient-#{ingredient.id}-name-display" }
             = ingredient.name.humanize
-          %span{ id: "ingredient-#{index + 1}-preparation-display" }
+          %span{ id: "ingredient-#{ingredient.id}-preparation-display" }
             = "(#{ingredient.preparation})"
         = simple_form_for [@recipe, ingredient] do |f|
-          .d-none{ id: "ingredient-#{index + 1}-input" }
-            = f.input :amount, disabled: :true, label: false, input_html: { id: "ingredient-#{index + 1}-amount-input", class: 'input-edit' }
-            = f.input :unit, disabled: :true, label: false, input_html: { id: "ingredient-#{index + 1}-unit-input", class: 'input-edit' }
-            = f.input :name, disabled: :true, label: false, input_html: { id: "ingredient-#{index + 1}-name-input", class: 'input-edit' }
-            = f.input :preparation, disabled: :true, label: false, input_html: { id: "ingredient-#{index + 1}-preparation-input", class: 'input-edit' }
-
-
+          .d-none{ id: "ingredient-#{ingredient.id}-input" }
+            = f.input :amount, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-amount-input", class: 'input-edit' }
+            = f.input :unit, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-unit-input", class: 'input-edit' }
+            = f.input :name, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-name-input", class: 'input-edit' }
+            = f.input :preparation, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-preparation-input", class: 'input-edit' }
+        :javascript
+          inputIdPrefixes.push(`ingredient-${#{ingredient.id}}`)
 
 :javascript
-  const inputIdPrefixes = ['name', 'process']
-
-  let ingredientElementPrefixes = []
-  for (let i = 1; i < "#{@ingredients.count}"; i++) {
-    inputIdPrefixes.push(`ingredient-${i}`)
-    ingredientElementPrefixes.push(`ingredient-${i}-amount`)
-    ingredientElementPrefixes.push(`ingredient-${i}-unit`)
-    ingredientElementPrefixes.push(`ingredient-${i}-name`)
-    ingredientElementPrefixes.push(`ingredient-${i}-preparation`)
-  }
-
-
+  inputIdPrefixes.push('name', 'process')

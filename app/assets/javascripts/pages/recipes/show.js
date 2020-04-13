@@ -1,7 +1,6 @@
 const recipeId = $('body').data('params-id');
 
 console.log(inputIdPrefixes)
-console.log(ingredientElementPrefixes)
 
 $(function() {
   inputIdPrefixes.forEach((prefix) => {
@@ -30,20 +29,25 @@ $(function() {
 });
 
 function saveInput(prefix) {
-  const url = `/recipes/${recipeId}`
-  // Read up on if you need to do something here in the event of an error
-  $.ajax({
-    type: 'patch',
-    url: url,
-    dataType: 'json',
-    data: { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
-  });
+  if(isIngredientPrefix(prefix)) {
+    const ingredientId = prefix.replace('ingredient-', '')
+    const url = `/recipes/${recipeId}/ingredients/${ingredientId}`
+  } else {
+    const url = `/recipes/${recipeId}`
+    // Read up on if you need to do something here in the event of an error
+    $.ajax({
+      type: 'patch',
+      url: url,
+      dataType: 'json',
+      data: { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
+    });
+  }
 }
 
 const hideInput = (prefix) => $(`#${prefix}-input`).prop('disabled', true).addClass('d-none');
 
 function populateDisplayElement(prefix) {
-  if(prefix.includes('ingredient')) {
+  if(isIngredientPrefix(prefix)) {
     $(`#${prefix}-amount-display`).text($(`#${prefix}-amount-input`).val())
     $(`#${prefix}-unit-display`).text($(`#${prefix}-unit-input`).val())
     $(`#${prefix}-name-display`).text($(`#${prefix}-name-input`).val())
@@ -56,17 +60,23 @@ function populateDisplayElement(prefix) {
 const showDisplayElement = (prefix) => $(`#${prefix}-display`).removeClass('d-none');
 
 function matchInputHeightToDisplayElement(prefix, clickTarget) {
-  if(prefix.includes('ingredient')) {
+  if(isIngredientPrefix(prefix)) {
 
   } else {
     $(`#${prefix}-input`).height($(clickTarget).height());
   }
 }
 
-function hideDisplayElement(clickTarget){
-  $(clickTarget).closest('.input-display').addClass('d-none')
+const hideDisplayElement = (clickTarget) => $(clickTarget).closest('.input-display').addClass('d-none')
+function showInput(prefix){
+  if(isIngredientPrefix(prefix)) {
+    $(`#${prefix}-input`).removeClass('d-none')
+  } else {
+    $(`#${prefix}-input`).removeClass('d-none').prop('disabled', false).focus(); // Try to get the cursor to appear at the end of the input
+  }
 }
-const showInput = (prefix) => $(`#${prefix}-input`).removeClass('d-none').prop('disabled', false).focus(); // Try to get the cursor to appear at the end of the input
 
-const inputIsEnabled = (prefix) => $(`#${prefix}-input`).prop('disabled') === false
+const inputIsEnabled = (prefix) => !$(`#${prefix}-input`).hasClass('d-none')
 const clickIsOutsideInput = (click, prefix) => click.target.id !== `${prefix}-input`
+
+const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
