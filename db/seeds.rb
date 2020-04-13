@@ -1,4 +1,6 @@
 # YOU NEED TO UPDATE THIS TO HAVE UNIT AS COLUMN TYPE STRING ON INGREDIENT
+# AMOUNT_DESCRIPTION HAS NOW BEEN DELETED
+# AMOUNT IS NOW A STRING
 
 CASHEW_SAUCE_PASTA = "Wholewheat pasta with cashew-cheese sauce".freeze
 TOMATO_OLIVE_BASIL_PIZZA = "Tomato, olive and basil wholewheat pizza".freeze
