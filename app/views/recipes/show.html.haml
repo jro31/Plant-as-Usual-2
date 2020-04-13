@@ -20,9 +20,9 @@
       - @ingredients.each do |ingredient|
         %p.input-display{ id: "ingredient-#{ingredient.id}-display" }
           %span{ id: "ingredient-#{ingredient.id}-amount-display" }
-            = ingredient.amount || ingredient.amount_description
+            = ingredient&.amount
           %span{ id: "ingredient-#{ingredient.id}-unit-display" }
-            = ingredient&.unit&.name
+            = ingredient&.unit
           %span{ id: "ingredient-#{ingredient.id}-name-display" }
             = ingredient.name.humanize
           %span{ id: "ingredient-#{ingredient.id}-preparation-display" }
