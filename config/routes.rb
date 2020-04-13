@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   root to: 'pages#home'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  resources :recipes
+  resources :recipes do
+    resources :ingredients
+  end
 
   get 'current_user_data' => "users#current_user_data"
   patch '/users/toggle_dark_mode/:id', to: 'users#toggle_dark_mode'

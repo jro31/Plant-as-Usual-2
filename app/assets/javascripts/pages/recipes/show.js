@@ -1,8 +1,9 @@
 const recipeId = $('body').data('params-id');
 
-$(function() {
-  console.log(inputIdPrefixes)
+console.log(inputIdPrefixes)
+console.log(ingredientElementPrefixes)
 
+$(function() {
   inputIdPrefixes.forEach((prefix) => {
     populateDisplayElement(prefix)
   })
@@ -19,7 +20,7 @@ $(function() {
       }
     })
     inputIdPrefixes.forEach((prefix) => {
-      if(click.target.id === `${prefix}-display` && noInputWasEnabled){
+      if(click.target.id.includes(prefix) && click.target.id.includes('-display') && noInputWasEnabled){
         matchInputHeightToDisplayElement(prefix, click.target)
         hideDisplayElement(click.target)
         showInput(prefix)
@@ -40,11 +41,31 @@ function saveInput(prefix) {
 }
 
 const hideInput = (prefix) => $(`#${prefix}-input`).prop('disabled', true).addClass('d-none');
-const populateDisplayElement = (prefix) => $(`#${prefix}-display`).text($(`#${prefix}-input`).val())
+
+function populateDisplayElement(prefix) {
+  if(prefix.includes('ingredient')) {
+    $(`#${prefix}-amount-display`).text($(`#${prefix}-amount-input`).val())
+    $(`#${prefix}-unit-display`).text($(`#${prefix}-unit-input`).val())
+    $(`#${prefix}-name-display`).text($(`#${prefix}-name-input`).val())
+    $(`#${prefix}-preparation-display`).text($(`#${prefix}-preparation-input`).val())
+  } else {
+    $(`#${prefix}-display`).text($(`#${prefix}-input`).val())
+  }
+}
+
 const showDisplayElement = (prefix) => $(`#${prefix}-display`).removeClass('d-none');
 
-const matchInputHeightToDisplayElement = (prefix, displayElement) => $(`#${prefix}-input`).height($(displayElement).height());
-const hideDisplayElement = (displayElement) => $(displayElement).addClass('d-none');
+function matchInputHeightToDisplayElement(prefix, clickTarget) {
+  if(prefix.includes('ingredient')) {
+
+  } else {
+    $(`#${prefix}-input`).height($(clickTarget).height());
+  }
+}
+
+function hideDisplayElement(clickTarget){
+  $(clickTarget).closest('.input-display').addClass('d-none')
+}
 const showInput = (prefix) => $(`#${prefix}-input`).removeClass('d-none').prop('disabled', false).focus(); // Try to get the cursor to appear at the end of the input
 
 const inputIsEnabled = (prefix) => $(`#${prefix}-input`).prop('disabled') === false

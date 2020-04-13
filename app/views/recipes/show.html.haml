@@ -16,22 +16,33 @@
     .col-4
       - @ingredients.each_with_index do |ingredient, index|
         %p.input-display{ id: "ingredient-#{index + 1}-display" }
-          %span.ingredient-amount-display
+          %span{ id: "ingredient-#{index + 1}-amount-display" }
             = ingredient.amount || ingredient.amount_description
-          %span.ingredient-unit-display
+          %span{ id: "ingredient-#{index + 1}-unit-display" }
             = ingredient&.unit&.name
-          %span.ingredient-name-display
+          %span{ id: "ingredient-#{index + 1}-name-display" }
             = ingredient.name.humanize
-          %span.ingredient-preparation-display
+          %span{ id: "ingredient-#{index + 1}-preparation-display" }
             = "(#{ingredient.preparation})"
+        = simple_form_for [@recipe, ingredient] do |f|
+          .d-none{ id: "ingredient-#{index + 1}-input" }
+            = f.input :amount, disabled: :true, label: false, input_html: { id: "ingredient-#{index + 1}-amount-input", class: 'input-edit' }
+            = f.input :unit, disabled: :true, label: false, input_html: { id: "ingredient-#{index + 1}-unit-input", class: 'input-edit' }
+            = f.input :name, disabled: :true, label: false, input_html: { id: "ingredient-#{index + 1}-name-input", class: 'input-edit' }
+            = f.input :preparation, disabled: :true, label: false, input_html: { id: "ingredient-#{index + 1}-preparation-input", class: 'input-edit' }
 
 
 
 :javascript
-  let inputIdPrefixes = ['name', 'process']
+  const inputIdPrefixes = ['name', 'process']
 
+  let ingredientElementPrefixes = []
   for (let i = 1; i < "#{@ingredients.count}"; i++) {
     inputIdPrefixes.push(`ingredient-${i}`)
+    ingredientElementPrefixes.push(`ingredient-${i}-amount`)
+    ingredientElementPrefixes.push(`ingredient-${i}-unit`)
+    ingredientElementPrefixes.push(`ingredient-${i}-name`)
+    ingredientElementPrefixes.push(`ingredient-${i}-preparation`)
   }
 
 

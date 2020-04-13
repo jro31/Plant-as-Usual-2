@@ -10,7 +10,6 @@ class RecipesController < ApplicationController
   def show
     @recipe = Recipe.find(params[:id])
     @ingredients = @recipe.ingredients
-    # @ingredient_prefixes = ingredient_prefixes
     authorize @recipe
   end
 
@@ -30,8 +29,4 @@ class RecipesController < ApplicationController
   def recipe_params
     params.require(:recipe).permit(:name, :process)
   end
-
-  # def ingredient_prefixes
-  #   @ingredients.map.with_index { |_, index| "ingredient-#{index + 1}" }
-  # end
 end
