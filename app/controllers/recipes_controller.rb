@@ -10,6 +10,7 @@ class RecipesController < ApplicationController
   def show
     @recipe = Recipe.find(params[:id])
     @ingredients = @recipe.ingredients
+    @units = Ingredient::UNITS
     authorize @recipe
   end
 

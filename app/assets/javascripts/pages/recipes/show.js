@@ -31,12 +31,13 @@ $(function() {
 function saveInput(prefix) {
   if(isIngredientPrefix(prefix)) {
     let url = `/recipes/${recipeId}/ingredients/${prefix.replace('ingredient-', '')}`
-    let data = 'coming_soon'
+    let data = 'coming_soon' // START HERE NEXT TIME
   } else {
     let url = `/recipes/${recipeId}`
     let data = { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
+    ajaxRequest('patch', url, data) // MOVE THIS TO THE LINE BELOW ONCE data IS SET ON LINE 34
   }
-  ajaxRequest('patch', url, data)
+  // ajaxRequest('patch', url, data)
 }
 
 const hideInput = (prefix) => $(`#${prefix}-input`).prop('disabled', true).addClass('d-none');
