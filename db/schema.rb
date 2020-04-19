@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2020_04_13_150622) do
 
   create_table "ingredients", force: :cascade do |t|
     t.bigint "recipe_id", null: false
-    t.string "name"
+    t.string "food"
     t.string "amount"
     t.string "preparation"
     t.boolean "optional", default: false

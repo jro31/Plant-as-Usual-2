@@ -23,15 +23,15 @@
             = ingredient&.amount
           %span{ id: "ingredient-#{ingredient.id}-unit-display" }
             = ingredient&.unit
-          %span{ id: "ingredient-#{ingredient.id}-name-display" }
-            = ingredient.name.humanize
+          %span{ id: "ingredient-#{ingredient.id}-food-display" }
+            = ingredient.food.humanize
           %span{ id: "ingredient-#{ingredient.id}-preparation-display" }
             = "(#{ingredient.preparation})"
         = simple_form_for [@recipe, ingredient] do |f|
           .d-none{ id: "ingredient-#{ingredient.id}-input" }
             = f.input :amount, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-amount-input", class: 'input-edit' }
             = f.input :unit, collection: @units, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-unit-input", class: 'input-edit' }
-            = f.input :name, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-name-input", class: 'input-edit' }
+            = f.input :food, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-food-input", class: 'input-edit' }
             = f.input :preparation, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-preparation-input", class: 'input-edit' }
         :javascript
           inputIdPrefixes.push(`ingredient-${#{ingredient.id}}`)

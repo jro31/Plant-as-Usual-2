@@ -46,7 +46,7 @@ function populateDisplayElement(prefix) {
   if(isIngredientPrefix(prefix)) {
     $(`#${prefix}-amount-display`).text($(`#${prefix}-amount-input`).val())
     $(`#${prefix}-unit-display`).text($(`#${prefix}-unit-input`).val())
-    $(`#${prefix}-name-display`).text($(`#${prefix}-name-input`).val())
+    $(`#${prefix}-food-display`).text($(`#${prefix}-food-input`).val())
     $(`#${prefix}-preparation-display`).text($(`#${prefix}-preparation-input`).val())
   } else {
     $(`#${prefix}-display`).text($(`#${prefix}-input`).val())
@@ -64,7 +64,9 @@ function matchInputHeightToDisplayElement(prefix, clickTarget) {
 }
 
 const hideDisplayElement = (clickTarget) => $(clickTarget).closest('.input-display').addClass('d-none')
+
 function showInput(prefix){
+  console.log("🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳")
   if(isIngredientPrefix(prefix)) {
     $(`#${prefix}-input`).removeClass('d-none')
   } else {

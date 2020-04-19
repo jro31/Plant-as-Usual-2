@@ -5,5 +5,6 @@ class DropUnitTableAndAddToIngredient < ActiveRecord::Migration[6.0]
     add_column :ingredients, :unit, :string
     remove_column :ingredients, :amount, :float
     rename_column :ingredients, :amount_description, :amount
+    rename_column :ingredients, :name, :food
   end
 end
