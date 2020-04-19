@@ -1,4 +1,6 @@
-class IngredientController < ApplicationController
+class IngredientsController < ApplicationController
+  protect_from_forgery unless: -> { request.format.json? }
+  skip_before_action :authenticate_user!, only: %i[update] # You don't want update here
   def create
 
   end
@@ -13,6 +15,19 @@ class IngredientController < ApplicationController
     # when the unit would usually expect a number (for example, grams, pound
     # kilos etc).
     puts "😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬"
+    @ingredient = Ingredient.find(params[:id])
+    if @ingredient.update(ingredient_params)
+      # Show positive flash message somehow
+    else
+      # Show positive flash message somehow
+      # Re-render the page
+    end
+  end
+
+  private
+
+  def ingredient_params
+    params.require(:ingredient).permit(:amount, :unit, :food, :preparation)
   end
 end
 

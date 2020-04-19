@@ -29,21 +29,24 @@ $(function() {
 });
 
 function saveInput(prefix) {
-  console.log("🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲")
-  console.log(prefix)
-  console.log("🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲")
+  let url = ''
+  let data = {}
   if(isIngredientPrefix(prefix)) {
-    let url = `/recipes/${recipeId}/ingredients/${prefix.replace('ingredient-', '')}`
-    let data = { 'ingredient' : { 'amount' : $(`#${prefix}-amount-input`).val() } } // START HERE NEXT TIME
-    console.log("🦢🦢🦢🦢🦢🦢🦢🦢🦢")
-    console.log(data)
-    console.log("🦢🦢🦢🦢🦢🦢🦢🦢🦢")
+    url = `/recipes/${recipeId}/ingredients/${prefix.replace('ingredient-', '')}`
+    data = { 'ingredient' : {
+      'amount' : $(`#${prefix}-amount-input`).val(),
+      'unit' : $(`#${prefix}-unit-input`).val(),
+      'food' : $(`#${prefix}-food-input`).val(),
+      'preparation' : $(`#${prefix}-preparation-input`).val(),
+    } }
   } else {
-    let url = `/recipes/${recipeId}`
-    let data = { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
-    ajaxRequest('patch', url, data) // MOVE THIS TO THE LINE BELOW ONCE data IS SET ON LINE 34
+    url = `/recipes/${recipeId}`
+    data = { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
   }
-  // ajaxRequest('patch', url, data)
+  console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀")
+  console.log(url)
+  console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀")
+  ajaxRequest('patch', url, data)
 }
 
 const hideInput = (prefix) => $(`#${prefix}-input`).prop('disabled', true).addClass('d-none');

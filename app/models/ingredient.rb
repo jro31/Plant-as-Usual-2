@@ -4,6 +4,6 @@ class Ingredient < ApplicationRecord
   UNITS = %w(
     gram millilitre pinch splash teaspoon tablespoon cup dash litre
     kilogram piece inch centimetre can pack clove whole large medium
-    small leaf pound ounce pint fluid ounce quart gallon sprig
+    small leaf pound ounce pint fluid_ounce quart gallon sprig
   ).sort.freeze
 end

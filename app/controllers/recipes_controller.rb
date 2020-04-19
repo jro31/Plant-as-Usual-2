@@ -9,7 +9,7 @@ class RecipesController < ApplicationController
 
   def show
     @recipe = Recipe.find(params[:id])
-    @ingredients = @recipe.ingredients
+    @ingredients = @recipe.ingredients.order(created_at: :asc)
     @units = Ingredient::UNITS
     authorize @recipe
   end
@@ -21,7 +21,7 @@ class RecipesController < ApplicationController
       # Show positive flash message somehow
     else
       # Show positive flash message somehow
-      render :show
+      render :show # If this doesn't work, change to redirect?
     end
   end
 
