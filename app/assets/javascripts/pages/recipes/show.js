@@ -29,9 +29,15 @@ $(function() {
 });
 
 function saveInput(prefix) {
+  console.log("🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲")
+  console.log(prefix)
+  console.log("🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲")
   if(isIngredientPrefix(prefix)) {
     let url = `/recipes/${recipeId}/ingredients/${prefix.replace('ingredient-', '')}`
-    let data = 'coming_soon' // START HERE NEXT TIME
+    let data = { 'ingredient' : { 'amount' : $(`#${prefix}-amount-input`).val() } } // START HERE NEXT TIME
+    console.log("🦢🦢🦢🦢🦢🦢🦢🦢🦢")
+    console.log(data)
+    console.log("🦢🦢🦢🦢🦢🦢🦢🦢🦢")
   } else {
     let url = `/recipes/${recipeId}`
     let data = { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
@@ -66,7 +72,6 @@ function matchInputHeightToDisplayElement(prefix, clickTarget) {
 const hideDisplayElement = (clickTarget) => $(clickTarget).closest('.input-display').addClass('d-none')
 
 function showInput(prefix){
-  console.log("🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳")
   if(isIngredientPrefix(prefix)) {
     $(`#${prefix}-input`).removeClass('d-none')
   } else {
@@ -75,7 +80,14 @@ function showInput(prefix){
 }
 
 const inputIsEnabled = (prefix) => !$(`#${prefix}-input`).hasClass('d-none')
-const clickIsOutsideInput = (click, prefix) => click.target.id !== `${prefix}-input`
+
+function clickIsOutsideInput(click, prefix) {
+  if(isIngredientPrefix(prefix)) {
+    return click.target.id !== `${prefix}-input` && click.target.id !== `${prefix}-amount-input` && click.target.id !== `${prefix}-unit-input` && click.target.id !== `${prefix}-food-input` && click.target.id !== `${prefix}-preparation-input`
+  } else {
+    return click.target.id !== `${prefix}-input`
+  }
+}
 
 const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
 
