@@ -4,12 +4,16 @@ class IngredientsController < ApplicationController
   def create
     params[:ingredient] = { recipe_id: params[:recipe_id] }
     @ingredient = Ingredient.new(ingredient_params)
-    @ingredient.save
-    # render json: @ingredient.to_json
     @recipe = Recipe.find(params[:recipe_id])
-    respond_to do |format|
-      format.js
+    @units = Ingredient::UNITS
+    if @ingredient.save
+      respond_to do |format|
+        format.js
+      end
+    else
+      # DO SOMETHING
     end
+    # render json: @ingredient.to_json
   end
 
   def update
@@ -21,7 +25,6 @@ class IngredientsController < ApplicationController
     # A possible alternative/addition to this is to require numbers for
     # when the unit would usually expect a number (for example, grams, pound
     # kilos etc).
-    puts "😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬😬"
     @ingredient = Ingredient.find(params[:id])
     if @ingredient.update(ingredient_params)
       # Show positive flash message somehow

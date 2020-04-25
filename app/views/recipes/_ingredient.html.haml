@@ -1,10 +1,4 @@
-= puts "🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲"
-= puts ingredient.inspect
-= puts @recipe.inspect
-= puts "🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲"
-
-%p.input-display{ id: "ingredient-#{ingredient.id}-display" }
-  TARD
+%p.input-display{ id: "ingredient-#{ingredient.id}-display", class: show_input ? 'd-none' : '' }
   %span{ id: "ingredient-#{ingredient.id}-amount-display" }
     = ingredient.amount
   %span{ id: "ingredient-#{ingredient.id}-unit-display" }
@@ -14,8 +8,8 @@
   %span{ id: "ingredient-#{ingredient.id}-preparation-display" }
     = "(#{ingredient.preparation})"
 = simple_form_for [@recipe, ingredient] do |f|
-  .d-none{ id: "ingredient-#{ingredient.id}-input" }
-    = f.input :amount, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-amount-input", class: 'input-edit' }
-    = f.input :unit, collection: @units, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-unit-input", class: 'input-edit' }
-    = f.input :food, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-food-input", class: 'input-edit' }
-    = f.input :preparation, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-preparation-input", class: 'input-edit' }
+  %div{ id: "ingredient-#{ingredient.id}-input", class: show_input ? '' : 'd-none' }
+    = f.input :amount, label: false, input_html: { id: "ingredient-#{ingredient.id}-amount-input", class: 'input-edit' }
+    = f.input :unit, collection: @units, label: false, input_html: { id: "ingredient-#{ingredient.id}-unit-input", class: 'input-edit' }
+    = f.input :food, label: false, input_html: { id: "ingredient-#{ingredient.id}-food-input", class: 'input-edit' }
+    = f.input :preparation, label: false, input_html: { id: "ingredient-#{ingredient.id}-preparation-input", class: 'input-edit' }

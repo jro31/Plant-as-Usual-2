@@ -32,25 +32,25 @@ $(function() {
   })
 });
 
-function createIngredient() {
-  type = 'post'
-  url = ` /recipes/${recipeId}/ingredients`
-  data = { 'ingredient' : {
-    'recipe_id' : recipeId
-  } }
-  $.ajax({
-    type: type,
-    url: url,
-    dataType: 'json',
-    data: data
-  }).done(function(newIngredient) {
-    displayIngredient(newIngredient.id)
-  });
-}
+// function createIngredient() {
+//   type = 'post'
+//   url = ` /recipes/${recipeId}/ingredients`
+//   data = { 'ingredient' : {
+//     'recipe_id' : recipeId
+//   } }
+//   $.ajax({
+//     type: type,
+//     url: url,
+//     dataType: 'json',
+//     data: data
+//   }).done(function(newIngredient) {
+//     displayIngredient(newIngredient.id)
+//   });
+// }
 
-function displayIngredient(id) {
-  $('#ingredients-container').append("<%= escape_javascript render partial: 'ingredient' %>")
-}
+// function displayIngredient(id) {
+//   $('#ingredients-container').append("<%= escape_javascript render partial: 'ingredient' %>")
+// }
 
 function saveInput(prefix) {
   let url = ''
@@ -81,7 +81,7 @@ function ajaxRequest(type, url, data) {
   });
 }
 
-const hideInput = (prefix) => $(`#${prefix}-input`).prop('disabled', true).addClass('d-none');
+const hideInput = (prefix) => $(`#${prefix}-input`).addClass('d-none');
 
 function populateDisplayElement(prefix) {
   if(isIngredientPrefix(prefix)) {
@@ -110,7 +110,7 @@ function showInput(prefix){
   if(isIngredientPrefix(prefix)) {
     $(`#${prefix}-input`).removeClass('d-none')
   } else {
-    $(`#${prefix}-input`).removeClass('d-none').prop('disabled', false).focus(); // Try to get the cursor to appear at the end of the input
+    $(`#${prefix}-input`).removeClass('d-none').focus(); // Try to get the cursor to appear at the end of the input
   }
 }
 
