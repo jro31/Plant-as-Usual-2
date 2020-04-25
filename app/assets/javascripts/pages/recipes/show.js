@@ -18,7 +18,7 @@ $(function() {
     })
     if (noInputWasEnabled) {
       if (click.target.id === 'add-ingredient') {
-        createIngredient()
+        // createIngredient()
       } else {
         inputIdPrefixes.forEach((prefix) => {
           if(click.target.id.includes(prefix) && click.target.id.includes('-display')){
@@ -44,8 +44,12 @@ function createIngredient() {
     dataType: 'json',
     data: data
   }).done(function(newIngredient) {
-    console.log(newIngredient.id)
+    displayIngredient(newIngredient.id)
   });
+}
+
+function displayIngredient(id) {
+  $('#ingredients-container').append("<%= escape_javascript render partial: 'ingredient' %>")
 }
 
 function saveInput(prefix) {

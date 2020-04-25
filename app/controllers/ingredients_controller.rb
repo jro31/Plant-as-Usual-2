@@ -2,9 +2,14 @@ class IngredientsController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
   skip_before_action :authenticate_user!, only: %i[create update] # You don't want create update here
   def create
+    params[:ingredient] = { recipe_id: params[:recipe_id] }
     @ingredient = Ingredient.new(ingredient_params)
     @ingredient.save
-    render json: @ingredient.to_json
+    # render json: @ingredient.to_json
+    @recipe = Recipe.find(params[:recipe_id])
+    respond_to do |format|
+      format.js
+    end
   end
 
   def update

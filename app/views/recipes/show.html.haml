@@ -17,26 +17,13 @@
       = simple_form_for @recipe do |f|
         = f.input :process, disabled: true, label: false, input_html: { id: 'process-input', class: 'input-edit d-none' }
     .col-4
-      - @ingredients.each do |ingredient|
-        %p.input-display{ id: "ingredient-#{ingredient.id}-display" }
-          %span{ id: "ingredient-#{ingredient.id}-amount-display" }
-            = ingredient.amount
-          %span{ id: "ingredient-#{ingredient.id}-unit-display" }
-            = ingredient.unit
-          %span{ id: "ingredient-#{ingredient.id}-food-display" }
-            = ingredient.food&.humanize
-          %span{ id: "ingredient-#{ingredient.id}-preparation-display" }
-            = "(#{ingredient.preparation})"
-        = simple_form_for [@recipe, ingredient] do |f|
-          .d-none{ id: "ingredient-#{ingredient.id}-input" }
-            = f.input :amount, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-amount-input", class: 'input-edit' }
-            = f.input :unit, collection: @units, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-unit-input", class: 'input-edit' }
-            = f.input :food, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-food-input", class: 'input-edit' }
-            = f.input :preparation, disabled: :true, label: false, input_html: { id: "ingredient-#{ingredient.id}-preparation-input", class: 'input-edit' }
-        :javascript
-          inputIdPrefixes.push(`ingredient-${#{ingredient.id}}`)
+      #ingredients-container
+        - @ingredients.each do |ingredient|
+          = render partial: 'ingredient', locals: { ingredient: ingredient }
+          :javascript
+            inputIdPrefixes.push(`ingredient-${#{ingredient.id}}`)
       %div#add-ingredient
-        Add ingredient
+        = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true
 
 :javascript
   inputIdPrefixes.push('name', 'process')
