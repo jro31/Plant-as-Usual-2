@@ -1,8 +1,10 @@
 class IngredientsController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
-  skip_before_action :authenticate_user!, only: %i[update] # You don't want update here
+  skip_before_action :authenticate_user!, only: %i[create update] # You don't want create update here
   def create
-
+    @ingredient = Ingredient.new(ingredient_params)
+    @ingredient.save
+    render json: @ingredient.to_json
   end
 
   def update
@@ -27,7 +29,7 @@ class IngredientsController < ApplicationController
   private
 
   def ingredient_params
-    params.require(:ingredient).permit(:amount, :unit, :food, :preparation)
+    params.require(:ingredient).permit(:recipe_id, :amount, :unit, :food, :preparation)
   end
 end
 

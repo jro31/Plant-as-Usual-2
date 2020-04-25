@@ -1,7 +1,5 @@
 const recipeId = $('body').data('params-id');
 
-console.log(inputIdPrefixes)
-
 $(function() {
   inputIdPrefixes.forEach((prefix) => {
     populateDisplayElement(prefix)
@@ -18,15 +16,37 @@ $(function() {
         noInputWasEnabled = false
       }
     })
-    inputIdPrefixes.forEach((prefix) => {
-      if(click.target.id.includes(prefix) && click.target.id.includes('-display') && noInputWasEnabled){
-        matchInputHeightToDisplayElement(prefix, click.target)
-        hideDisplayElement(click.target)
-        showInput(prefix)
+    if (noInputWasEnabled) {
+      if (click.target.id === 'add-ingredient') {
+        createIngredient()
+      } else {
+        inputIdPrefixes.forEach((prefix) => {
+          if(click.target.id.includes(prefix) && click.target.id.includes('-display')){
+            matchInputHeightToDisplayElement(prefix, click.target)
+            hideDisplayElement(click.target)
+            showInput(prefix)
+          }
+        })
       }
-    })
+    }
   })
 });
+
+function createIngredient() {
+  type = 'post'
+  url = ` /recipes/${recipeId}/ingredients`
+  data = { 'ingredient' : {
+    'recipe_id' : recipeId
+  } }
+  $.ajax({
+    type: type,
+    url: url,
+    dataType: 'json',
+    data: data
+  }).done(function(newIngredient) {
+    console.log(newIngredient.id)
+  });
+}
 
 function saveInput(prefix) {
   let url = ''
@@ -43,10 +63,18 @@ function saveInput(prefix) {
     url = `/recipes/${recipeId}`
     data = { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
   }
-  console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀")
-  console.log(url)
-  console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀")
   ajaxRequest('patch', url, data)
+}
+
+
+function ajaxRequest(type, url, data) {
+  // Read up on if you need to do something here in the event of an error
+  $.ajax({
+    type: type,
+    url: url,
+    dataType: 'json',
+    data: data
+  });
 }
 
 const hideInput = (prefix) => $(`#${prefix}-input`).prop('disabled', true).addClass('d-none');
@@ -94,12 +122,6 @@ function clickIsOutsideInput(click, prefix) {
 
 const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
 
-function ajaxRequest(type, url, data) {
-  // Read up on if you need to do something here in the event of an error
-  $.ajax({
-    type: type,
-    url: url,
-    dataType: 'json',
-    data: data
-  });
-}
+// To do next:
+// Activate 'Add ingredient' button
+// Give ingredients a 'delete' button
