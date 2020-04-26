@@ -1,7 +1,9 @@
 class IngredientsController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
-  skip_before_action :authenticate_user!, only: %i[create update] # You don't want create update here
+  skip_before_action :authenticate_user!, only: %i[create update destroy] # You don't want create or update or destroy here
+
   def create
+    # return unless current user is the recipe owner or admin
     params[:ingredient] = { recipe_id: params[:recipe_id] }
     @ingredient = Ingredient.new(ingredient_params)
     @recipe = Recipe.find(params[:recipe_id])
@@ -32,6 +34,12 @@ class IngredientsController < ApplicationController
       # Show positive flash message somehow
       # Re-render the page
     end
+  end
+
+  def destroy
+    # Return unless the current user is admin or the recipe owner
+    @ingredient = Ingredient.find(params[:id])
+    @ingredient.destroy
   end
 
   private

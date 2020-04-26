@@ -10,15 +10,16 @@ $(function() {
     inputIdPrefixes.forEach((prefix) => {
       if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
         saveInput(prefix)
-        hideInput(prefix)
+        hideInput(prefix) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
         populateDisplayElement(prefix)
         showDisplayElement(prefix)
         noInputWasEnabled = false
       }
     })
     if (noInputWasEnabled) {
-      if (click.target.id === 'add-ingredient') {
-        // createIngredient()
+      if (deleteIngredientWasClicked(click)) {
+        deleteIngredient(click.target.id.replace('ingredient-', '').replace('-delete', ''))
+        hideIngredient(click.target.id.replace('ingredient-', '').replace('-delete', '')) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
       } else {
         inputIdPrefixes.forEach((prefix) => {
           if(click.target.id.includes(prefix) && click.target.id.includes('-display')){
@@ -32,25 +33,9 @@ $(function() {
   })
 });
 
-// function createIngredient() {
-//   type = 'post'
-//   url = ` /recipes/${recipeId}/ingredients`
-//   data = { 'ingredient' : {
-//     'recipe_id' : recipeId
-//   } }
-//   $.ajax({
-//     type: type,
-//     url: url,
-//     dataType: 'json',
-//     data: data
-//   }).done(function(newIngredient) {
-//     displayIngredient(newIngredient.id)
-//   });
-// }
+const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`)
 
-// function displayIngredient(id) {
-//   $('#ingredients-container').append("<%= escape_javascript render partial: 'ingredient' %>")
-// }
+const hideIngredient = (ingredientId) => $(`#ingredient-${ingredientId}-display`).addClass('d-none')
 
 function saveInput(prefix) {
   let url = ''
@@ -71,7 +56,7 @@ function saveInput(prefix) {
 }
 
 
-function ajaxRequest(type, url, data) {
+function ajaxRequest(type, url, data = null) {
   // Read up on if you need to do something here in the event of an error
   $.ajax({
     type: type,
@@ -126,6 +111,8 @@ function clickIsOutsideInput(click, prefix) {
 
 const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
 
+const deleteIngredientWasClicked = (click) => click.target.id.includes('ingredient-') && click.target.id.includes('-delete')
+
 // To do next:
-// Activate 'Add ingredient' button
 // Give ingredients a 'delete' button
+// Sort photo upload
