@@ -18,8 +18,8 @@ $(function() {
     })
     if (noInputWasEnabled) {
       if (deleteIngredientWasClicked(click)) {
-        deleteIngredient(click.target.id.replace('ingredient-', '').replace('-delete', ''))
-        hideIngredient(click.target.id.replace('ingredient-', '').replace('-delete', '')) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
+        deleteIngredient(ingredientIdNumber(click.target.id))
+        hideIngredient(ingredientIdNumber(click.target.id)) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
       } else {
         inputIdPrefixes.forEach((prefix) => {
           if(click.target.id.includes(prefix) && click.target.id.includes('-display')){
@@ -41,7 +41,7 @@ function saveInput(prefix) {
   let url = ''
   let data = {}
   if(isIngredientPrefix(prefix)) {
-    url = `/recipes/${recipeId}/ingredients/${prefix.replace('ingredient-', '')}`
+    url = `/recipes/${recipeId}/ingredients/${ingredientIdNumber(prefix)}`
     data = { 'ingredient' : {
       'amount' : $(`#${prefix}-amount-input`).val(),
       'unit' : $(`#${prefix}-unit-input`).val(),
@@ -113,6 +113,7 @@ const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
 
 const deleteIngredientWasClicked = (click) => click.target.id.includes('ingredient-') && click.target.id.includes('-delete')
 
+const ingredientIdNumber = (cssId) => cssId.replace(/[^0-9]/g, '')
+
 // To do next:
-// Give ingredients a 'delete' button
 // Sort photo upload
