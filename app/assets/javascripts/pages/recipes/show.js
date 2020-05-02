@@ -1,11 +1,26 @@
 const recipeId = $('body').data('params-id');
 
+var widget = cloudinary.createUploadWidget({
+  cloudName: "plantasusual", uploadPreset: "zbn3ptuu" }, (error, result) => {
+    if (result && result.event === "success") {
+      console.log("🌕🌕🌕🌕🌕🌕🌕🌕🌕🌕🌕🌕🌕🌕")
+      console.log(result)
+      url = `/recipes/${recipeId}`
+      let data = { 'recipe' : { photo: { io: File.open('result.info.url'), filename: result.info.public_id, key: result.info.public_id } } }
+      ajaxRequest('patch', url, data)
+    }
+  });
+
 $(function() {
   inputIdPrefixes.forEach((prefix) => {
     populateDisplayElement(prefix)
   })
 
   $(document).click(function(click) {
+    if(click.target.id === 'waddup') {
+      widget.open()
+    }
+
     let noInputWasEnabled = true
     inputIdPrefixes.forEach((prefix) => {
       if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {

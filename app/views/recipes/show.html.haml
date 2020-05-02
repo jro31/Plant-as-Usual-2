@@ -1,15 +1,19 @@
+= javascript_include_tag "https://widget.cloudinary.com/v2.0/global/all.js"
+
 :javascript
   let inputIdPrefixes = []
 
 .container
   .row
     .col-12.text-center
-      = cl_image_tag @recipe.photo.key, class: 'recipe-index-photo'
+      =# cl_image_tag @recipe.photo.key, class: 'recipe-index-photo'
   .row
     .col-12
-      = simple_form_for @recipe do |f|
-        = f.input :photo, as: :file
-        = f.submit
+      / = simple_form_for @recipe do |f|
+      /   = f.input :photo, as: :file
+      /   = f.submit
+      #waddup
+        Photo uploader
   .row
     .col-12.text-center
       %h1#name-display.input-display
