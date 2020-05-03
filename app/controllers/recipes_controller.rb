@@ -17,22 +17,14 @@ class RecipesController < ApplicationController
   def update
     # Return unless the current user is admin or the recipe owner
     @recipe = Recipe.find(params[:id])
-    puts "🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵"
     if @recipe.update(recipe_params)
       # Show positive flash message somehow
-      puts "🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡"
-      puts recipe_params
-      puts @recipe.inspect
-      puts @recipe.photo.inspect
-      puts @recipe.photo.key
-      puts "🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡"
     else
-      # Show positive flash message somehow
-      puts "🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣"
-      puts @recipe.inspect
-      puts "🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣"
+      # Show negative flash message somehow
 
-      render :show # If this doesn't work, change to redirect?
+      # Alternative to this, we could use a redirect, or just re-render the partial that it was updating without refreshing the page
+      # Not sure this works
+      render :show
     end
   end
 

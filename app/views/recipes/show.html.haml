@@ -6,14 +6,14 @@
 .container
   .row
     .col-12.text-center
-      =# cl_image_tag @recipe.photo.key, class: 'recipe-index-photo'
+      = simple_form_for @recipe do |f|
+        = f.file_field :photo
+        = f.submit
+
   .row
     .col-12
-      / = simple_form_for @recipe do |f|
-      /   = f.input :photo, as: :file
-      /   = f.submit
-      #waddup
-        Photo uploader
+      = image_tag @recipe.photo.url
+
   .row
     .col-12.text-center
       %h1#name-display.input-display
