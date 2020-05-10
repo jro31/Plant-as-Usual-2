@@ -14,6 +14,9 @@
     .col-12
       = image_tag @recipe.photo.url
 
+      // REMEMBER THAT WHEN IT COMES TO DISPLAYING RECIPE PHOTOS OF DIFFERENT SIZES SEE LINE 32 'THUMB' OF /Users/jethrowilliams/Google Drive/code/Plant-as-Usual-2/app/uploaders/photo_uploader.rb
+      // WHICH CAN THEN BE DISPLAYED AS, FOR EXAMPLE, image_tag photo.image.thumb
+
   .row
     .col-12.text-center
       %h1#name-display.input-display
@@ -21,7 +24,7 @@
         = f.input :name, label: false, input_html: { id: 'name-input', class: 'input-edit d-none text-center' }
   .row
     .col-8
-      / If not the user's recipe, do not add #process-display. Make sure that pundit works for this. Also spec that the classes only exist when the user is the current user.
+      // If not the user's recipe, do not add #process-display. Make sure that pundit works for this. Also spec that the classes only exist when the user is the current user.
       #process-display.input-display
       = simple_form_for @recipe do |f|
         = f.input :process, label: false, input_html: { id: 'process-input', class: 'input-edit d-none' }
