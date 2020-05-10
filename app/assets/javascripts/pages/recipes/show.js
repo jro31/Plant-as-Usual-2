@@ -1,6 +1,10 @@
 const recipeId = $('body').data('params-id');
 
 $(function() {
+  $('#recipe_photo').change(function() {
+    $(`#edit_recipe_${recipeId}`).submit()
+  })
+
   inputIdPrefixes.forEach((prefix) => {
     populateDisplayElement(prefix)
   })
@@ -9,6 +13,7 @@ $(function() {
     let noInputWasEnabled = true
     inputIdPrefixes.forEach((prefix) => {
       if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
+        click.preventDefault()
         saveInput(prefix)
         hideInput(prefix) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
         populateDisplayElement(prefix)
@@ -117,3 +122,4 @@ const ingredientIdNumber = (cssId) => cssId.replace(/[^0-9]/g, '')
 
 // To do next:
 // Sort photo upload
+// Add a new recipe

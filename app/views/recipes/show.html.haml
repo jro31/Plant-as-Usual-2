@@ -7,8 +7,8 @@
   .row
     .col-12.text-center
       = simple_form_for @recipe do |f|
-        = f.file_field :photo
-        = f.submit
+        = f.file_field :photo, id: 'photo_uploader'
+        = f.submit id: 'submit_photo', class: 'd-none'
 
   .row
     .col-12
