@@ -5,7 +5,7 @@ $(function() {
     $(`#edit_recipe_${recipeId}`).submit()
   })
 
-  $('#photo-row').click(function() {
+  $('#photo-container').click(function() {
     $('#photo-uploader').click()
   })
 
