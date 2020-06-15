@@ -82,11 +82,13 @@ function populateDisplayElement(prefix) {
     $(`#${prefix}-amount-display`).text($(`#${prefix}-amount-input`).val())
     $(`#${prefix}-unit-display`).text($(`#${prefix}-unit-input`).val())
     $(`#${prefix}-food-display`).text($(`#${prefix}-food-input`).val())
-    $(`#${prefix}-preparation-display`).text($(`#${prefix}-preparation-input`).val())
+    $(`#${prefix}-preparation-display`).text(preparationText(prefix))
   } else {
     $(`#${prefix}-display`).text($(`#${prefix}-input`).val())
   }
 }
+
+const preparationText = (prefix) => $(`#${prefix}-preparation-input`).val() == '' ? '' : `(${$(`#${prefix}-preparation-input`).val()})`
 
 const showDisplayElement = (prefix) => $(`#${prefix}-display`).removeClass('d-none');
 

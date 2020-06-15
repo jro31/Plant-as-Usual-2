@@ -11,7 +11,7 @@
         = f.submit id: 'submit-photo', class: 'd-none'
 
   .row
-    .col-12#photo-container
+    .col-12#photo-container.text-center
       - if @recipe.photo.file&.exists?
         = image_tag @recipe.photo.url
       - else
