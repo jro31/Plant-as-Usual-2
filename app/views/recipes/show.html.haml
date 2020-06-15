@@ -7,10 +7,10 @@
   .row
     .col-12.text-center
       = simple_form_for @recipe do |f|
-        = f.file_field :photo, id: 'photo_uploader'
-        = f.submit id: 'submit_photo', class: 'd-none'
+        = f.file_field :photo, id: 'photo-uploader', class: 'd-none'
+        = f.submit id: 'submit-photo', class: 'd-none'
 
-  .row
+  .row#photo-row
     .col-12
       = image_tag @recipe.photo.url
 

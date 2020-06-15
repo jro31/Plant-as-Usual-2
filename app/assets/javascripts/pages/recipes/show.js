@@ -1,8 +1,12 @@
 const recipeId = $('body').data('params-id');
 
 $(function() {
-  $('#recipe_photo').change(function() {
+  $('#photo-uploader').change(function() {
     $(`#edit_recipe_${recipeId}`).submit()
+  })
+
+  $('#photo-row').click(function() {
+    $('#photo-uploader').click()
   })
 
   inputIdPrefixes.forEach((prefix) => {
