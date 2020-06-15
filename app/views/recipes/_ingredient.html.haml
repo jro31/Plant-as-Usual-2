@@ -1,0 +1,17 @@
+%p.input-display{ id: "ingredient-#{ingredient.id}-display", class: show_input ? 'd-none' : '' }
+  %span{ id: "ingredient-#{ingredient.id}-amount-display" }
+    = ingredient.amount
+  %span{ id: "ingredient-#{ingredient.id}-unit-display" }
+    = ingredient.unit
+  %span{ id: "ingredient-#{ingredient.id}-food-display" }
+    = ingredient.food&.humanize
+  %span{ id: "ingredient-#{ingredient.id}-preparation-display" }
+    = "(#{ingredient.preparation})"
+  %span.float-right{ id: "ingredient-#{ingredient.id}-delete"}
+    delete
+= simple_form_for [@recipe, ingredient] do |f|
+  %div{ id: "ingredient-#{ingredient.id}-input", class: show_input ? '' : 'd-none' }
+    = f.input :amount, label: false, placeholder: 'Amount (optional)', input_html: { id: "ingredient-#{ingredient.id}-amount-input", class: 'input-edit' }
+    = f.input :unit, collection: @units, label: false, prompt: 'Measurement (optional)', input_html: { id: "ingredient-#{ingredient.id}-unit-input", class: 'input-edit' }
+    = f.input :food, label: false, placeholder: 'Ingredient', input_html: { id: "ingredient-#{ingredient.id}-food-input", class: 'input-edit' }
+    = f.input :preparation, label: false, placeholder: 'Preparation (optional)', input_html: { id: "ingredient-#{ingredient.id}-preparation-input", class: 'input-edit' }

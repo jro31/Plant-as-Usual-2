@@ -5,9 +5,9 @@ describe UsersController, type: :controller do
   before { sign_in user }
   describe 'GET #current_user_data' do
     context 'user is signed-in' do
-        it '' do
-          # Complete this
-        end
+      it '' do
+        # Complete this
+      end
     end
 
     context 'user is not signed-in' do

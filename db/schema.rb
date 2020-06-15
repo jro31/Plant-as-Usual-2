@@ -10,42 +10,55 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_28_182103) do
+ActiveRecord::Schema.define(version: 2020_05_02_133315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
   create_table "ingredients", force: :cascade do |t|
     t.bigint "recipe_id", null: false
-    t.string "name"
-    t.float "amount"
-    t.string "amount_description"
-    t.bigint "unit_id"
+    t.string "food"
+    t.string "amount"
     t.string "preparation"
     t.boolean "optional", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "unit"
     t.index ["recipe_id"], name: "index_ingredients_on_recipe_id"
-    t.index ["unit_id"], name: "index_ingredients_on_unit_id"
   end
 
   create_table "recipes", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "name"
-    t.string "photo"
     t.integer "servings"
     t.integer "cooking_time_minutes"
     t.boolean "deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "process"
+    t.string "photo"
     t.index ["user_id"], name: "index_recipes_on_user_id"
-  end
-
-  create_table "units", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -65,7 +78,7 @@ ActiveRecord::Schema.define(version: 2019_12_28_182103) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "ingredients", "recipes"
-  add_foreign_key "ingredients", "units"
   add_foreign_key "recipes", "users"
 end

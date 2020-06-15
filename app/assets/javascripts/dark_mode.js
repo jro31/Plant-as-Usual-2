@@ -25,6 +25,7 @@ function toggleClasses() {
 function selectMode(user) {
   var url = `/users/toggle_dark_mode/${user.id}`
   var newDarkMode = !user.dark_mode
+  // Read up on if you need to do something here in the event of an error
   $.ajax({
     type: 'patch',
     url: url,

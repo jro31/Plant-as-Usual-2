@@ -1,0 +1,2 @@
+$('#ingredients-container').append("<%= escape_javascript render partial: 'recipes/ingredient', locals: { ingredient: @ingredient, show_input: true } %>")
+inputIdPrefixes.push(`ingredient-${"<%= @ingredient.id %>"}`)

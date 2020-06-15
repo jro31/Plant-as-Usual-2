@@ -1,10 +1,44 @@
+= javascript_include_tag "https://widget.cloudinary.com/v2.0/global/all.js"
+
+:javascript
+  let inputIdPrefixes = []
+
 .container
   .row
-    .col-6
-      %h1= @recipe.name
-      %p Servings: #{@recipe.servings}
-      %p Cooking time: #{@recipe.cooking_time_minutes}
-      %p Ingredients:
-      - @recipe.ingredients.each do |ingredient|
-        %p= ingredient.name
-      %p= @recipe.process
+    .col-12.text-center
+      = simple_form_for @recipe do |f|
+        = f.file_field :photo, id: 'photo-uploader', class: 'd-none'
+        = f.submit id: 'submit-photo', class: 'd-none'
+
+  .row
+    .col-12#photo-container.text-center
+      - if @recipe.photo.file&.exists?
+        = image_tag @recipe.photo.url
+      - else
+        PLACEHOLDER HERE
+
+      // REMEMBER THAT WHEN IT COMES TO DISPLAYING RECIPE PHOTOS OF DIFFERENT SIZES SEE LINE 32 'THUMB' OF /Users/jethrowilliams/Google Drive/code/Plant-as-Usual-2/app/uploaders/photo_uploader.rb
+      // WHICH CAN THEN BE DISPLAYED AS, FOR EXAMPLE, image_tag photo.image.thumb
+
+  .row
+    .col-12.text-center
+      %h1#name-display.input-display
+      = simple_form_for @recipe do |f|
+        = f.input :name, label: false, input_html: { id: 'name-input', class: 'input-edit d-none text-center' }
+  .row
+    .col-8
+      // If not the user's recipe, do not add #process-display. Make sure that pundit works for this. Also spec that the classes only exist when the user is the current user.
+      #process-display.input-display
+      = simple_form_for @recipe do |f|
+        = f.input :process, label: false, input_html: { id: 'process-input', class: 'input-edit d-none' }
+    .col-4
+      #ingredients-container
+        - @ingredients.each do |ingredient|
+          = render partial: 'ingredient', locals: { ingredient: ingredient, show_input: false }
+          :javascript
+            inputIdPrefixes.push(`ingredient-${#{ingredient.id}}`)
+      %div#add-ingredient
+        = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true
+
+:javascript
+  inputIdPrefixes.push('name', 'process')
