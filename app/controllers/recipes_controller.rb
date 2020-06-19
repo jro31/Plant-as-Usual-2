@@ -1,6 +1,6 @@
 class RecipesController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
-  skip_before_action :authenticate_user!, only: %i[index show update] # You don't want update here
+  skip_before_action :authenticate_user!, only: %i[index show update upload_photo] # You don't want update or upload_photo here
 
   def index
     @recipes = Recipe.last(10)
@@ -16,7 +16,6 @@ class RecipesController < ApplicationController
 
   def update
     # Return unless the current user is admin or the recipe owner
-    puts "🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵"
     @recipe = Recipe.find(params[:id])
     if @recipe.update(recipe_params)
       # Show positive flash message somehow
@@ -28,6 +27,30 @@ class RecipesController < ApplicationController
       render :show
     end
   end
+
+  def upload_photo
+    # Return unless the current user is admin or the recipe owner
+    @recipe = Recipe.find(params[:id])
+    if @recipe.update(recipe_params)
+      # render :display_photo
+      respond_to do |format|
+        # format.html
+        format.js
+      end
+    else
+      # Show negative flash message somehow
+
+      # Alternative to this, we could use a redirect, or just re-render the partial that it was updating without refreshing the page
+      # Not sure this works
+      # render :show
+    end
+  end
+
+  # def display_photo
+  #   respond_to do |format|
+  #     format.js
+  #   end
+  # end
 
   private
 

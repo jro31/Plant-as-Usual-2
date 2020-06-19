@@ -6,7 +6,7 @@
 .container
   .row
     .col-12.text-center
-      = simple_form_for @recipe do |f|
+      = simple_form_for @recipe, url: upload_photo_recipe_url, remote: true do |f|
         = f.file_field :photo, id: 'photo-uploader', class: 'd-none'
         = f.submit id: 'submit-photo', class: 'd-none'
 

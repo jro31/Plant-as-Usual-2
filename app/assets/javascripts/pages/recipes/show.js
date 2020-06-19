@@ -2,7 +2,7 @@ const recipeId = $('body').data('params-id');
 
 $(function() {
   $('#photo-uploader').change(function() {
-    $(`#edit_recipe_${recipeId}`).submit()
+    $('#submit-photo').click()
   })
 
   $('#photo-container').click(function() {
