@@ -32,9 +32,7 @@ class RecipesController < ApplicationController
     # Return unless the current user is admin or the recipe owner
     @recipe = Recipe.find(params[:id])
     if @recipe.update(recipe_params)
-      # render :display_photo
       respond_to do |format|
-        # format.html
         format.js
       end
     else
@@ -45,12 +43,6 @@ class RecipesController < ApplicationController
       # render :show
     end
   end
-
-  # def display_photo
-  #   respond_to do |format|
-  #     format.js
-  #   end
-  # end
 
   private
 
