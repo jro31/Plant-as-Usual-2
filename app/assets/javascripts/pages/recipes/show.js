@@ -1,17 +1,7 @@
 const recipeId = $('body').data('params-id');
 
 $(function() {
-  $('#photo-uploader').change(function() {
-    $('#spinner').removeClass('d-none');
-    $('#submit-photo').click()
-  })
-
-  $('#photo-container').click(function() {
-    $('#photo-uploader').click()
-  })
-
-  $(`#spinner`).height($('#photo-container').height());
-  $(`#spinner`).width($('#photo-container').height());
+  setPhotoUploader()
 
   inputIdPrefixes.forEach((prefix) => {
     populateDisplayElement(prefix)
@@ -46,6 +36,18 @@ $(function() {
   })
 });
 
+function setPhotoUploader() {
+  $('#photo-uploader').change(function() {
+    $('#spinner').removeClass('d-none');
+    $('#submit-photo').click()
+  })
+
+  $('#photo-container').click(function() {
+    $('#photo-uploader').click()
+  })
+  setSpinnerDimensions()
+}
+
 const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`)
 
 const hideIngredient = (ingredientId) => $(`#ingredient-${ingredientId}-display`).addClass('d-none')
@@ -77,12 +79,22 @@ function ajaxRequest(type, url, data = null) {
     dataType: 'json',
     data: data,
     success: function() {
-      $('#hidden-flash-message').fadeIn(1000)
-      setTimeout(function() {
-        $('#hidden-flash-message').fadeOut(1000)
-      }, 3000);
+      displayHiddenFlash('Recipe saved', 'success')
+    },
+    error: function() {
+      displayHiddenFlash('Unable to save recipe', 'fail')
     }
   });
+}
+
+function displayHiddenFlash(text, status) {
+  $('#hidden-flash-text').text(text)
+  $('#hidden-flash-message').addClass(status).fadeIn(1000)
+  setTimeout(function() {
+    $('#hidden-flash-message').fadeOut(1000, function() {
+      $('#hidden-flash-message').removeClass(status)
+    })
+  }, 3000);
 }
 
 const hideInput = (prefix) => $(`#${prefix}-input`).addClass('d-none');
@@ -135,6 +147,8 @@ const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
 const deleteIngredientWasClicked = (click) => click.target.id.includes('ingredient-') && click.target.id.includes('-delete')
 
 const ingredientIdNumber = (cssId) => cssId.replace(/[^0-9]/g, '')
+
+const setSpinnerDimensions = () => $(`#spinner`).height($('#photo-container').height()).width($('#photo-container').height());
 
 // To do next:
 // Add a new recipe
