@@ -48,7 +48,7 @@ function setPhotoUploader() {
   setSpinnerDimensions()
 }
 
-const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`)
+const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, component = 'ingredient', verb = 'delete')
 
 const hideIngredient = (ingredientId) => $(`#ingredient-${ingredientId}-display`).addClass('d-none')
 
@@ -63,15 +63,17 @@ function saveInput(prefix) {
       'food' : $(`#${prefix}-food-input`).val(),
       'preparation' : $(`#${prefix}-preparation-input`).val(),
     } }
+    component = 'ingredient'
   } else {
     url = `/recipes/${recipeId}`
     data = { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
+    component = 'recipe'
   }
-  ajaxRequest('patch', url, data)
+  ajaxRequest('patch', url, data, component)
 }
 
 
-function ajaxRequest(type, url, data = null) {
+function ajaxRequest(type, url, data = null, component = 'recipe', verb = 'save') {
   // Read up on if you need to do something here in the event of an error
   $.ajax({
     type: type,
@@ -79,13 +81,17 @@ function ajaxRequest(type, url, data = null) {
     dataType: 'json',
     data: data,
     success: function() {
-      displayHiddenFlash('Recipe saved', 'success')
+      displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
     },
     error: function() {
-      displayHiddenFlash('Unable to save recipe', 'fail')
+      displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')
     }
   });
 }
+
+// function flashMessage() {
+
+// }
 
 function displayHiddenFlash(text, status) {
   $('#hidden-flash-text').text(text)
