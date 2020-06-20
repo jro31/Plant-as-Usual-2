@@ -1,5 +1,9 @@
 $('#spinner').addClass('d-none');
-<% unless @result == 'fail' %>
+<% if @result == 'success' %>
   $('#photo-container').children(":first").replaceWith('<%= image_tag @recipe.photo.url %>')
+  displayHiddenFlash('Photo uploaded', 'success')
   // SPINNER SHOULD ALSO RESIZE FOR NEW PHOTO
+<% end %>
+<% if @result == 'fail' %>
+  displayHiddenFlash('Unable to upload photo', 'fail')
 <% end %>

@@ -89,10 +89,6 @@ function ajaxRequest(type, url, data = null, component = 'recipe', verb = 'save'
   });
 }
 
-// function flashMessage() {
-
-// }
-
 function displayHiddenFlash(text, status) {
   $('#hidden-flash-text').text(text)
   $('#hidden-flash-message').addClass(status).fadeIn(1000)
@@ -157,4 +153,5 @@ const ingredientIdNumber = (cssId) => cssId.replace(/[^0-9]/g, '')
 const setSpinnerDimensions = () => $(`#spinner`).height($('#photo-container').height()).width($('#photo-container').height());
 
 // To do next:
+// Separate show page for owner/admin and everybody else
 // Add a new recipe

@@ -32,6 +32,7 @@
     .col-8
       // If not the user's recipe, do not add #process-display. Make sure that pundit works for this. Also spec that the classes only exist when the user is the current user.
       #process-display.input-display
+      // Perhaps add a safeguard where the recipe saves after every (100?) characters typed
       = simple_form_for @recipe, remote: true do |f|
         = f.input :process, label: false, input_html: { id: 'process-input', class: 'input-edit d-none' }
     .col-4
