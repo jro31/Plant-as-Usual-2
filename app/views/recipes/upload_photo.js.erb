@@ -1,4 +1,5 @@
 $('#spinner').addClass('d-none');
 <% unless @result == 'fail' %>
   $('#photo-container').children(":first").replaceWith('<%= image_tag @recipe.photo.url %>')
+  // SPINNER SHOULD ALSO RESIZE FOR NEW PHOTO
 <% end %>

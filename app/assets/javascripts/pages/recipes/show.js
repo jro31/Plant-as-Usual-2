@@ -131,5 +131,4 @@ const deleteIngredientWasClicked = (click) => click.target.id.includes('ingredie
 const ingredientIdNumber = (cssId) => cssId.replace(/[^0-9]/g, '')
 
 // To do next:
-// Sort photo upload
 // Add a new recipe
