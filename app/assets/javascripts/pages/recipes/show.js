@@ -2,12 +2,16 @@ const recipeId = $('body').data('params-id');
 
 $(function() {
   $('#photo-uploader').change(function() {
+    $('#spinner').removeClass('d-none');
     $('#submit-photo').click()
   })
 
   $('#photo-container').click(function() {
     $('#photo-uploader').click()
   })
+
+  $(`#spinner`).height($('#photo-container').height());
+  $(`#spinner`).width($('#photo-container').height());
 
   inputIdPrefixes.forEach((prefix) => {
     populateDisplayElement(prefix)

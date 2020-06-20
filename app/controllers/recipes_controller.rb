@@ -32,10 +32,15 @@ class RecipesController < ApplicationController
     # Return unless the current user is admin or the recipe owner
     @recipe = Recipe.find(params[:id])
     if @recipe.update(recipe_params)
+      @result = 'success'
       respond_to do |format|
         format.js
       end
     else
+      @result = 'fail'
+      respond_to do |format|
+        format.js
+      end
       # Show negative flash message somehow
 
       # Alternative to this, we could use a redirect, or just re-render the partial that it was updating without refreshing the page

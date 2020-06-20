@@ -1,1 +1,4 @@
-$('#photo-container').children(":first").replaceWith('<%= image_tag @recipe.photo.url %>')
+$('#spinner').addClass('d-none');
+<% unless @result == 'fail' %>
+  $('#photo-container').children(":first").replaceWith('<%= image_tag @recipe.photo.url %>')
+<% end %>
