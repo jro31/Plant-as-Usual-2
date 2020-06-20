@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :recipes do # REMOVE METHODS YOU DON'T NEED
     patch 'upload_photo', on: :member
-    resources :ingredients
+    resources :ingredients # REMOVE METHODS YOU DON'T NEED
   end
 
   get 'current_user_data' => "users#current_user_data"

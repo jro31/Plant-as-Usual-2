@@ -3,7 +3,7 @@ class IngredientsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[create update destroy] # You don't want create or update or destroy here
 
   def create
-    # return unless current user is the recipe owner or admin
+    # ADD PUNDIT TO THIS METHOD
     params[:ingredient] = { recipe_id: params[:recipe_id] }
     @ingredient = Ingredient.new(ingredient_params)
     @recipe = Recipe.find(params[:recipe_id])
@@ -15,11 +15,10 @@ class IngredientsController < ApplicationController
     else
       # DO SOMETHING
     end
-    # render json: @ingredient.to_json
   end
 
   def update
-    # Return unless the current user is admin or the recipe owner
+    # ADD PUNDIT TO THIS METHOD
 
     # Remember, 'amount' is now a string. Add a check so that any numbers
     # are typed (for example 'one, two, three'), they get saved as, for

@@ -75,7 +75,13 @@ function ajaxRequest(type, url, data = null) {
     type: type,
     url: url,
     dataType: 'json',
-    data: data
+    data: data,
+    success: function() {
+      $('#hidden-flash-message').fadeIn(1000)
+      setTimeout(function() {
+        $('#hidden-flash-message').fadeOut(1000)
+      }, 3000);
+    }
   });
 }
 
