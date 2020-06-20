@@ -1,2 +1,1 @@
-console.log("Twat!")
-$('#photo-container').text("Prick")
+$('#photo-container').children(":first").replaceWith('<%= image_tag @recipe.photo.url %>')
