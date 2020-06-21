@@ -12,6 +12,11 @@ class RecipesController < ApplicationController
     authorize @recipe
     @ingredients = @recipe.ingredients.order(created_at: :asc)
     @units = Ingredient::UNITS
+    @user_can_edit = user_is_owner_or_admin?
+    puts "🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳"
+    puts user_is_owner_or_admin?
+    puts @user_can_edit
+    puts "🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳"
   end
 
   def update
@@ -55,5 +60,11 @@ class RecipesController < ApplicationController
 
   def recipe_params
     params.require(:recipe).permit(:name, :process, :photo)
+  end
+
+  def user_is_owner_or_admin?
+    return false unless @current_user
+
+    @recipe.user == @current_user || @current_user&.admin
   end
 end

@@ -36,7 +36,7 @@ class IngredientsController < ApplicationController
   end
 
   def destroy
-    # Return unless the current user is admin or the recipe owner
+    # ADD PUNDIT TO THIS METHOD
     @ingredient = Ingredient.find(params[:id])
     @ingredient.destroy
   end

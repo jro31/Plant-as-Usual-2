@@ -46,3 +46,5 @@
 
 :javascript
   inputIdPrefixes.push('name', 'process')
+  const isRecipeShow = #{current_page?(controller: 'recipes', action: 'show')}
+  const userCanEdit = #{@user_can_edit}
