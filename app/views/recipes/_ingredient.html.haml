@@ -1,4 +1,4 @@
-%p.input-display{ id: "ingredient-#{ingredient.id}-display", class: show_input ? 'd-none' : '' }
+%p.input-display{ id: "ingredient-#{ingredient.id}-display", class: show_input ? 'd-none' : '', class: @user_can_edit ? 'can-edit-input-display' : '' }
   %span{ id: "ingredient-#{ingredient.id}-amount-display" }
     = ingredient.amount
   %span{ id: "ingredient-#{ingredient.id}-unit-display" }
@@ -7,8 +7,9 @@
     = ingredient.food&.humanize
   %span{ id: "ingredient-#{ingredient.id}-preparation-display" }
     = "(#{ingredient.preparation})"
-  %span.float-right{ id: "ingredient-#{ingredient.id}-delete"}
-    delete
+  - if @user_can_edit
+    %span.float-right{ id: "ingredient-#{ingredient.id}-delete"}
+      delete
 = simple_form_for [@recipe, ingredient] do |f|
   %div{ id: "ingredient-#{ingredient.id}-input", class: show_input ? '' : 'd-none' }
     = f.input :amount, label: false, placeholder: 'Amount (optional)', input_html: { id: "ingredient-#{ingredient.id}-amount-input", class: 'input-edit' }

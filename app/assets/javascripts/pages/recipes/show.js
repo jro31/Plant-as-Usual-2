@@ -2,42 +2,41 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   const recipeId = $('body').data('params-id');
 
   $(function() {
-    console.log("🤮🤮🤮🤮🤮🤮🤮🤮🤮🤮🤮🤮🤮🤮🤮")
-    console.log(userCanEdit)
-
-    setPhotoUploader()
-
     inputIdPrefixes.forEach((prefix) => {
       populateDisplayElement(prefix)
     })
 
-    $(document).click(function(click) {
-      let noInputWasEnabled = true
-      inputIdPrefixes.forEach((prefix) => {
-        if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
-          click.preventDefault()
-          saveInput(prefix)
-          hideInput(prefix) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
-          populateDisplayElement(prefix)
-          showDisplayElement(prefix)
-          noInputWasEnabled = false
+    if(userCanEdit) {
+      setPhotoUploader()
+
+      $(document).click(function(click) {
+        let noInputWasEnabled = true
+        inputIdPrefixes.forEach((prefix) => {
+          if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
+            click.preventDefault()
+            saveInput(prefix)
+            hideInput(prefix) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
+            populateDisplayElement(prefix)
+            showDisplayElement(prefix)
+            noInputWasEnabled = false
+          }
+        })
+        if (noInputWasEnabled) {
+          if (deleteIngredientWasClicked(click)) {
+            deleteIngredient(ingredientIdNumber(click.target.id))
+            hideIngredient(ingredientIdNumber(click.target.id)) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
+          } else {
+            inputIdPrefixes.forEach((prefix) => {
+              if(click.target.id.includes(prefix) && click.target.id.includes('-display')){
+                matchInputHeightToDisplayElement(prefix, click.target)
+                hideDisplayElement(click.target)
+                showInput(prefix)
+              }
+            })
+          }
         }
       })
-      if (noInputWasEnabled) {
-        if (deleteIngredientWasClicked(click)) {
-          deleteIngredient(ingredientIdNumber(click.target.id))
-          hideIngredient(ingredientIdNumber(click.target.id)) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
-        } else {
-          inputIdPrefixes.forEach((prefix) => {
-            if(click.target.id.includes(prefix) && click.target.id.includes('-display')){
-              matchInputHeightToDisplayElement(prefix, click.target)
-              hideDisplayElement(click.target)
-              showInput(prefix)
-            }
-          })
-        }
-      }
-    })
+    }
   });
 
   function setPhotoUploader() {
