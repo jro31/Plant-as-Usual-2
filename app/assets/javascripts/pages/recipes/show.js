@@ -81,7 +81,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     $.ajax({
       type: type,
       url: url,
-      dataType: 'json',
+      dataType: 'json', // If you're having trouble getting a js.erb page to display, try changing this to 'script' (it worked in some now deleted code with dark mode)
       data: data,
       success: function() {
         displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
@@ -157,5 +157,4 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 }
 
 // To do next:
-// Separate show page for owner/admin and everybody else
 // Add a new recipe

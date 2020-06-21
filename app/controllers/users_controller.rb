@@ -10,7 +10,11 @@ class UsersController < ApplicationController
   def toggle_dark_mode
     @user = User.find(params[:id])
     # authorize @user
-    @user.update(user_params)
+    if @user.update(user_params)
+
+    else
+
+    end
   end
 
   private

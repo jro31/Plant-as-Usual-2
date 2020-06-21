@@ -1,35 +1,50 @@
 var darkModeClasses = ['navbar', 'page-container', 'recipe-card']
 
-$(function() {
-  $('#dark-mode').click(function() {
-      toggleDarkMode();
-  });
-});
+setInitialSwitchState()
 
-function toggleDarkMode() {
+$('#dark-mode-switch-input').change(function(e) {
+  toggleDarkMode(e.target.checked)
+})
+
+$('#dark-mode-switch-container').on('click', function(event){
+  event.stopPropagation();
+})
+
+function setInitialSwitchState() {
   $.get('/current_user_data', function(result) {
     if(result != null) {
-      toggleClasses();
-      selectMode(result);
+      $('#dark-mode-switch-input').prop('checked', result.dark_mode);
     }
   });
 }
 
-function toggleClasses() {
+function toggleDarkMode(darkModeOn) {
+  $.get('/current_user_data', function(result) {
+    if(result != null) {
+      toggleClasses(darkModeOn);
+      selectMode(result, darkModeOn);
+    }
+  });
+}
+
+function toggleClasses(darkModeOn) {
   $(darkModeClasses).each(function() {
-    $(`.${this}`).toggleClass(`${this}-light-mode ${this}-dark-mode`)
+    if(darkModeOn) {
+      $(`.${this}`).addClass(`${this}-dark-mode`).removeClass(`${this}-light-mode`)
+    } else {
+      $(`.${this}`).addClass(`${this}-light-mode`).removeClass(`${this}-dark-mode`)
+    }
   });
 }
 
 
-function selectMode(user) {
+function selectMode(user, darkModeOn) {
   var url = `/users/toggle_dark_mode/${user.id}`
-  var newDarkMode = !user.dark_mode
   // Read up on if you need to do something here in the event of an error
   $.ajax({
     type: 'patch',
     url: url,
     dataType: 'json',
-    data: { 'user' : { 'dark_mode' : newDarkMode } }
+    data: { 'user' : { 'dark_mode' : darkModeOn } }
   });
 };
