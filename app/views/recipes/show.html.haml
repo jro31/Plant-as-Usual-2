@@ -41,8 +41,9 @@
           = render partial: 'ingredient', locals: { ingredient: ingredient, show_input: false }
           :javascript
             inputIdPrefixes.push(`ingredient-${#{ingredient.id}}`)
-      %div#add-ingredient
-        = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true
+      - if @user_can_edit
+        %div#add-ingredient
+          = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true
 
 :javascript
   inputIdPrefixes.push('name', 'process')

@@ -45,7 +45,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       $('#submit-photo').click()
     })
 
-    $('#photo-container').click(function() {
+    $('#photo-container').click(function() { // Update this so only the photo is clickable. Having the whole row clickable is a bit annoying when clicking to close the navbar dropdown
       $('#photo-uploader').click()
     })
     setSpinnerDimensions()
