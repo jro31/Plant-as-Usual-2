@@ -1,3 +1,4 @@
 .container-fluid.recipe-index-page
   - @recipes.each do |recipe|
-    = render 'shared/recipe_card', recipe: recipe
+    = render 'shared/wide_recipe_card', recipe: recipe, photo_first: @recipe_iterator.odd?
+    - @recipe_iterator += 1

@@ -1,10 +1,18 @@
 .welcome-banner
-  background-color: gold
   .text-box-container
     .text-box
-      background-color: green
+    .text-box-light-mode
+      background-color: $light-mode-welcome-banner-text-box-background-color
+    .text-box-dark-mode
+      background-color: $dark-mode-welcome-banner-text-box-background-color
 
   .photo-box-container
     .photo-box
       img
         max-width: 100%
+
+.welcome-banner-light-mode
+  background-color: $light-mode-welcome-banner-background-color
+
+.welcome-banner-dark-mode
+  background-color: $dark-mode-welcome-banner-background-color
