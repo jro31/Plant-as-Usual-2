@@ -45,6 +45,8 @@
         %div#add-ingredient
           = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true
 
+-# ADD A BUTTON TO MARK THE RECIPE AS COMPLETE. THIS SHOULD ALSO APPEAR WHEN UPDATES ARE MADE
+
 :javascript
   inputIdPrefixes.push('name', 'process')
   const isRecipeShow = #{current_page?(controller: 'recipes', action: 'show')}
