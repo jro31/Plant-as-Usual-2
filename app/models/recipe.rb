@@ -10,7 +10,7 @@ class Recipe < ApplicationRecord
   scope :awaiting_approval, -> { where(state: :awaiting_approval) }
   scope :not_hidden, -> { where.not(state: :hidden) }
 
-  state_machine initial: :incomplete do # SPEC THIS
+  state_machine initial: :incomplete do
     event :complete do
       transition incomplete: :awaiting_approval
     end

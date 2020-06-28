@@ -45,7 +45,93 @@ describe Recipe, type: :model do
   end
 
   describe 'state machine' do
-    # COMPLETE THIS
+    describe 'events' do
+      let(:incomplete_recipe) { create(:recipe, state: :incomplete) }
+      let(:awaiting_approval_recipe) { create(:recipe, state: :awaiting_approval) }
+      let(:approved_recipe) { create(:recipe, state: :approved) }
+      let(:approved_for_feature_recipe) { create(:recipe, state: :approved_for_feature) }
+      let(:approved_for_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day) }
+      let(:declined_recipe) { create(:recipe, state: :declined) }
+      let(:hidden_recipe) { create(:recipe, state: :hidden) }
+      let(:all_recipes) { [incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, declined_recipe, hidden_recipe] }
+      before { all_recipes.each { |recipe| recipe.send(event) } }
+      describe '.complete' do
+        let(:event) { 'complete' }
+        it { expect(incomplete_recipe.state).to eq('awaiting_approval') }
+        it { expect(awaiting_approval_recipe.state).to eq('awaiting_approval') }
+        it { expect(approved_recipe.state).to eq('approved') }
+        it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(declined_recipe.state).to eq('declined') }
+        it { expect(hidden_recipe.state).to eq('hidden') }
+      end
+
+      describe '.revised' do
+        let(:event) { 'revised' }
+        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(awaiting_approval_recipe.state).to eq('incomplete') }
+        it { expect(approved_recipe.state).to eq('incomplete') }
+        it { expect(approved_for_feature_recipe.state).to eq('incomplete') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('incomplete') }
+        it { expect(declined_recipe.state).to eq('incomplete') }
+        it { expect(hidden_recipe.state).to eq('hidden') }
+      end
+
+      describe '.approve' do
+        let(:event) { 'approve' }
+        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(awaiting_approval_recipe.state).to eq('approved') }
+        it { expect(approved_recipe.state).to eq('approved') }
+        it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(declined_recipe.state).to eq('declined') }
+        it { expect(hidden_recipe.state).to eq('hidden') }
+      end
+
+      describe '.approve_for_feature' do
+        let(:event) { 'approve_for_feature' }
+        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(awaiting_approval_recipe.state).to eq('approved_for_feature') }
+        it { expect(approved_recipe.state).to eq('approved') }
+        it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(declined_recipe.state).to eq('declined') }
+        it { expect(hidden_recipe.state).to eq('hidden') }
+      end
+
+      describe '.approve_for_recipe_of_the_day' do
+        let(:event) { 'approve_for_recipe_of_the_day' }
+        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(awaiting_approval_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(approved_recipe.state).to eq('approved') }
+        it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(declined_recipe.state).to eq('declined') }
+        it { expect(hidden_recipe.state).to eq('hidden') }
+      end
+
+      describe 'decline' do
+        let(:event) { 'decline' }
+        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(awaiting_approval_recipe.state).to eq('declined') }
+        it { expect(approved_recipe.state).to eq('approved') }
+        it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(declined_recipe.state).to eq('declined') }
+        it { expect(hidden_recipe.state).to eq('hidden') }
+      end
+
+      describe 'hide' do
+        let(:event) { 'hide' }
+        it { expect(incomplete_recipe.state).to eq('hidden') }
+        it { expect(awaiting_approval_recipe.state).to eq('hidden') }
+        it { expect(approved_recipe.state).to eq('hidden') }
+        it { expect(approved_for_feature_recipe.state).to eq('hidden') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('hidden') }
+        it { expect(declined_recipe.state).to eq('hidden') }
+        it { expect(hidden_recipe.state).to eq('hidden') }
+      end
+    end
   end
 
   describe 'something' do
