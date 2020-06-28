@@ -18,3 +18,10 @@
           = image_tag 'temp-bowl'
 
   = render 'shared/wide_recipe_card', recipe: Recipe.find(11), photo_first: true
+
+  .container
+    .row
+      .col-md-6
+        = render 'shared/narrow_recipe_card', recipe: Recipe.find(11)
+      .col-md-6
+        = render 'shared/narrow_recipe_card', recipe: Recipe.find(11)

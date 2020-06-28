@@ -1,0 +1,16 @@
+.row{class: component_classes('narrow-recipe-card')}
+  .col-12
+    .d-flex.flex-column.justify-content-start.align-items-center
+      %div
+        - if recipe.photo.file&.exists?
+          = image_tag recipe.photo.url, class: 'w-100'
+        - else
+          -# SOMETHING HERE
+      .d-flex.flex-column.justify-content-between.content-container
+        %h2
+          = recipe.name
+        %div
+          = recipe.process.truncate(300, separator: ' ')
+        .text-right
+          Buttons
+

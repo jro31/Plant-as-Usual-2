@@ -1,4 +1,4 @@
-var darkModeClasses = ['navbar', 'page-container', 'text-box', 'welcome-banner', 'wide-recipe-card']
+var darkModeClasses = ['narrow-recipe-card', 'navbar', 'page-container', 'text-box', 'welcome-banner', 'wide-recipe-card']
 
 setInitialSwitchState()
 

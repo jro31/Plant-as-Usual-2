@@ -1,7 +1,9 @@
 .row.my-5{class: component_classes('wide-recipe-card')}
   .col-6.p-0.photo{class: photo_first ? "order-first" : "order-last"}
     - if recipe.photo.file&.exists?
-      = image_tag recipe.photo.url, class: 'recipe-index-photo'
+      = image_tag recipe.photo.url, class: 'w-100'
+    - else
+      -# SOMETHING HERE
   .col-6.p-0.details
     %h2
       = recipe.name
