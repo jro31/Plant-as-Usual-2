@@ -51,9 +51,6 @@ ActiveRecord::Schema.define(version: 2020_06_28_152620) do
   create_table "recipes", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "name"
-    t.integer "servings"
-    t.integer "cooking_time_minutes"
-    t.boolean "deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "process"

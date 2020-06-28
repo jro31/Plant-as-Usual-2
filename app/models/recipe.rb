@@ -4,6 +4,12 @@ class Recipe < ApplicationRecord
 
   mount_uploader :photo, PhotoUploader
 
+  scope :approved, -> { where(state: [:approved, :approved_for_feature, :approved_for_recipe_of_the_day]) }
+  scope :approved_for_feature, -> { where(state: [:approved_for_feature, :approved_for_recipe_of_the_day]) }
+  scope :approved_for_recipe_of_the_day, -> { where(state: :approved_for_recipe_of_the_day) }
+  scope :awaiting_approval, -> { where(state: :awaiting_approval) }
+  scope :not_hidden, -> { where.not(state: :hidden) }
+
   state_machine initial: :incomplete do # SPEC THIS
     event :complete do
       transition incomplete: :awaiting_approval
