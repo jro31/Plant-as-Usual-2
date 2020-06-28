@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   resources :recipes do # REMOVE METHODS YOU DON'T NEED
     patch 'upload_photo', on: :member
+    patch 'mark_as_complete', on: :member
     resources :ingredients # REMOVE METHODS YOU DON'T NEED
   end
 

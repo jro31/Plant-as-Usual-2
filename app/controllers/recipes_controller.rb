@@ -52,6 +52,16 @@ class RecipesController < ApplicationController
     end
   end
 
+  def mark_as_complete
+    # Add pundit
+    @recipe = Recipe.find(params[:id])
+    if @recipe.complete
+      redirect_to recipe_path(@recipe)
+    else
+      # Do something
+    end
+  end
+
   private
 
   def recipe_params

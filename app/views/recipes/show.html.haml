@@ -45,7 +45,9 @@
         %div#add-ingredient
           = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true
 
--# ADD A BUTTON TO MARK THE RECIPE AS COMPLETE. THIS SHOULD ALSO APPEAR WHEN UPDATES ARE MADE
+    #mark-as-complete-row.row.d-none
+      .col-12
+        = link_to 'Click here when recipe is finished', mark_as_complete_recipe_path(@recipe), method: :patch
 
 :javascript
   inputIdPrefixes.push('name', 'process')
