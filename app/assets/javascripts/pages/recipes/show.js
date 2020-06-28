@@ -1,5 +1,6 @@
 if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   const recipeId = $('body').data('params-id');
+  let initialInputValue = {}
 
   $(function() {
     inputIdPrefixes.forEach((prefix) => {
@@ -18,6 +19,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
             hideInput(prefix) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
             populateDisplayElement(prefix)
             showDisplayElement(prefix)
+            resetInitialInputValue()
             noInputWasEnabled = false
           }
         })
@@ -28,6 +30,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
           } else {
             inputIdPrefixes.forEach((prefix) => {
               if(click.target.id.includes(prefix) && click.target.id.includes('-display')){
+                setInitialInputValue(prefix)
                 matchInputHeightToDisplayElement(prefix, click.target)
                 hideDisplayElement(click.target)
                 showInput(prefix)
@@ -72,9 +75,18 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       data = { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
       component = 'recipe'
     }
-    ajaxRequest('patch', url, data, component)
+    if(inputHasBeenUpdated(prefix, data)) {
+      ajaxRequest('patch', url, data, component)
+    }
   }
 
+  function inputHasBeenUpdated(prefix, data) {
+    if(isIngredientPrefix(prefix)) {
+      return data.ingredient.amount != initialInputValue.amount || data.ingredient.unit != initialInputValue.unit || data.ingredient.food != initialInputValue.food || data.ingredient.preparation != initialInputValue.preparation
+    } else {
+      return data.recipe[prefix] != initialInputValue[prefix]
+    }
+  }
 
   function ajaxRequest(type, url, data = null, component = 'recipe', verb = 'save') {
     // Read up on if you need to do something here in the event of an error
@@ -118,6 +130,21 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   const preparationText = (prefix) => $(`#${prefix}-preparation-input`).val() == '' ? '' : `(${$(`#${prefix}-preparation-input`).val()})`
 
   const showDisplayElement = (prefix) => $(`#${prefix}-display`).removeClass('d-none');
+
+  function setInitialInputValue(prefix) {
+    if(isIngredientPrefix(prefix)) {
+      initialInputValue['amount'] = $(`#${prefix}-amount-input`).val()
+      initialInputValue['unit'] = $(`#${prefix}-unit-input`).val()
+      initialInputValue['food'] = $(`#${prefix}-food-input`).val()
+      initialInputValue['preparation'] = $(`#${prefix}-preparation-input`).val()
+    } else {
+      initialInputValue[prefix] = $(`#${prefix}-input`).val()
+    }
+  }
+
+  function resetInitialInputValue() {
+    initialInputValue = {}
+  }
 
   function matchInputHeightToDisplayElement(prefix, clickTarget) {
     if(isIngredientPrefix(prefix)) {

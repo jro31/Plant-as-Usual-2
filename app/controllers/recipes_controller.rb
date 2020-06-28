@@ -59,8 +59,8 @@ class RecipesController < ApplicationController
   end
 
   def user_is_owner_or_admin?
-    return false unless @current_user
+    return false unless current_user
 
-    @recipe.user == @current_user || @current_user&.admin
+    @recipe.user == current_user || current_user&.admin
   end
 end
