@@ -4,6 +4,14 @@ describe Recipe, type: :model do
   it { should belong_to :user }
   it { should have_many :ingredients }
 
+  describe 'callbacks' do
+    describe 'after_save' do
+      describe '#update_state_updated_at' do
+        # COMPLETE THIS
+      end
+    end
+  end
+
   describe 'scopes' do
     let!(:incomplete_recipe) { create(:recipe, state: :incomplete) }
     let!(:awaiting_approval_recipe) { create(:recipe, state: :awaiting_approval) }
@@ -132,6 +140,28 @@ describe Recipe, type: :model do
         it { expect(hidden_recipe.state).to eq('hidden') }
       end
     end
+  end
+
+  describe 'class methods' do
+    describe '#update_featured_recipes' do
+      # COMPLETE THIS
+    end
+
+    describe '#recipe_of_the_day' do
+      # COMPLETE THIS
+    end
+
+    describe '#featured_recipes' do
+      # COMPLETE THIS
+    end
+
+    describe '#recipe_of_the_day_last_updated' do
+      # COMPLETE THIS
+    end
+  end
+
+  describe 'currently_featured?' do
+    # COMPLETE THIS
   end
 
   describe 'something' do

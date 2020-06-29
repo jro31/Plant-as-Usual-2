@@ -47,7 +47,7 @@
 
     #mark-as-complete-row.row.fixed-bottom{ class: @recipe.incomplete? ? '' : 'd-none' }
       .col-12
-        = link_to 'Click here to submit your updates', mark_as_complete_recipe_path(@recipe), method: :patch, class: 'btn btn-success'
+        = link_to 'Click here to submit your recipe', mark_as_complete_recipe_path(@recipe), method: :patch, class: 'btn btn-success'
 
 :javascript
   inputIdPrefixes.push('name', 'process')

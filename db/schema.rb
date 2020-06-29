@@ -56,9 +56,10 @@ ActiveRecord::Schema.define(version: 2020_06_28_152620) do
     t.text "process"
     t.string "photo"
     t.string "state"
+    t.datetime "state_updated_at"
     t.string "declined_reason"
-    t.date "last_featured"
-    t.date "last_recipe_of_the_day"
+    t.datetime "last_featured_at"
+    t.datetime "last_recipe_of_the_day_at"
     t.index ["user_id"], name: "index_recipes_on_user_id"
   end
 

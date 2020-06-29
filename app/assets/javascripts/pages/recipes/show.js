@@ -185,5 +185,4 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 }
 
 // To do next:
-// Display the mark as complete row on load when a recipe is 'incomplete', or when successfully saved (line 100)
 // Add a new recipe
