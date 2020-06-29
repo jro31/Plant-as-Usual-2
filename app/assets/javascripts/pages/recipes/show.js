@@ -97,7 +97,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       data: data,
       success: function() {
         displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
-        // Display mark as complete link
+        $('#mark-as-complete-row').removeClass('d-none')
       },
       error: function() {
         displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')

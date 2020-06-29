@@ -27,7 +27,9 @@ class IngredientsController < ApplicationController
     # when the unit would usually expect a number (for example, grams, pound
     # kilos etc).
     @ingredient = Ingredient.find(params[:id])
+    @recipe = Recipe.find(params[:recipe_id])
     if @ingredient.update(ingredient_params)
+      @recipe.revised
       # Show positive flash message somehow
     else
       # Show positive flash message somehow

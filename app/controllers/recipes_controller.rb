@@ -19,6 +19,7 @@ class RecipesController < ApplicationController
     @recipe = Recipe.find(params[:id])
     authorize @recipe
     if @recipe.update(recipe_params)
+      @recipe.revised
       # flash[:notice] = "Success"
       # Show positive flash message somehow
     else
@@ -35,6 +36,7 @@ class RecipesController < ApplicationController
     @recipe = Recipe.find(params[:id])
     authorize @recipe
     if @recipe.update(recipe_params)
+      @recipe.revised
       @result = 'success'
       respond_to do |format|
         format.js
