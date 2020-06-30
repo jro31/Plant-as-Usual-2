@@ -4,6 +4,16 @@ describe Recipe, type: :model do
   it { should belong_to :user }
   it { should have_many :ingredients }
 
+  describe 'validations' do
+    describe '#validate_not_currently_featured' do
+      # COMPELTE THIS
+    end
+
+    describe '#validate_one_recipe_of_the_day' do
+      # COMPLETE THIS
+    end
+  end
+
   describe 'callbacks' do
     describe 'after_save' do
       describe '#update_state_updated_at' do
@@ -50,6 +60,10 @@ describe Recipe, type: :model do
       it { expect(subject).to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, declined_recipe) }
       it { expect(subject).not_to include(hidden_recipe) }
     end
+
+    describe '.current_recipe_of_the_day' do
+
+    end
   end
 
   describe 'state machine' do
@@ -59,9 +73,12 @@ describe Recipe, type: :model do
       let(:approved_recipe) { create(:recipe, state: :approved) }
       let(:approved_for_feature_recipe) { create(:recipe, state: :approved_for_feature) }
       let(:approved_for_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day) }
+      let(:currently_featured_recipe) { create(:recipe, state: :currently_featured) }
+      let(:recipe_of_the_day_as_currently_featured_recipe) { create(:recipe, state: :recipe_of_the_day_as_currently_featured) }
+      let(:current_recipe_of_the_day_recipe) { create(:recipe, state: :current_recipe_of_the_day) }
       let(:declined_recipe) { create(:recipe, state: :declined) }
       let(:hidden_recipe) { create(:recipe, state: :hidden) }
-      let(:all_recipes) { [incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, declined_recipe, hidden_recipe] }
+      let(:all_recipes) { [incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe] }
       before { all_recipes.each { |recipe| recipe.send(event) } }
       describe '.complete' do
         let(:event) { 'complete' }
@@ -70,6 +87,9 @@ describe Recipe, type: :model do
         it { expect(approved_recipe.state).to eq('approved') }
         it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
         it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(currently_featured_recipe.state).to eq('currently_featured') }
+        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
+        it { expect(current_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
         it { expect(declined_recipe.state).to eq('declined') }
         it { expect(hidden_recipe.state).to eq('hidden') }
       end
@@ -81,6 +101,9 @@ describe Recipe, type: :model do
         it { expect(approved_recipe.state).to eq('incomplete') }
         it { expect(approved_for_feature_recipe.state).to eq('incomplete') }
         it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('incomplete') }
+        it { expect(currently_featured_recipe.state).to eq('incomplete') }
+        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('incomplete') }
+        it { expect(current_recipe_of_the_day_recipe.state).to eq('incomplete') }
         it { expect(declined_recipe.state).to eq('incomplete') }
         it { expect(hidden_recipe.state).to eq('hidden') }
       end
@@ -92,6 +115,9 @@ describe Recipe, type: :model do
         it { expect(approved_recipe.state).to eq('approved') }
         it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
         it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(currently_featured_recipe.state).to eq('currently_featured') }
+        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
+        it { expect(current_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
         it { expect(declined_recipe.state).to eq('declined') }
         it { expect(hidden_recipe.state).to eq('hidden') }
       end
@@ -103,6 +129,9 @@ describe Recipe, type: :model do
         it { expect(approved_recipe.state).to eq('approved') }
         it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
         it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(currently_featured_recipe.state).to eq('currently_featured') }
+        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
+        it { expect(current_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
         it { expect(declined_recipe.state).to eq('declined') }
         it { expect(hidden_recipe.state).to eq('hidden') }
       end
@@ -114,28 +143,79 @@ describe Recipe, type: :model do
         it { expect(approved_recipe.state).to eq('approved') }
         it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
         it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(currently_featured_recipe.state).to eq('currently_featured') }
+        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
+        it { expect(current_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
         it { expect(declined_recipe.state).to eq('declined') }
         it { expect(hidden_recipe.state).to eq('hidden') }
       end
 
-      describe 'decline' do
+      describe '.feature' do
+        let(:event) { 'feature' }
+        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(awaiting_approval_recipe.state).to eq('awaiting_approval') }
+        it { expect(approved_recipe.state).to eq('approved') }
+        it { expect(approved_for_feature_recipe.state).to eq('currently_featured') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
+        it { expect(currently_featured_recipe.state).to eq('currently_featured') }
+        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
+        it { expect(current_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
+        it { expect(declined_recipe.state).to eq('declined') }
+        it { expect(hidden_recipe.state).to eq('hidden') }
+      end
+
+      describe '.set_as_recipe_of_the_day' do
+        let(:event) { 'set_as_recipe_of_the_day' }
+        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(awaiting_approval_recipe.state).to eq('awaiting_approval') }
+        it { expect(approved_recipe.state).to eq('approved') }
+        it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
+        it { expect(currently_featured_recipe.state).to eq('currently_featured') }
+        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
+        it { expect(current_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
+        it { expect(declined_recipe.state).to eq('declined') }
+        it { expect(hidden_recipe.state).to eq('hidden') }
+      end
+
+      describe '.revert_from_featured' do
+        let(:event) { 'revert_from_featured' }
+        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(awaiting_approval_recipe.state).to eq('awaiting_approval') }
+        it { expect(approved_recipe.state).to eq('approved') }
+        it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(currently_featured_recipe.state).to eq('approved_for_feature') }
+        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(current_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(declined_recipe.state).to eq('declined') }
+        it { expect(hidden_recipe.state).to eq('hidden') }
+      end
+
+      describe '.decline' do
         let(:event) { 'decline' }
         it { expect(incomplete_recipe.state).to eq('incomplete') }
         it { expect(awaiting_approval_recipe.state).to eq('declined') }
         it { expect(approved_recipe.state).to eq('approved') }
         it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
         it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        it { expect(currently_featured_recipe.state).to eq('currently_featured') }
+        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
+        it { expect(current_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
         it { expect(declined_recipe.state).to eq('declined') }
         it { expect(hidden_recipe.state).to eq('hidden') }
       end
 
-      describe 'hide' do
+      describe '.hide' do
         let(:event) { 'hide' }
         it { expect(incomplete_recipe.state).to eq('hidden') }
         it { expect(awaiting_approval_recipe.state).to eq('hidden') }
         it { expect(approved_recipe.state).to eq('hidden') }
         it { expect(approved_for_feature_recipe.state).to eq('hidden') }
         it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('hidden') }
+        it { expect(currently_featured_recipe.state).to eq('hidden') }
+        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('hidden') }
+        it { expect(current_recipe_of_the_day_recipe.state).to eq('hidden') }
         it { expect(declined_recipe.state).to eq('hidden') }
         it { expect(hidden_recipe.state).to eq('hidden') }
       end

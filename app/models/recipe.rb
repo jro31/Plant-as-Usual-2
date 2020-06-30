@@ -4,6 +4,9 @@ class Recipe < ApplicationRecord
 
   mount_uploader :photo, PhotoUploader
 
+  validate :validate_not_currently_featured
+  validate :validate_one_recipe_of_the_day
+
   after_save :update_state_updated_at
 
   scope :approved, -> { where(state: [:approved, :approved_for_feature, :approved_for_recipe_of_the_day]) }
@@ -11,6 +14,7 @@ class Recipe < ApplicationRecord
   scope :approved_for_recipe_of_the_day, -> { where(state: :approved_for_recipe_of_the_day) }
   scope :awaiting_approval, -> { where(state: :awaiting_approval) }
   scope :not_hidden, -> { where.not(state: :hidden) }
+  scope :current_recipe_of_the_day, -> { where(state: :current_recipe_of_the_day).first }
 
   state_machine initial: :incomplete do
     event :complete do
@@ -18,7 +22,7 @@ class Recipe < ApplicationRecord
     end
 
     event :revised do
-      transition [:awaiting_approval, :approved, :approved_for_feature, :approved_for_recipe_of_the_day, :declined] => :incomplete
+      transition [:awaiting_approval, :approved, :approved_for_feature, :approved_for_recipe_of_the_day, :currently_featured, :recipe_of_the_day_as_currently_featured, :current_recipe_of_the_day, :declined] => :incomplete
     end
 
     event :approve do
@@ -31,6 +35,20 @@ class Recipe < ApplicationRecord
 
     event :approve_for_recipe_of_the_day do
       transition awaiting_approval: :approved_for_recipe_of_the_day
+    end
+
+    event :feature do
+      transition approved_for_feature: :currently_featured
+      transition approved_for_recipe_of_the_day: :recipe_of_the_day_as_currently_featured
+    end
+
+    event :set_as_recipe_of_the_day do
+      transition approved_for_recipe_of_the_day: :current_recipe_of_the_day
+    end
+
+    event :revert_from_featured do
+      transition currently_featured: :approved_for_feature
+      transition [:recipe_of_the_day_as_currently_featured, :current_recipe_of_the_day] => :approved_for_recipe_of_the_day
     end
 
     event :decline do
@@ -77,5 +95,17 @@ class Recipe < ApplicationRecord
 
   def currently_featured?
     # COMPLETE THIS
+  end
+
+  def validate_not_currently_featured # ADD THIS VALIDATION TO INGREDIENTS AS WELL
+    return unless currently_featured?
+
+    errors.add(:process, "Recipe cannot be updated while it is featured on the homepage")
+  end
+
+  def validate_one_recipe_of_the_day
+    # return unless Recipe.current_recipe_of_the_day.count > 1
+
+    # errors.add(:state, "There can only be one recipe of the day")
   end
 end
