@@ -9,7 +9,11 @@ describe Recipe, type: :model do
       # COMPELTE THIS
     end
 
-    describe '#validate_one_recipe_of_the_day' do
+    describe '#validate_number_of_recipes_of_the_day' do
+      # COMPLETE THIS
+    end
+
+    describe '#validate_number_of_featured_recipes' do
       # COMPLETE THIS
     end
   end
@@ -28,41 +32,57 @@ describe Recipe, type: :model do
     let!(:approved_recipe) { create(:recipe, state: :approved) }
     let!(:approved_for_feature_recipe) { create(:recipe, state: :approved_for_feature) }
     let!(:approved_for_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day) }
+    let!(:currently_featured_recipe) { create(:recipe, state: :currently_featured) }
+    let!(:recipe_of_the_day_as_currently_featured_recipe) { create(:recipe, state: :recipe_of_the_day_as_currently_featured) }
+    let!(:current_recipe_of_the_day_recipe) { create(:recipe, state: :current_recipe_of_the_day) }
     let!(:declined_recipe) { create(:recipe, state: :declined) }
     let!(:hidden_recipe) { create(:recipe, state: :hidden) }
 
     describe '.approved' do
       subject { Recipe.approved }
       it { expect(subject).to include(approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe) }
-      it { expect(subject).not_to include(incomplete_recipe, awaiting_approval_recipe, declined_recipe, hidden_recipe) }
+      it { expect(subject).not_to include(incomplete_recipe, awaiting_approval_recipe, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
     end
 
     describe '.approved_for_feature' do
       subject { Recipe.approved_for_feature }
       it { expect(subject).to include(approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe) }
-      it { expect(subject).not_to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, declined_recipe, hidden_recipe) }
+      it { expect(subject).not_to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
     end
 
     describe '.approved_for_recipe_of_the_day' do
       subject { Recipe.approved_for_recipe_of_the_day }
       it { expect(subject).to include(approved_for_recipe_of_the_day_recipe) }
-      it { expect(subject).not_to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, declined_recipe, hidden_recipe) }
+      it { expect(subject).not_to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
+    end
+
+    describe '.currently_featured' do
+      subject { Recipe.currently_featured }
+      it { expect(subject).to include(currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe) }
+      it { expect(subject).not_to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
+    end
+
+    describe '.current_recipe_of_the_day' do
+      subject { Recipe.current_recipe_of_the_day }
+      it { expect(subject).to eq(current_recipe_of_the_day_recipe) }
+    end
+
+    describe '.currently_highlighted' do
+      subject { Recipe.currently_highlighted }
+      it { expect(subject).to include(currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe) }
+      it { expect(subject).not_to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
     end
 
     describe '.awaiting_approval' do
       subject { Recipe.awaiting_approval }
       it { expect(subject).to include(awaiting_approval_recipe) }
-      it { expect(subject).not_to include(incomplete_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
+      it { expect(subject).not_to include(incomplete_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
     end
 
     describe '.not_hidden' do
       subject { Recipe.not_hidden }
-      it { expect(subject).to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, declined_recipe) }
+      it { expect(subject).to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe, declined_recipe) }
       it { expect(subject).not_to include(hidden_recipe) }
-    end
-
-    describe '.current_recipe_of_the_day' do
-
     end
   end
 
@@ -178,8 +198,8 @@ describe Recipe, type: :model do
         it { expect(hidden_recipe.state).to eq('hidden') }
       end
 
-      describe '.revert_from_featured' do
-        let(:event) { 'revert_from_featured' }
+      describe '.revert_from_highlighted' do
+        let(:event) { 'revert_from_highlighted' }
         it { expect(incomplete_recipe.state).to eq('incomplete') }
         it { expect(awaiting_approval_recipe.state).to eq('awaiting_approval') }
         it { expect(approved_recipe.state).to eq('approved') }
@@ -220,22 +240,163 @@ describe Recipe, type: :model do
         it { expect(hidden_recipe.state).to eq('hidden') }
       end
     end
+
+    describe 'callbacks' do
+      describe 'after_transition' do
+        describe '[:currently_featured, :recipe_of_the_day_as_currently_featured] => any' do
+          subject { recipe.revert_from_highlighted }
+          context 'recipe is currently_featured' do
+            let(:recipe) { create(:recipe, state: 'currently_featured') }
+            it 'calls set_next_featured_recipe' do
+              # COMPLETE THIS
+            end
+          end
+
+          context 'recipe is recipe_of_the_day_as_currently_featured' do
+            let(:recipe) { create(:recipe, state: 'recipe_of_the_day_as_currently_featured') }
+            it 'calls set_next_featured_recipe' do
+              # COMPLETE THIS
+            end
+          end
+
+          context 'recipe is something else' do
+            let(:recipe) { create(:recipe, state: 'current_recipe_of_the_day') }
+            it 'does not call set_next_featured_recipe' do
+              # COMPLETE THIS
+            end
+          end
+        end
+
+        describe ':current_recipe_of_the_day => any' do
+          subject { recipe.revert_from_highlighted }
+          context 'recipe is current_recipe_of_the_day' do
+            let(:recipe) { create(:recipe, state: 'current_recipe_of_the_day') }
+            it 'calls set_next_recipe_of_the_day' do
+              # COMPLETE THIS
+            end
+          end
+
+          context 'recipe is something else' do
+            let(:recipe) { create(:recipe, state: 'recipe_of_the_day_as_currently_featured') }
+            it 'does not call set_next_recipe_of_the_day' do
+              # COMPLETE THIS
+            end
+          end
+        end
+      end
+    end
   end
 
   describe 'class methods' do
+    let(:recipe) { create(:recipe) }
+    describe '#update_highlighted_recipes' do
+      it 'calls update_recipe_of_the_day' do
+        # double(recipe.currently_featured?).once
+        # COMPLETE THIS
+        # mock(recipe).update_recipe_of_the_day
+      end
+
+      it 'calls update_featured_recipes' do
+        # COMPLETE THIS
+      end
+    end
+
+    describe '#update_recipe_of_the_day' do
+      before { Timecop.freeze }
+      after { Timecop.return }
+      let!(:current_recipe_of_the_day) { create(:recipe, state: :current_recipe_of_the_day, last_recipe_of_the_day_at: 1.day.ago) }
+      subject { Recipe.update_recipe_of_the_day }
+      context 'next recipe of the day exists' do
+        let!(:next_recipe_of_the_day) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: nil) }
+        it 'reverts the current recipe of the day to approved_for_recipe_of_the_day' do
+          subject
+          expect(current_recipe_of_the_day.reload.state).to eq('approved_for_recipe_of_the_day')
+        end
+
+        it 'sets the next recipe as the recipe of the day' do
+          subject
+          expect(next_recipe_of_the_day.reload.state).to eq('current_recipe_of_the_day')
+        end
+
+        it 'sets last_recipe_of_the_day_at' do
+          subject
+          expect(next_recipe_of_the_day.reload.last_recipe_of_the_day_at).to eq(Time.now)
+        end
+      end
+
+      context 'next recipe of the day does not exist' do
+        it 'does not revert the state of the current recipe of the day' do
+          subject
+          expect(current_recipe_of_the_day.reload.state).to eq('current_recipe_of_the_day')
+        end
+      end
+    end
+
+    describe '#set_next_recipe_of_the_day' do
+      subject { Recipe.set_next_recipe_of_the_day }
+      context 'the number of current recipes of the day is less than NUMBER_OF_RECIPES_OF_THE_DAY' do
+
+      end
+
+      context 'the number of current recipes of the day is equal to NUMBER_OF_RECIPES_OF_THE_DAY' do
+        let!(:current_recipe_of_the_day) { create(:recipe, state: :current_recipe_of_the_day) }
+        it 'does nothing' do
+          expect(subject).to eq(nil)
+        end
+      end
+    end
+
+    describe '#next_recipe_of_the_day' do
+      let!(:middle_never_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: nil, created_at: 1.week.ago) }
+      let!(:oldest_never_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: nil, created_at: 1.month.ago) }
+      let!(:newest_never_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: nil, created_at: 1.day.ago) }
+      let!(:middle_previous_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: 1.week.ago) }
+      let!(:oldest_previous_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: 1.month.ago) }
+      let!(:newest_previous_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: 1.day.ago) }
+      let!(:not_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_feature, last_recipe_of_the_day_at: nil) }
+      subject { Recipe.next_recipe_of_the_day }
+      it { expect(subject).to eq(oldest_never_recipe_of_the_day_recipe) }
+
+      context 'oldest never recipe of the day recipe does not exist' do
+        let!(:oldest_never_recipe_of_the_day_recipe) { nil }
+        it { expect(subject).to eq(middle_never_recipe_of_the_day_recipe) }
+
+        context 'middle never recipe of the day recipe does not exist' do
+          let!(:middle_never_recipe_of_the_day_recipe) { nil }
+          it { expect(subject).to eq(newest_never_recipe_of_the_day_recipe) }
+
+          context 'newest never recipe of the day recipe does not exist' do
+            let!(:newest_never_recipe_of_the_day_recipe) { nil }
+            it { expect(subject).to eq(oldest_previous_recipe_of_the_day_recipe) }
+
+            context 'oldest previous recipe of the day recipe does not exist' do
+              let!(:oldest_previous_recipe_of_the_day_recipe) { nil }
+              it { expect(subject).to eq(middle_previous_recipe_of_the_day_recipe) }
+
+              context 'middle previous recipe of the day recipe does not exist' do
+                let!(:middle_previous_recipe_of_the_day_recipe) { nil }
+                it { expect(subject).to eq(newest_previous_recipe_of_the_day_recipe) }
+
+                context 'newest previous recipe of the day recipe does not exist' do
+                  let!(:newest_previous_recipe_of_the_day_recipe) { nil }
+                  it { expect(subject).to eq(nil) }
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+
     describe '#update_featured_recipes' do
       # COMPLETE THIS
     end
 
-    describe '#recipe_of_the_day' do
+    describe '#set_next_featured_recipe' do
       # COMPLETE THIS
     end
 
-    describe '#featured_recipes' do
-      # COMPLETE THIS
-    end
-
-    describe '#recipe_of_the_day_last_updated' do
+    describe '#next_recipe_to_feature' do
       # COMPLETE THIS
     end
   end

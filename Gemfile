@@ -33,6 +33,7 @@ end
 group :test do
   gem 'shoulda-matchers'
   gem 'rr', require: false
+  gem 'timecop'
 end
 
 group :development, :test do
