@@ -291,9 +291,7 @@ describe Recipe, type: :model do
     let(:recipe) { create(:recipe) }
     describe '#update_highlighted_recipes' do
       it 'calls update_recipe_of_the_day' do
-        # double(recipe.currently_featured?).once
         # COMPLETE THIS
-        # mock(recipe).update_recipe_of_the_day
       end
 
       it 'calls update_featured_recipes' do
@@ -302,40 +300,49 @@ describe Recipe, type: :model do
     end
 
     describe '#update_recipe_of_the_day' do
-      before { Timecop.freeze }
-      after { Timecop.return }
       let!(:current_recipe_of_the_day) { create(:recipe, state: :current_recipe_of_the_day, last_recipe_of_the_day_at: 1.day.ago) }
+      let!(:next_recipe_of_the_day) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: nil) }
       subject { Recipe.update_recipe_of_the_day }
-      context 'next recipe of the day exists' do
-        let!(:next_recipe_of_the_day) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: nil) }
-        it 'reverts the current recipe of the day to approved_for_recipe_of_the_day' do
+      context 'last_recipe_of_the_day_at is less than 23 hours ago' do
+        before { current_recipe_of_the_day.update(last_recipe_of_the_day_at: 22.hours.ago) }
+        it 'does not change the state of the recipe' do
           subject
-          expect(current_recipe_of_the_day.reload.state).to eq('approved_for_recipe_of_the_day')
-        end
-
-        it 'sets the next recipe as the recipe of the day' do
-          subject
-          expect(next_recipe_of_the_day.reload.state).to eq('current_recipe_of_the_day')
-        end
-
-        it 'sets last_recipe_of_the_day_at' do
-          subject
-          expect(next_recipe_of_the_day.reload.last_recipe_of_the_day_at).to eq(Time.now)
+          expect(current_recipe_of_the_day.reload.state).to eq('current_recipe_of_the_day')
         end
       end
 
-      context 'next recipe of the day does not exist' do
-        it 'does not revert the state of the current recipe of the day' do
+      context 'last_recipe_of_the_day_at is 23 hours ago or more' do
+        before { current_recipe_of_the_day.update(last_recipe_of_the_day_at: 23.hours.ago) }
+        it 'updates the state of the recipe to approved_for_recipe_of_the_day' do
           subject
-          expect(current_recipe_of_the_day.reload.state).to eq('current_recipe_of_the_day')
+          expect(current_recipe_of_the_day.reload.state).to eq('approved_for_recipe_of_the_day')
         end
       end
     end
 
     describe '#set_next_recipe_of_the_day' do
+      before { Timecop.freeze }
+      after { Timecop.return }
       subject { Recipe.set_next_recipe_of_the_day }
       context 'the number of current recipes of the day is less than NUMBER_OF_RECIPES_OF_THE_DAY' do
+        context 'next recipe of the day exists' do
+          let!(:next_recipe_of_the_day) { create(:recipe, state: :approved_for_recipe_of_the_day) }
+          it 'sets the next recipe of the day as recipe of the day' do
+            subject
+            expect(next_recipe_of_the_day.reload.state).to eq('current_recipe_of_the_day')
+          end
 
+          it 'sets last_recipe_of_the_day_at' do
+            subject
+            expect(next_recipe_of_the_day.reload.last_recipe_of_the_day_at).to eq(Time.now)
+          end
+        end
+
+        context 'next recipe of the day does not exist' do
+          it 'does nothing' do
+            expect(subject).to eq(nil)
+          end
+        end
       end
 
       context 'the number of current recipes of the day is equal to NUMBER_OF_RECIPES_OF_THE_DAY' do

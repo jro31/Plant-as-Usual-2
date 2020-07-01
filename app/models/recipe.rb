@@ -75,14 +75,13 @@ class Recipe < ApplicationRecord
   end
 
   def self.update_highlighted_recipes
-    puts "🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳🐳"
     update_recipe_of_the_day
     update_featured_recipes
   end
 
   def self.update_recipe_of_the_day
     self.current_recipes_of_the_day.each do |recipe|
-      recipe.revert_from_highlighted if recipe.last_recipe_of_the_day_at >= 23.hours.ago
+      recipe.revert_from_highlighted if recipe.last_recipe_of_the_day_at <= 23.hours.ago
     end
   end
 
