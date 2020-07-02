@@ -1,8 +1,14 @@
 require 'rails_helper'
 
-describe Recipe, type: :model do
+describe Recipe do
   it { should belong_to :user }
   it { should have_many :ingredients }
+
+  let(:recipe) { create(:recipe) }
+  it '' do
+    mock(recipe).update_state_updated_at
+    recipe.validate_number_of_recipes_of_the_day
+  end
 
   describe 'validations' do
     describe '#validate_not_currently_featured' do
@@ -290,6 +296,7 @@ describe Recipe, type: :model do
   describe 'class methods' do
     let(:recipe) { create(:recipe) }
     describe '#update_highlighted_recipes' do
+      subject { Recipe.update_highlighted_recipes }
       it 'calls update_recipe_of_the_day' do
         # COMPLETE THIS
       end
@@ -410,6 +417,11 @@ describe Recipe, type: :model do
 
   describe 'currently_featured?' do
     # COMPLETE THIS
+    let(:recipe) { create(:recipe) }
+    it '' do
+      mock(recipe).update_state_updated_at
+      recipe.currently_featured?
+    end
   end
 
   describe 'something' do

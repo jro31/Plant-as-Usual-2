@@ -7,7 +7,6 @@ class Recipe < ApplicationRecord
 
   mount_uploader :photo, PhotoUploader
 
-  # validate :validate_not_currently_featured
   # validate :validate_one_recipe_of_the_day
   # validate :validate_number_of_featured_recipes
 
@@ -111,7 +110,7 @@ class Recipe < ApplicationRecord
   end
 
   def self.set_next_featured_recipe
-    return if self.currently_featured.count >= ::NUMBER_OF_FEATURED_RECIPES
+    return if self.currently_featured.count >= NUMBER_OF_FEATURED_RECIPES
 
     new_featured_recipe = self.next_recipe_to_feature
     return unless new_featured_recipe
@@ -135,15 +134,9 @@ class Recipe < ApplicationRecord
     touch(:state_updated_at)
   end
 
-  def currently_featured?
-    # COMPLETE THIS
-  end
-
-  def validate_not_currently_featured # ADD THIS VALIDATION TO INGREDIENTS AS WELL
-    return unless currently_featured?
-
-    errors.add(:process, "Recipe cannot be updated while it is featured on the homepage")
-  end
+  # def currently_featured?
+  #   true
+  # end
 
   def validate_number_of_recipes_of_the_day
     # errors.add(:state, "There can only be one recipe of the day")
@@ -151,5 +144,6 @@ class Recipe < ApplicationRecord
 
   def validate_number_of_featured_recipes
     # COMPLETE THIS
+    true
   end
 end
