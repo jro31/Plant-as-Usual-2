@@ -32,7 +32,6 @@ end
 
 group :test do
   gem 'shoulda-matchers'
-  gem 'rr', require: false
   gem 'timecop'
 end
 
@@ -44,16 +43,7 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'dotenv-rails'
-
-  # Was getting an rspec bug (see https://github.com/rspec/rspec-rails/issues/2177). This was the fix until rSpec 4.0 is released:
-  # gem 'rspec-rails', '~> 3.9.0'
-  gem 'rspec-core', git: 'https://github.com/rspec/rspec-core'
-  gem 'rspec-expectations', git: 'https://github.com/rspec/rspec-expectations'
-  gem 'rspec-mocks', git: 'https://github.com/rspec/rspec-mocks'
-  gem 'rspec-rails', git: 'https://github.com/rspec/rspec-rails'
-  gem 'rspec-support', git: 'https://github.com/rspec/rspec-support'
-  # Up to here
-
+  gem 'rspec-rails', '~> 4.0.0'
   gem 'capybara'
   gem 'factory_bot_rails'
 end

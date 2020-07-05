@@ -105,8 +105,10 @@ class Recipe < ApplicationRecord
 
   def self.update_featured_recipes
     self.currently_featured.each do |recipe|
-      recipe.revert_from_highlighted if recipe.last_featured_at >= 23.hours.ago
+      recipe.revert_from_highlighted if recipe.last_featured_at <= 23.hours.ago
     end
+
+    (NUMBER_OF_FEATURED_RECIPES - Recipe.currently_featured.count).times { self.set_next_featured_recipe }
   end
 
   def self.set_next_featured_recipe
@@ -120,6 +122,8 @@ class Recipe < ApplicationRecord
   end
 
   def self.next_recipe_to_feature
+    return if self.approved_for_feature.count.nil?
+
     never_featured_recipes = self.approved_for_feature
                                  .where(last_featured_at: nil)
                                  .order(created_at: :asc)
@@ -134,16 +138,11 @@ class Recipe < ApplicationRecord
     touch(:state_updated_at)
   end
 
-  # def currently_featured?
-  #   true
-  # end
-
   def validate_number_of_recipes_of_the_day
     # errors.add(:state, "There can only be one recipe of the day")
   end
 
   def validate_number_of_featured_recipes
     # COMPLETE THIS
-    true
   end
 end

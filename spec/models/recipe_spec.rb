@@ -5,10 +5,6 @@ describe Recipe do
   it { should have_many :ingredients }
 
   let(:recipe) { create(:recipe) }
-  it '' do
-    mock(recipe).update_state_updated_at
-    recipe.validate_number_of_recipes_of_the_day
-  end
 
   describe 'validations' do
     describe '#validate_not_currently_featured' do
@@ -38,8 +34,8 @@ describe Recipe do
     let!(:approved_recipe) { create(:recipe, state: :approved) }
     let!(:approved_for_feature_recipe) { create(:recipe, state: :approved_for_feature) }
     let!(:approved_for_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day) }
-    let!(:currently_featured_recipe) { create(:recipe, state: :currently_featured) }
-    let!(:recipe_of_the_day_as_currently_featured_recipe) { create(:recipe, state: :recipe_of_the_day_as_currently_featured) }
+    let!(:currently_featured_recipe) { create(:recipe, state: :currently_featured, last_featured_at: 2.hours.ago) }
+    let!(:recipe_of_the_day_as_currently_featured_recipe) { create(:recipe, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 1.hours.ago) }
     let!(:current_recipe_of_the_day_recipe) { create(:recipe, state: :current_recipe_of_the_day) }
     let!(:declined_recipe) { create(:recipe, state: :declined) }
     let!(:hidden_recipe) { create(:recipe, state: :hidden) }
@@ -69,8 +65,8 @@ describe Recipe do
     end
 
     describe '.current_recipe_of_the_day' do
-      subject { Recipe.current_recipe_of_the_day }
-      it { expect(subject).to eq(current_recipe_of_the_day_recipe) }
+      subject { Recipe.current_recipes_of_the_day }
+      it { expect(subject).to eq([current_recipe_of_the_day_recipe]) }
     end
 
     describe '.currently_highlighted' do
@@ -254,21 +250,24 @@ describe Recipe do
           context 'recipe is currently_featured' do
             let(:recipe) { create(:recipe, state: 'currently_featured') }
             it 'calls set_next_featured_recipe' do
-              # COMPLETE THIS
+              expect(Recipe).to receive(:set_next_featured_recipe).once.and_call_original
+              subject
             end
           end
 
           context 'recipe is recipe_of_the_day_as_currently_featured' do
             let(:recipe) { create(:recipe, state: 'recipe_of_the_day_as_currently_featured') }
             it 'calls set_next_featured_recipe' do
-              # COMPLETE THIS
+              expect(Recipe).to receive(:set_next_featured_recipe).once.and_call_original
+              subject
             end
           end
 
           context 'recipe is something else' do
             let(:recipe) { create(:recipe, state: 'current_recipe_of_the_day') }
             it 'does not call set_next_featured_recipe' do
-              # COMPLETE THIS
+              expect(Recipe).to receive(:set_next_featured_recipe).never
+              subject
             end
           end
         end
@@ -278,14 +277,16 @@ describe Recipe do
           context 'recipe is current_recipe_of_the_day' do
             let(:recipe) { create(:recipe, state: 'current_recipe_of_the_day') }
             it 'calls set_next_recipe_of_the_day' do
-              # COMPLETE THIS
+              expect(Recipe).to receive(:set_next_recipe_of_the_day).once.and_call_original
+              subject
             end
           end
 
           context 'recipe is something else' do
             let(:recipe) { create(:recipe, state: 'recipe_of_the_day_as_currently_featured') }
             it 'does not call set_next_recipe_of_the_day' do
-              # COMPLETE THIS
+              expect(Recipe).to receive(:set_next_recipe_of_the_day).never
+              subject
             end
           end
         end
@@ -298,11 +299,13 @@ describe Recipe do
     describe '#update_highlighted_recipes' do
       subject { Recipe.update_highlighted_recipes }
       it 'calls update_recipe_of_the_day' do
-        # COMPLETE THIS
+        expect(Recipe).to receive(:update_recipe_of_the_day).once.and_call_original
+        subject
       end
 
       it 'calls update_featured_recipes' do
-        # COMPLETE THIS
+        expect(Recipe).to receive(:update_featured_recipes).once.and_call_original
+        subject
       end
     end
 
@@ -403,7 +406,58 @@ describe Recipe do
     end
 
     describe '#update_featured_recipes' do
-      # COMPLETE THIS
+      before { Timecop.freeze }
+      after { Timecop.return }
+      subject { Recipe.update_featured_recipes }
+      let!(:currently_featured_recipe_1) { create(:recipe, state: :currently_featured, last_featured_at: 23.hours.ago) }
+      let!(:currently_featured_recipe_2) { create(:recipe, state: :currently_featured, last_featured_at: 23.hours.ago - 1.minute) }
+      let!(:currently_featured_recipe_3) { create(:recipe, state: :currently_featured, last_featured_at: 23.hours.ago + 1.minute) }
+      let!(:recipe_of_the_day_as_currently_featured_recipe_1) { create(:recipe, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 23.hours.ago) }
+      let!(:recipe_of_the_day_as_currently_featured_recipe_2) { create(:recipe, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 23.hours.ago - 2.minutes) }
+      let!(:recipe_of_the_day_as_currently_featured_recipe_3) { create(:recipe, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 23.hours.ago + 2.minutes) }
+      let!(:approved_for_feature_recipe_1) { create(:recipe, state: :approved_for_feature, last_featured_at: nil) }
+      let!(:approved_for_feature_recipe_2) { create(:recipe, state: :approved_for_feature, last_featured_at: 1.month.ago) }
+      let!(:approved_for_feature_recipe_3) { create(:recipe, state: :approved_for_feature, last_featured_at: 1.week.ago) }
+      let!(:approved_for_recipe_of_the_day_recipe_1) { create(:recipe, state: :approved_for_recipe_of_the_day, last_featured_at: nil) }
+      let!(:approved_for_recipe_of_the_day_recipe_2) { create(:recipe, state: :approved_for_recipe_of_the_day, last_featured_at: 1.month.ago) }
+      let!(:approved_for_recipe_of_the_day_recipe_3) { create(:recipe, state: :approved_for_recipe_of_the_day, last_featured_at: 1.week.ago) }
+      it 'calls set_next_featured_recipe 8 times' do
+        expect(Recipe).to receive(:set_next_featured_recipe).exactly(8).times.and_call_original
+        subject
+      end
+
+      it 'features a total of ten recipes' do
+        subject
+        expect(Recipe.currently_featured.count).to eq(10)
+      end
+
+      it 'features all of the approved for feature recipes' do
+        subject
+        expect(approved_for_feature_recipe_1.reload.state).to eq('currently_featured')
+        expect(approved_for_feature_recipe_2.reload.state).to eq('currently_featured')
+        expect(approved_for_feature_recipe_3.reload.state).to eq('currently_featured')
+        expect(approved_for_recipe_of_the_day_recipe_1.reload.state).to eq('recipe_of_the_day_as_currently_featured')
+        expect(approved_for_recipe_of_the_day_recipe_2.reload.state).to eq('recipe_of_the_day_as_currently_featured')
+        expect(approved_for_recipe_of_the_day_recipe_3.reload.state).to eq('recipe_of_the_day_as_currently_featured')
+      end
+
+      it 'continues to feature the recipes that were featured less than 23 hours ago' do
+        subject
+        expect(currently_featured_recipe_3.reload.state).to eq('currently_featured')
+        expect(recipe_of_the_day_as_currently_featured_recipe_3.reload.state).to eq('recipe_of_the_day_as_currently_featured')
+      end
+
+      it 're-features the remaining currently featured recipes that were featured the longest time ago' do
+        subject
+        expect(currently_featured_recipe_2.reload.state).to eq('currently_featured')
+        expect(recipe_of_the_day_as_currently_featured_recipe_2.reload.state).to eq('recipe_of_the_day_as_currently_featured')
+      end
+
+      it 'does not re-feature the remanining currently featured receipes that were featured most recently' do
+        subject
+        expect(currently_featured_recipe_1.reload.state).to eq('approved_for_feature')
+        expect(recipe_of_the_day_as_currently_featured_recipe_1.reload.state).to eq('approved_for_recipe_of_the_day')
+      end
     end
 
     describe '#set_next_featured_recipe' do
@@ -412,15 +466,6 @@ describe Recipe do
 
     describe '#next_recipe_to_feature' do
       # COMPLETE THIS
-    end
-  end
-
-  describe 'currently_featured?' do
-    # COMPLETE THIS
-    let(:recipe) { create(:recipe) }
-    it '' do
-      mock(recipe).update_state_updated_at
-      recipe.currently_featured?
     end
   end
 
