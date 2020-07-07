@@ -7,8 +7,8 @@ class Recipe < ApplicationRecord
 
   mount_uploader :photo, PhotoUploader
 
-  # validate :validate_one_recipe_of_the_day
-  # validate :validate_number_of_featured_recipes
+  validate :validate_number_of_featured_recipes
+  validate :validate_number_of_recipes_of_the_day
 
   after_save :update_state_updated_at
 
@@ -132,17 +132,23 @@ class Recipe < ApplicationRecord
     self.approved_for_feature.order(last_featured_at: :asc).first
   end
 
-  def update_state_updated_at
+  def update_state_updated_at # PERHAPS REMOVE THIS IF THERE'S NO NEED FOR state_updated_at
     return unless saved_change_to_state?
 
     touch(:state_updated_at)
   end
 
-  def validate_number_of_recipes_of_the_day
-    # errors.add(:state, "There can only be one recipe of the day")
+  def validate_number_of_featured_recipes
+    return unless will_save_change_to_state? && (currently_featured? || recipe_of_the_day_as_currently_featured?)
+    return unless Recipe.currently_featured.count >= NUMBER_OF_FEATURED_RECIPES
+
+    errors.add(:state, "There can only be ten featured recipes")
   end
 
-  def validate_number_of_featured_recipes
-    # COMPLETE THIS
+  def validate_number_of_recipes_of_the_day
+    return unless will_save_change_to_state? && current_recipe_of_the_day?
+    return unless Recipe.current_recipes_of_the_day.count >= NUMBER_OF_RECIPES_OF_THE_DAY
+
+    errors.add(:state, "There can only be one recipe of the day")
   end
 end

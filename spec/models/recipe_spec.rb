@@ -7,23 +7,113 @@ describe Recipe do
   let(:recipe) { create(:recipe) }
 
   describe 'validations' do
-    describe '#validate_not_currently_featured' do
-      # COMPELTE THIS
+    describe '#validate_number_of_featured_recipes' do
+      before do
+        create_list(:recipe, currently_featured_count, state: :currently_featured)
+        create_list(:recipe, 5, state: :recipe_of_the_day_as_currently_featured)
+      end
+      subject { create(:recipe, state: :approved_for_feature) }
+      context 'will_save_change_to_state? is true' do
+        context 'subject will update to currently_featured' do
+          before { subject.state = 'currently_featured' }
+          context 'there are already ten or more currently featured recipes' do
+            let(:currently_featured_count) { 5 }
+            it { expect(subject).not_to be_valid }
+          end
+
+          context 'there are less than ten currently featured recipes' do
+            let(:currently_featured_count) { 4 }
+            it { expect(subject).to be_valid }
+          end
+        end
+
+        context 'subject will update to recipe_of_the_day_as_currently_featured' do
+          before { subject.state = 'recipe_of_the_day_as_currently_featured' }
+          context 'there are already ten or more currently featured recipes' do
+            let(:currently_featured_count) { 5 }
+            it { expect(subject).not_to be_valid }
+          end
+
+          context 'there are less than ten currently featured recipes' do
+            let(:currently_featured_count) { 4 }
+            it { expect(subject).to be_valid }
+          end
+        end
+
+        context 'subject will update to something else' do
+          before { subject.state = 'current_recipe_of_the_day' }
+          context 'there are already ten or more currently featured recipes' do
+            let(:currently_featured_count) { 5 }
+            it { expect(subject).to be_valid }
+          end
+        end
+      end
+
+      context 'will_save_change_to_state? is false' do
+        before { subject.name = 'Big Papa' }
+        context 'there are already ten or more currently featured recipes' do
+          let(:currently_featured_count) { 5 }
+          it { expect(subject).to be_valid }
+        end
+      end
     end
 
     describe '#validate_number_of_recipes_of_the_day' do
-      # COMPLETE THIS
-    end
+      subject { create(:recipe, state: :approved_for_recipe_of_the_day) }
+      context 'will_save_change_to_state? is true' do
+        context 'subject will update to current_recipe_of_the_day' do
+          before { subject.state = 'current_recipe_of_the_day' }
+          context 'there is an existing recipe of the day' do
+            let!(:current_recipe_of_the_day_recipe) { create(:recipe, state: :current_recipe_of_the_day) }
+            it { expect(subject).not_to be_valid }
+          end
 
-    describe '#validate_number_of_featured_recipes' do
-      # COMPLETE THIS
+          context 'there is not an existing recipe of the day' do
+            it { expect(subject).to be_valid }
+          end
+        end
+
+        context 'subject will update to something else' do
+          before { subject.state = 'recipe_of_the_day_as_currently_featured' }
+          context 'there is an existing recipe of the day' do
+            let!(:current_recipe_of_the_day_recipe) { create(:recipe, state: :current_recipe_of_the_day) }
+            it { expect(subject).to be_valid }
+          end
+        end
+      end
+
+      context 'will_save_change_to_state? is false' do
+        before { subject.name = 'Big Papa' }
+        context 'there is an existing recipe of the day' do
+          let!(:current_recipe_of_the_day_recipe) { create(:recipe, state: :current_recipe_of_the_day) }
+          it { expect(subject).to be_valid }
+        end
+      end
     end
   end
 
   describe 'callbacks' do
     describe 'after_save' do
       describe '#update_state_updated_at' do
-        # COMPLETE THIS
+        before { Timecop.freeze }
+        after { Timecop.return }
+        subject { create(:recipe, state: :incomplete) }
+        before { subject.update(state_updated_at: 1.day.ago) }
+        context 'state is updated' do
+          it 'sets state_updated_at' do
+            expect(subject.state_updated_at).to eq(1.day.ago)
+            subject.complete
+            expect(subject.state_updated_at).to eq(Time.now)
+          end
+        end
+
+        context 'state is not updated' do
+          it 'does not set state_updated_at' do
+            expect(subject.state_updated_at).to eq(1.day.ago)
+            subject.update(name: 'Big Pizza')
+            expect(subject.state_updated_at).to eq(1.day.ago)
+          end
+        end
       end
     end
   end
