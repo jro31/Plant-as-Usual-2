@@ -122,7 +122,7 @@ class Recipe < ApplicationRecord
   end
 
   def self.next_recipe_to_feature
-    return if self.approved_for_feature.count.nil?
+    return if self.approved_for_feature.count.zero?
 
     never_featured_recipes = self.approved_for_feature
                                  .where(last_featured_at: nil)

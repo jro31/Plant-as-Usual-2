@@ -461,29 +461,99 @@ describe Recipe do
     end
 
     describe '#set_next_featured_recipe' do
-      # COMPLETE THIS
-    end
+      before { Timecop.freeze }
+      after { Timecop.return }
+      subject { Recipe.set_next_featured_recipe }
+      let!(:approved_for_feature_recipe) { create(:recipe, state: :approved_for_feature) }
+      context 'number of currently featured recipes is greater/equal to NUMBER_OF_FEATURED_RECIPES' do
+        before do
+          create_list(:recipe, 5, state: :currently_featured)
+          create_list(:recipe, 5, state: :recipe_of_the_day_as_currently_featured)
+        end
+        it { expect(Recipe.currently_featured.count).to eq(10) }
 
-    describe '#next_recipe_to_feature' do
-      # COMPLETE THIS
-    end
-  end
+        it 'does not call next_recipe_to_feature' do
+          expect(Recipe).to receive(:next_recipe_to_feature).never
+          subject
+        end
 
-  describe 'something' do
-    context 'recipe' do
-      let(:recipe) { create(:recipe) }
-      it 'does something' do
-        puts recipe.name
-        puts recipe.process
+        it 'does not update the next recipe to feature' do
+          subject
+          expect(approved_for_feature_recipe.reload.state).to eq('approved_for_feature')
+        end
+      end
+
+      context 'number of currently featured recipes is less than NUMBER_OF_FEATURED_RECIPES' do
+        before do
+          create_list(:recipe, 5, state: :currently_featured)
+          create_list(:recipe, 4, state: :recipe_of_the_day_as_currently_featured)
+        end
+        it { expect(Recipe.currently_featured.count).to eq(9) }
+
+        context 'there is a next_recipe_to_feature' do
+          it 'calls next_recipe_to_feature' do
+            expect(Recipe).to receive(:next_recipe_to_feature).once.and_call_original
+            subject
+          end
+
+          it 'calls feature' do
+            expect_any_instance_of(Recipe).to receive(:feature).once
+            subject
+          end
+
+          it 'updates the state of the next recipe to feature' do
+            subject
+            expect(approved_for_feature_recipe.reload.state).to eq('currently_featured')
+          end
+
+          it 'sets last_featured_at of the next recipe to feature' do
+            subject
+            expect(approved_for_feature_recipe.reload.last_featured_at).to eq(Time.now)
+          end
+        end
+
+        context 'there is not a next_recipe_to_feature' do
+          let!(:approved_for_feature_recipe) { nil }
+          it 'calls next_recipe_to_feature' do
+            expect(Recipe).to receive(:next_recipe_to_feature).once.and_call_original
+            subject
+          end
+
+          it 'does not call feature' do
+            expect_any_instance_of(Recipe).to receive(:feature).never
+            subject
+          end
+        end
       end
     end
 
-    context 'recipe_with_ingredients' do
-      let(:recipe_with_ingredients) { create(:recipe_with_ingredients) }
-      it 'does something else' do
-        puts recipe_with_ingredients.name
-        puts recipe_with_ingredients.ingredients.first.food
-        puts recipe_with_ingredients.ingredients.last.food
+    describe '#next_recipe_to_feature' do
+      let!(:approved_recipe) { create(:recipe, state: :approved, created_at: 1.second.ago) }
+      subject { Recipe.next_recipe_to_feature }
+      context 'no recipes are approved for feature' do
+        it 'returns nil' do
+          expect(subject).to eq(nil)
+        end
+      end
+
+      context 'recipes approved for feature exist' do
+        let!(:approved_for_recipe_of_the_day_recipe_1) { create(:recipe, state: :approved_for_recipe_of_the_day, last_featured_at: 1.month.ago) }
+        let!(:approved_for_feature_recipe_1) { create(:recipe, state: :approved_for_feature, last_featured_at: 1.year.ago) }
+        let!(:approved_for_feature_recipe_2) { create(:recipe, state: :approved_for_feature, last_featured_at: 1.week.ago) }
+        context 'never featured recipes exist' do
+          let!(:approved_for_recipe_of_the_day_recipe_2) { create(:recipe, state: :approved_for_recipe_of_the_day, created_at: 1.hour.ago, last_featured_at: nil) }
+          let!(:approved_for_recipe_of_the_day_recipe_3) { create(:recipe, state: :approved_for_recipe_of_the_day, created_at: 1.week.ago, last_featured_at: nil) }
+          let!(:approved_for_feature_recipe_3) { create(:recipe, state: :approved_for_feature, created_at: 1.day.ago, last_featured_at: nil) }
+          it 'returns the never featured recipe created the longest ago' do
+            expect(subject).to eq(approved_for_recipe_of_the_day_recipe_3)
+          end
+        end
+
+        context 'never featured recipes do not exist' do
+          it 'returns the recipe last featured the longest ago' do
+            expect(subject).to eq(approved_for_feature_recipe_1)
+          end
+        end
       end
     end
   end
