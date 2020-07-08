@@ -191,7 +191,7 @@ describe Recipe do
       let(:declined_recipe) { create(:recipe, state: :declined) }
       let(:hidden_recipe) { create(:recipe, state: :hidden) }
       let(:all_recipes) { [incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe] }
-      before { all_recipes.each { |recipe| recipe.send(event) } }
+      before { all_recipes.each { |recipe| recipe&.send(event) } }
       describe '.complete' do
         let(:event) { 'complete' }
         it { expect(incomplete_recipe.state).to eq('awaiting_approval') }
@@ -282,7 +282,11 @@ describe Recipe do
         it { expect(awaiting_approval_recipe.state).to eq('awaiting_approval') }
         it { expect(approved_recipe.state).to eq('approved') }
         it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
-        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
+        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+        context 'no current recipe of the day exists' do
+          let(:current_recipe_of_the_day_recipe) { nil }
+          it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
+        end
         it { expect(currently_featured_recipe.state).to eq('currently_featured') }
         it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
         it { expect(current_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
