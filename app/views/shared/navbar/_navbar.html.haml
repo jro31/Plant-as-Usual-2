@@ -1,0 +1,43 @@
+.navbar-container
+  = link_to root_path, class: 'site-logo position-fixed' do
+    = image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png"
+
+  .dropleft.position-fixed.search-logo
+    = link_to "#", class: 'dropdown-toggle', id: 'navbarDropdown', 'role' => 'button', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false' do
+      %i.fa.fa-search
+    .dropdown-menu
+      %form.form-inline.my-2.my-lg-0.dropdown-item
+        %input.form-control.mr-sm-2{type: :search, 'placeholder' => 'Search', 'aria-label' => 'Search'}
+        %button.btn.btn-outline-success.my-2.my-sm-0{type: :search}
+          Search
+
+  .navbar-expand-md{class: component_classes('navbar')}
+    %button.navbar-toggler{type: :button, 'data-toggle' => :collapse, 'data-target' => "#navbarSupportedContent", 'aria-controls' => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation"}
+      / %span.navbar-toggler-icon
+      %i.fas.fa-bars
+
+    .collapse.navbar-collapse.w-100#navbarSupportedContent
+      %ul.navbar-nav.w-100.justify-content-around
+        - if user_signed_in?
+          %li.nav-item
+            = link_to "#", class: 'nav-link' do
+              %i.fas.fa-user
+              My recipes
+          %li.nav-item
+            = link_to "#", class: 'nav-link' do
+              %i.fas.fa-heart
+              Favourites
+          %li.nav-item
+            #dark-mode-switch-container.nav-link
+              .custom-control.custom-switch
+                %input#dark-mode-switch-input.custom-control-input{type: 'checkbox'}
+                %label.custom-control-label{for: 'dark-mode-switch-input'}
+                  %i.fas.fa-moon
+                  Dark mode
+          %li.nav-item
+            = link_to destroy_user_session_path, method: :delete, class: 'nav-link' do
+              %i.fas.fa-sign-out-alt
+              Sign out
+        - else
+          %li.nav-item
+            = link_to "Login", new_user_session_path, class: "nav-link"
