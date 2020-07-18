@@ -2,18 +2,18 @@ var darkModeClasses = ['narrow-recipe-card', 'navbar', 'page-container', 'text-b
 
 setInitialSwitchState()
 
-$('#dark-mode-switch-input').change(function(e) {
+$('#dark-mode-dropdown-switch, #dark-mode-expanded-switch').change(function(e) {
   toggleDarkMode(e.target.checked)
 })
 
-$('#dark-mode-switch-container').on('click', function(event){
+$('.dark-mode-switch-container').on('click', function(event){
   event.stopPropagation();
 })
 
 function setInitialSwitchState() {
   $.get('/current_user_data', function(result) {
     if(result != null) {
-      $('#dark-mode-switch-input').prop('checked', result.dark_mode);
+      $('#dark-mode-dropdown-switch, #dark-mode-expanded-switch').prop('checked', result.dark_mode);
     }
   });
 }
