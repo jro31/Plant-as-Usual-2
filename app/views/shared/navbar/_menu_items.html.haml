@@ -1,0 +1,19 @@
+- if user_signed_in?
+  = link_to '#', class: mobile ? 'dropdown-item' : '' do
+    %i.fas.fa-user.navbar-menu-item-icon
+    %span
+      My recipes
+  = link_to '#', class: mobile ? 'dropdown-item' : '' do
+    %i.fas.fa-heart.navbar-menu-item-icon
+    %span
+      Favourites
+  = render 'shared/navbar/dark_mode_switch', mobile: mobile
+  = link_to destroy_user_session_path, class: mobile ? 'dropdown-item' : '' do
+    %i.fas.fa-sign-out-alt.navbar-menu-item-icon
+    %span
+      Sign out
+- else
+  =  link_to new_user_session_path, class: mobile ? 'dropdown-item' : '' do
+    / ADD SIGN IN ICON .navbar-menu-item-icon
+    %span
+      Login

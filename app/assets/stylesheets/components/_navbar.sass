@@ -1,7 +1,5 @@
-// .navbar-container
-.navbar
+.custom-navbar
   height: $navbar-height
-  z-index: $navbar-z-index
   font-size: $navbar-font-size
 
   .site-logo
@@ -17,34 +15,71 @@
     z-index: $logo-z-index
     line-height: 1
 
+  #menu-items-desktop-container
+    padding: 0 $menu-items-desktop-container-right-padding 0 $menu-items-desktop-container-left-padding
 
-  #navbarDropdown
-    &:before
+  #navbarSearchDropdown, #navbarMenuDropdown
+    &:before, &:after
       content: none
+
+  .navbar-menu-item-icon
+    width: $navbar-menu-item-icon-width
+    margin-left: $navbar-menu-item-icon-left-margin
+    margin-right: $navbar-menu-item-icon-right-margin
+
+  #navbarMenuDropdown
+    background-color: transparent
+    border: none
+    &:focus
+      outline: none
+
+  #dropdown-item-container
+    transform: translate3d(0, calc(#{$navbar-height} - 2px), 0) !important
+    border: none
+    border-radius: 0
+    z-index: $navbar-dropdown-menu-z-index
+    font-size: $default-font-size
+
+    .dropdown-item
+      padding-left: $dropdown-item-left-padding
+      &:hover
+        background: transparent
 
   .dark-mode-switch-container
     &:active
       background-color: transparent
 
+    #dark-mode-switch
+      padding-left: $toggle-switch-width
 
-.navbar-light-mode
+      #dark-mode-dropdown-switch-label, #dark-mode-expanded-switch-label
+        &:before
+          width: $toggle-switch-label-width
+          top: $outer-toggle-switch-top
+
+      #dark-mode-dropdown-switch-label
+        &:after
+          top: $inner-toggle-switch-top
+
+      #dark-mode-expanded-switch-label
+        &:after
+          top: calc(#{$inner-toggle-switch-top} - 1px)
+
+
+.custom-navbar-light-mode
   background: $light-mode-default-background-color
   .fa-bars
     color: $light-mode-paragraph-text-color
-  a
+  a, .dropdown-item
     color: $light-mode-paragraph-text-color
   .dropdown-menu
     background: $light-mode-default-background-color
-    // .dropdown-item
-      // color: $light-mode-paragraph-text-color
 
-.navbar-dark-mode
+.custom-navbar-dark-mode
   background: $dark-mode-default-background-color
   .fa-bars
     color: $dark-mode-paragraph-text-color
-  a
+  a, .dropdown-item
     color: $dark-mode-paragraph-text-color
   .dropdown-menu
     background: $dark-mode-default-background-color
-    // .dropdown-item
-      // color: $dark-mode-paragraph-text-color

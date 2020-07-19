@@ -1,9 +1,9 @@
-.w-100{class: component_classes('navbar')}
+.w-100{class: component_classes('custom-navbar')}
   = link_to root_path, class: 'site-logo position-fixed' do
     = image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png"
 
   .dropleft.position-fixed.search-logo
-    = link_to "#", class: 'dropdown-toggle', id: 'navbarDropdown', 'role' => 'button', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false' do
+    = link_to "#", class: 'dropdown-toggle', id: 'navbarSearchDropdown', 'role' => 'button', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false' do
       %i.fa.fa-search
     .dropdown-menu
       %form.form-inline.my-2.my-lg-0.dropdown-item
@@ -11,26 +11,14 @@
         %button.btn.btn-outline-success.my-2.my-sm-0{type: :search}
           Search
 
-  .w-100
-    .dropdown.d-block.d-md-none
-      %button.dropdown-toggle#dropdownMenuButton{type: :button, 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false'}
+  .w-100.h-100
+    .dropdown.d-flex.d-md-none.justify-content-center.w-100.h-100
+      %button.dropdown-toggle#navbarMenuDropdown{type: :button, 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false'}
         %i.fas.fa-bars
-      .dropdown-menu{'aria-labelledby' => 'dropdownMenuButton'}
-        - if user_signed_in?
-          = link_to 'My recipes', '#', class: 'dropdown-item'
-          = link_to 'Favourites', '#', class: 'dropdown-item'
-          = render 'shared/navbar/dark_mode_switch', switch_id: 'dark-mode-dropdown-switch'
-          = link_to 'Sign out', destroy_user_session_path, class: 'dropdown-item'
-        - else
-          =  link_to 'Login', new_user_session_path, class: "nav-link"
-    .d-none.d-md-flex.justify-content-around
-      - if user_signed_in?
-        = link_to 'My recipes', '#'
-        = link_to 'Favourites', '#'
-        = render 'shared/navbar/dark_mode_switch', switch_id: 'dark-mode-expanded-switch'
-        = link_to 'Sign out', destroy_user_session_path
-      - else
-        = link_to 'Login', new_user_session_path
+      .dropdown-menu.w-100#dropdown-item-container{'aria-labelledby' => 'navbarMenuDropdown'}
+        = render 'shared/navbar/menu_items', mobile: true
+    .d-none.d-md-flex.justify-content-around.align-items-center.h-100.w-100#menu-items-desktop-container
+      = render 'shared/navbar/menu_items', mobile: false
 
 
   / .navbar-expand-md{class: component_classes('navbar')}

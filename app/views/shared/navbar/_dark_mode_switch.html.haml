@@ -1,6 +1,6 @@
-.dark-mode-switch-container
-  .custom-control.custom-switch
-    %input.custom-control-input{id: switch_id ,type: 'checkbox'}
-    %label.custom-control-label{for: switch_id}
-      %i.fas.fa-moon
-      Dark mode
+.dark-mode-switch-container{class: mobile ? 'dropdown-item' : ''}
+  .custom-control.custom-switch#dark-mode-switch
+    %input.custom-control-input{id: mobile ? 'dark-mode-dropdown-switch' : 'dark-mode-expanded-switch', type: 'checkbox'}
+    %label.custom-control-label{id: mobile ? 'dark-mode-dropdown-switch-label' : 'dark-mode-expanded-switch-label', for: mobile ? 'dark-mode-dropdown-switch' : 'dark-mode-expanded-switch'}
+      %span
+        &#160;Dark mode
