@@ -1,19 +1,23 @@
 - if user_signed_in?
   = link_to '#', class: mobile ? 'dropdown-item' : '' do
-    %i.fas.fa-user.navbar-menu-item-icon
+    %i.fas.fa-user.navbar-menu-item-icon.d-inline-block.d-md-none.d-lg-inline-block
     %span
       My recipes
   = link_to '#', class: mobile ? 'dropdown-item' : '' do
-    %i.fas.fa-heart.navbar-menu-item-icon
+    %i.fas.fa-heart.navbar-menu-item-icon.d-inline-block.d-md-none.d-lg-inline-block
     %span
       Favourites
+  = link_to '#', class: mobile ? 'dropdown-item' : '' do
+    %i.fas.fa-plus.navbar-menu-item-icon.d-inline-block.d-md-none.d-lg-inline-block
+    %span
+      Add recipe
   = render 'shared/navbar/dark_mode_switch', mobile: mobile
-  = link_to destroy_user_session_path, class: mobile ? 'dropdown-item' : '' do
-    %i.fas.fa-sign-out-alt.navbar-menu-item-icon
+  = link_to destroy_user_session_path, class: mobile ? 'dropdown-item' : '', method: :delete do
+    %i.fas.fa-sign-out-alt.navbar-menu-item-icon.d-inline-block.d-md-none.d-lg-inline-block
     %span
       Sign out
 - else
   =  link_to new_user_session_path, class: mobile ? 'dropdown-item' : '' do
-    / ADD SIGN IN ICON .navbar-menu-item-icon
+    %i.fas.fa-sign-in-alt.navbar-menu-item-icon
     %span
       Login

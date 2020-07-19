@@ -6,7 +6,7 @@ $('#dark-mode-dropdown-switch, #dark-mode-expanded-switch').change(function(e) {
   toggleDarkMode(e.target.checked)
 })
 
-$('.dark-mode-switch-container').on('click', function(event){
+$('#dark-mode-switch-container').on('click', function(event){
   event.stopPropagation();
 })
 
