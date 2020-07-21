@@ -19,3 +19,20 @@
         = render 'shared/navbar/menu_items', mobile: true
     .d-none.d-md-flex.justify-content-around.align-items-center.h-100.w-100#menu-items-desktop-container
       = render 'shared/navbar/menu_items', mobile: false
+
+.modal.fade#add-recipe-modal{'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => 'add-recipe-modal-label', 'aria-hidden' => 'true'}
+  .modal-dialog{'role' => 'document'}
+    .modal-content
+      .modal-header
+        %h5.modal-title#add-recipe-modal-label
+          Modal title
+        %button.class{type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close'}
+          %span{'aria-hidden' => "true"}
+            &times;
+      .modal-body
+        Something here
+      .modal-footer
+        %button.btn.btn-secondary{type: :button, 'data-dismiss' => 'modal'}
+          Close
+        %button.btn.btn-primary{type: :button}
+          Save changes
