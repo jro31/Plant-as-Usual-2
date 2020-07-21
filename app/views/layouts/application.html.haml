@@ -14,5 +14,7 @@
       = render 'shared/navbar/navbar'
       = render 'shared/flashes'
       = yield
+      :javascript
+        const darkModeClasses = #{raw @dark_mode_css_classes}
     = javascript_include_tag 'application'
     = javascript_pack_tag 'application'

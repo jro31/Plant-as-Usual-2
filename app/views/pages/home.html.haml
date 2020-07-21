@@ -1,10 +1,10 @@
 -# REMEMBER THAT WHEN IT COMES TO DISPLAYING RECIPE PHOTOS OF DIFFERENT SIZES SEE LINE 32 OF /Users/jethrowilliams/Google Drive/code/Plant-as-Usual-2/app/uploaders/photo_uploader.rb
 
 .container-fluid
-  .row{class: component_classes('welcome-banner')}
+  .row{class: component_classes(DarkMode::CLASSES[:welcome_banner])}
     .col-md-6
       .text-box-container.d-flex.justify-content-center.align-items-center.p-5.h-100
-        .d-flex.flex-column.justify-content-around.align-items-center.p-5.h-100{class: component_classes('text-box')}
+        .d-flex.flex-column.justify-content-around.align-items-center.p-5.h-100{class: component_classes(DarkMode::CLASSES[:text_box])}
           %h1.text-center
             Welcome to Plant as Usual
           .text-center

@@ -1,4 +1,4 @@
-.row.my-5{class: component_classes('wide-recipe-card')}
+.row.my-5{class: component_classes(DarkMode::CLASSES[:wide_recipe_card])}
   .col-6.p-0.photo{class: photo_first ? "order-first" : "order-last"}
     - if recipe.photo.file&.exists?
       = image_tag recipe.photo.url, class: 'w-100'
