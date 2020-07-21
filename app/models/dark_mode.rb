@@ -1,6 +1,7 @@
 class DarkMode < ApplicationRecord
   CLASSES = {
     custom_navbar: 'custom-navbar',
+    keen_modal: 'keen-modal',
     narrow_recipe_card: 'narrow-recipe-card',
     page_container: 'page-container',
     text_box: 'text-box',

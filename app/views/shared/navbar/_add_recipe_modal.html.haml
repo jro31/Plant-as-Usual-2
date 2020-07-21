@@ -1,0 +1,16 @@
+.modal.fade#add-recipe-modal{class: component_classes(DarkMode::CLASSES[:keen_modal]), 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => 'add-recipe-modal-label', 'aria-hidden' => 'true'}
+  .modal-dialog.modal-lg{'role' => 'document'}
+    .modal-content
+      .modal-header
+        %h5.modal-title#add-recipe-modal-label
+          What is the name of your recipe?
+        %button.class{type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close'}
+          %span{'aria-hidden' => "true"}
+            &times;
+      .modal-body
+        Something here
+      .modal-footer
+        %button.btn.btn-secondary{type: :button, 'data-dismiss' => 'modal'}
+          Close
+        %button.btn.btn-primary{type: :button}
+          Create recipe

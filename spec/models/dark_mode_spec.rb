@@ -6,6 +6,7 @@ describe DarkMode do
       expect(DarkMode::CLASSES).to eq(
         {
           custom_navbar: 'custom-navbar',
+          keen_modal: 'keen-modal',
           narrow_recipe_card: 'narrow-recipe-card',
           page_container: 'page-container',
           text_box: 'text-box',
@@ -20,6 +21,7 @@ describe DarkMode do
     it 'returns an array of classes' do
       expect(DarkMode.css_classes).to eq([
         'custom-navbar',
+        'keen-modal',
         'narrow-recipe-card',
         'page-container',
         'text-box',
