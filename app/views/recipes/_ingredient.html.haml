@@ -1,4 +1,4 @@
-%p.input-display{ id: "ingredient-#{ingredient.id}-display", class: show_input ? 'd-none' : '', class: @user_can_edit ? 'can-edit-input-display' : '' }
+%p.input-display{ id: "ingredient-#{ingredient.id}-display", class: [show_input ? 'd-none' : '', @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : ''] }
   %span{ id: "ingredient-#{ingredient.id}-amount-display" }
     = ingredient.amount
   %span{ id: "ingredient-#{ingredient.id}-unit-display" }

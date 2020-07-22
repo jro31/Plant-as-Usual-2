@@ -1,5 +1,6 @@
 class DarkMode < ApplicationRecord
   CLASSES = {
+    can_edit_input_display: 'can-edit-input-display',
     custom_navbar: 'custom-navbar',
     keen_modal: 'keen-modal',
     narrow_recipe_card: 'narrow-recipe-card',

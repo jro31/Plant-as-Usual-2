@@ -3,7 +3,7 @@
 
 = render 'shared/hidden_flash', text: ''
 
-.container
+.container#recipe-show-page
   .row
     .col-12.text-center
       = simple_form_for @recipe, url: upload_photo_recipe_url, remote: true, html: { id: nil } do |f|
@@ -25,13 +25,13 @@
 
   .row
     .col-12.text-center
-      %h1#name-display.input-display{ class: @user_can_edit ? 'can-edit-input-display' : '' }
+      %h1#name-display.input-display{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
       = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
         = f.input :name, label: false, input_html: { id: 'name-input', class: 'input-edit d-none text-center' }
   .row
     .col-8
       // If not the user's recipe, do not add #process-display. Make sure that pundit works for this. Also spec that the classes only exist when the user is the current user.
-      #process-display.input-display{ class: @user_can_edit ? 'can-edit-input-display' : '' }
+      #process-display.input-display{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
       // Perhaps add a safeguard where the recipe saves after every (100?) characters typed
       = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
         = f.input :process, label: false, input_html: { id: 'process-input', class: 'input-edit d-none' }

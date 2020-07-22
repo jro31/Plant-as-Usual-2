@@ -5,6 +5,7 @@ describe DarkMode do
     it 'returns a hash of classes' do
       expect(DarkMode::CLASSES).to eq(
         {
+          can_edit_input_display: 'can-edit-input-display',
           custom_navbar: 'custom-navbar',
           keen_modal: 'keen-modal',
           narrow_recipe_card: 'narrow-recipe-card',
@@ -20,6 +21,7 @@ describe DarkMode do
   describe '#css_classes' do
     it 'returns an array of classes' do
       expect(DarkMode.css_classes).to eq([
+        'can-edit-input-display',
         'custom-navbar',
         'keen-modal',
         'narrow-recipe-card',
