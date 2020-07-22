@@ -22,6 +22,10 @@ describe RecipesController, type: :controller do
     end
   end
 
+  describe 'POST #create' do
+    # COMPLETE THIS
+  end
+
   describe 'GET #show' do
     context 'user is signed-in' do
       it 'returns http success' do
@@ -37,5 +41,17 @@ describe RecipesController, type: :controller do
         expect(response).to be_successful
       end
     end
+  end
+
+  describe 'PATCH #update' do
+    # COMPLETE THIS
+  end
+
+  describe 'PATCH #upload_photo' do
+    # COMPLETE THIS
+  end
+
+  describe 'PATCH #mark_as_complete' do
+    # COMPLETE THIS
   end
 end

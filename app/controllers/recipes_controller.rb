@@ -7,6 +7,15 @@ class RecipesController < ApplicationController
     @recipe_iterator = 0
   end
 
+  def create
+    # ADD PUNDIT
+    if @recipe = Recipe.create(user: current_user, name: params[:recipe][:name])
+      redirect_to recipe_path(@recipe)
+    else
+      # DO SOMETHING
+    end
+  end
+
   def show
     @recipe = Recipe.find(params[:id])
     authorize @recipe
