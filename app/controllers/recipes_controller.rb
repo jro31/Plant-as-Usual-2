@@ -20,7 +20,7 @@ class RecipesController < ApplicationController
     @recipe = Recipe.find(params[:id])
     authorize @recipe
     @ingredients = @recipe.ingredients.order(created_at: :asc)
-    @units = Ingredient::UNITS
+    @units = Ingredient.inhuman_units
     @user_can_edit = user_is_owner_or_admin?
   end
 

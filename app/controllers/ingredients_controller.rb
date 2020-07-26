@@ -7,7 +7,7 @@ class IngredientsController < ApplicationController
     params[:ingredient] = { recipe_id: params[:recipe_id] }
     @ingredient = Ingredient.new(ingredient_params)
     @recipe = Recipe.find(params[:recipe_id])
-    @units = Ingredient::UNITS
+    @units = Ingredient.inhuman_units
     if @ingredient.save
       respond_to do |format|
         format.js
@@ -32,7 +32,7 @@ class IngredientsController < ApplicationController
       @recipe.revised
       # Show positive flash message somehow
     else
-      # Show positive flash message somehow
+      # Show negative flash message somehow
       # Re-render the page
     end
   end

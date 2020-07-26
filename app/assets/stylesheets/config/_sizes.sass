@@ -1,4 +1,32 @@
 // Fonts
 $default-font-size: 18px
+$default-button-font-size: 16px
 $paragraph-font-size: $default-font-size
 $navbar-font-size: $default-font-size
+
+// Navbar
+$navbar-height: 66px
+$site-logo-width: 40px
+$site-logo-position: calc((#{$navbar-height} - #{$site-logo-width}) / 2)
+$search-logo-position: calc((#{$navbar-height} - #{$navbar-font-size}) / 2)
+$menu-items-desktop-container-left-padding: calc((#{$site-logo-position} + (#{$site-logo-width} / 2)) * 2)
+$menu-items-desktop-container-right-padding: calc((#{$search-logo-position} + (#{$navbar-font-size } / 2)) * 2)
+$navbar-menu-item-icon-width: 1rem
+$toggle-switch-width: 2.25rem
+$toggle-switch-label-width: 1.75rem
+$outer-toggle-switch-top: calc((#{$default-font-size} / 4) + 1px)
+$inner-toggle-switch-top: calc((#{$default-font-size} / 2) - 1px)
+$dropdown-item-left-padding: calc((#{$site-logo-position} + (#{$site-logo-width} / 2)) - (#{$toggle-switch-label-width} / 2))
+$navbar-menu-item-icon-left-margin: calc((#{$toggle-switch-label-width} - #{$navbar-menu-item-icon-width}) / 2)
+$navbar-menu-item-icon-right-margin: calc(#{$toggle-switch-width} - (#{$navbar-menu-item-icon-width} + #{$navbar-menu-item-icon-left-margin}))
+
+// Inputs
+$input-x-padding: 0.75rem
+$input-y-padding: 0.375rem
+
+// Buttons
+$button-x-padding: 0.75rem
+$button-y-padding: 0.375rem
+$button-line-height: 1.5
+$button-border-width: 1px
+$expected-button-height: calc((#{$default-button-font-size} * #{$button-line-height}) + (#{$button-y-padding} * 2) + (#{$button-border-width} * 2))

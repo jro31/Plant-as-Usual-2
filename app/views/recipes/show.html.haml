@@ -42,12 +42,10 @@
           :javascript
             inputIdPrefixes.push(`ingredient-${#{ingredient.id}}`)
       - if @user_can_edit
-        %div#add-ingredient
+        #add-ingredient
           = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true
 
-    #mark-as-complete-row.row.fixed-bottom{ class: @recipe.incomplete? ? '' : 'd-none' }
-      .col-12
-        = link_to 'Click here to submit your recipe', mark_as_complete_recipe_path(@recipe), method: :patch, class: 'btn btn-success'
+= link_to 'Click here to submit changes to your recipe', mark_as_complete_recipe_path(@recipe), method: :patch, class: "btn btn-success fixed-bottom-left #{@recipe.incomplete? ? '' : 'd-none'}", id: 'mark-as-complete-button'
 
 :javascript
   inputIdPrefixes.push('name', 'process')
