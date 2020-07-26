@@ -6,6 +6,10 @@ describe Recipe do
 
   let(:recipe) { create(:recipe) }
 
+  describe 'destroying a recipe destroys ingredients' do
+    # COMPLETE THIS
+  end
+
   describe 'validations' do
     describe '#validate_number_of_featured_recipes' do
       before do
