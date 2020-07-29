@@ -123,6 +123,8 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       $(`#${prefix}-unit-display`).text($(`#${prefix}-unit-input`).val())
       $(`#${prefix}-food-display`).text($(`#${prefix}-food-input`).val())
       $(`#${prefix}-preparation-display`).text(preparationText(prefix))
+    } else if((prefix === 'name' || prefix === 'process') && !$(`#${prefix}-input`).val()) {
+      $(`#${prefix}-display`).text(placeholders[prefix])
     } else {
       $(`#${prefix}-display`).text($(`#${prefix}-input`).val())
     }
@@ -183,6 +185,3 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   const setSpinnerDimensions = () => $(`#spinner`).height($('#photo-container').height()).width($('#photo-container').height());
 }
-
-// To do next:
-// Add a new recipe
