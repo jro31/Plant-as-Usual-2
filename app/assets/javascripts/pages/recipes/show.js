@@ -1,6 +1,7 @@
 if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   const recipeId = $('body').data('params-id');
   let initialInputValue = {}
+  const ingredientColumns = ['amount', 'unit', 'food', 'preparation']
 
   $(function() {
     inputIdPrefixes.forEach((prefix) => {
@@ -63,12 +64,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     let data = {}
     if(isIngredientPrefix(prefix)) {
       url = `/recipes/${recipeId}/ingredients/${ingredientIdNumber(prefix)}`
-      data = { 'ingredient' : {
-        'amount' : $(`#${prefix}-amount-input`).val(),
-        'unit' : $(`#${prefix}-unit-input`).val(),
-        'food' : $(`#${prefix}-food-input`).val(),
-        'preparation' : $(`#${prefix}-preparation-input`).val(),
-      } }
+      data = { 'ingredient' : ingredientData(prefix) }
       component = 'ingredient'
     } else {
       url = `/recipes/${recipeId}`
@@ -78,6 +74,14 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     if(inputHasBeenUpdated(prefix, data)) {
       ajaxRequest('patch', url, data, component)
     }
+  }
+
+  function ingredientData(prefix) {
+    let ingredientObject = {}
+    $.each(ingredientColumns, function(_, column) {
+      ingredientObject[column] = $(`#${prefix}-${column}-input`).val()
+    })
+    return ingredientObject
   }
 
   function inputHasBeenUpdated(prefix, data) {
@@ -119,10 +123,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function populateDisplayElement(prefix) {
     if(isIngredientPrefix(prefix)) {
-      $(`#${prefix}-amount-display`).text($(`#${prefix}-amount-input`).val())
-      $(`#${prefix}-unit-display`).text($(`#${prefix}-unit-input`).val())
-      $(`#${prefix}-food-display`).text($(`#${prefix}-food-input`).val())
-      $(`#${prefix}-preparation-display`).text(preparationText(prefix))
+      ingredientDisplayContent(prefix)
     } else if((prefix === 'name' || prefix === 'process') && !$(`#${prefix}-input`).val()) {
       $(`#${prefix}-display`).text(placeholders[prefix])
     } else {
@@ -130,19 +131,22 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     }
   }
 
+  function ingredientDisplayContent(prefix) {
+    $.each(ingredientColumns, function(_, column) {
+      $(`#${prefix}-${column}-display`).text(column === 'preparation' ? preparationText(prefix) : $(`#${prefix}-${column}-input`).val())
+    })
+  }
+
   const preparationText = (prefix) => $(`#${prefix}-preparation-input`).val() == '' ? '' : `(${$(`#${prefix}-preparation-input`).val()})`
 
   const showDisplayElement = (prefix) => $(`#${prefix}-display`).removeClass('d-none');
 
-  function setInitialInputValue(prefix) {
-    if(isIngredientPrefix(prefix)) {
-      initialInputValue['amount'] = $(`#${prefix}-amount-input`).val()
-      initialInputValue['unit'] = $(`#${prefix}-unit-input`).val()
-      initialInputValue['food'] = $(`#${prefix}-food-input`).val()
-      initialInputValue['preparation'] = $(`#${prefix}-preparation-input`).val()
-    } else {
-      initialInputValue[prefix] = $(`#${prefix}-input`).val()
-    }
+  const setInitialInputValue = (prefix) => isIngredientPrefix(prefix) ? initialIngredientInputValue(prefix) : initialInputValue[prefix] = $(`#${prefix}-input`).val()
+
+  function initialIngredientInputValue(prefix) {
+    $.each(ingredientColumns, function(_, column) {
+      initialInputValue[column] = $(`#${prefix}-${column}-input`).val()
+    })
   }
 
   function resetInitialInputValue() {
