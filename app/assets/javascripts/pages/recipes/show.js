@@ -1,7 +1,6 @@
 if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   const recipeId = $('body').data('params-id');
   let initialInputValue = {}
-  const ingredientColumns = ['amount', 'unit', 'food', 'preparation']
 
   $(function() {
     inputIdPrefixes.forEach((prefix) => {

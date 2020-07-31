@@ -18,6 +18,10 @@ class Ingredient < ApplicationRecord
     self::USER_EDITABLE_COLUMNS.keys
   end
 
+  def self.ordered_editable_column_values
+    self::USER_EDITABLE_COLUMNS.values
+  end
+
   def self.user_facing_editable_column_names
     {
       self::USER_EDITABLE_COLUMNS[:amount] => 'Amount',

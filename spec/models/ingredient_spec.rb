@@ -28,6 +28,10 @@ describe Ingredient, type: :model do
     end
   end
 
+  describe '#ordered_editable_column_values' do
+    # COMPLETE THIS
+  end
+
   describe '#user_facing_editable_column_names' do
     # COMPLETE THIS
   end

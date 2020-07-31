@@ -38,7 +38,7 @@
     .col-4
       #ingredients-container
         - @ingredients.each do |ingredient|
-          = render partial: 'ingredient', locals: { ingredient: ingredient, show_input: false }
+          = render 'ingredient', ingredient: ingredient, show_input: false
           :javascript
             inputIdPrefixes.push(`ingredient-${#{ingredient.id}}`)
       - if @user_can_edit
@@ -52,3 +52,4 @@
   const isRecipeShow = #{current_page?(controller: 'recipes', action: 'show')}
   const userCanEdit = #{@user_can_edit}
   const placeholders = {name: `#{@name_placeholder}`, process: `#{@process_placeholder}`}
+  const ingredientColumns = #{raw @editable_ingredient_columns}

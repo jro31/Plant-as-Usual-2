@@ -1,12 +1,10 @@
 %p.input-display{ id: "ingredient-#{ingredient.id}-display", class: [show_input ? 'd-none' : '', @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : ''] }
-  - Ingredient.ordered_editable_column_keys.each do |key|
-    - ingredient_input_display(ingredient, key, humanize = [Ingredient::USER_EDITABLE_COLUMNS[:food]].include?(Ingredient::USER_EDITABLE_COLUMNS[key]), brackets = [Ingredient::USER_EDITABLE_COLUMNS[:preparation]].include?(Ingredient::USER_EDITABLE_COLUMNS[key]) && ingredient.preparation.present?)
+  - Ingredient.ordered_editable_column_keys.each do |column|
+    = render 'recipes/ingredient_display', ingredient: ingredient, column: column
   - if @user_can_edit
     %span.float-right{ id: "ingredient-#{ingredient.id}-delete"}
       delete
 = simple_form_for [@recipe, ingredient] do |f|
   %div{ id: "ingredient-#{ingredient.id}-input", class: show_input ? '' : 'd-none' }
-    = f.input :amount, label: false, placeholder: ingredient_placeholder(Ingredient::USER_EDITABLE_COLUMNS[:amount], optional: true), input_html: { id: "ingredient-#{ingredient.id}-#{Ingredient::USER_EDITABLE_COLUMNS[:amount]}-input", class: 'input-edit' }
-    = f.input :unit, collection: @units, label: false, prompt: ingredient_placeholder(Ingredient::USER_EDITABLE_COLUMNS[:unit], optional: true), input_html: { id: "ingredient-#{ingredient.id}-#{Ingredient::USER_EDITABLE_COLUMNS[:unit]}-input", class: 'input-edit' }
-    = f.input :food, label: false, placeholder: ingredient_placeholder(Ingredient::USER_EDITABLE_COLUMNS[:food]), input_html: { id: "ingredient-#{ingredient.id}-#{Ingredient::USER_EDITABLE_COLUMNS[:food]}-input", class: 'input-edit' }
-    = f.input :preparation, label: false, placeholder: ingredient_placeholder(Ingredient::USER_EDITABLE_COLUMNS[:preparation], optional: true), input_html: { id: "ingredient-#{ingredient.id}-#{Ingredient::USER_EDITABLE_COLUMNS[:preparation]}-input", class: 'input-edit' }
+    - Ingredient.ordered_editable_column_keys.each do |column|
+      = render 'recipes/ingredient_input', f: f, id: ingredient.id, column: column
