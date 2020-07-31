@@ -1,11 +1,31 @@
 class Ingredient < ApplicationRecord
   belongs_to :recipe
 
+  USER_EDITABLE_COLUMNS = {
+    amount: 'amount',
+    unit: 'unit',
+    food: 'food',
+    preparation: 'preparation'
+  }
+
   UNIT_KEYS = %w(
     gram millilitre pinch splash teaspoon tablespoon cup dash litre
     kilogram piece inch centimetre can pack clove whole large medium
     small leaf pound ounce pint fluid_ounce quart gallon sprig
   ).sort.freeze
+
+  def self.ordered_editable_column_keys
+    self::USER_EDITABLE_COLUMNS.keys
+  end
+
+  def self.user_facing_editable_column_names
+    {
+      self::USER_EDITABLE_COLUMNS[:amount] => 'Amount',
+      self::USER_EDITABLE_COLUMNS[:unit] => 'Measurement',
+      self::USER_EDITABLE_COLUMNS[:food] => 'Ingredient',
+      self::USER_EDITABLE_COLUMNS[:preparation] => 'Preparation'
+    }
+  end
 
   def self.units_humanized
     units_humanized = {}

@@ -163,22 +163,22 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   const hideDisplayElement = (clickTarget) => $(clickTarget).closest('.input-display').addClass('d-none')
 
-  function showInput(prefix){
-    if(isIngredientPrefix(prefix)) {
-      $(`#${prefix}-input`).removeClass('d-none')
-    } else {
-      $(`#${prefix}-input`).removeClass('d-none').focus(); // Try to get the cursor to appear at the end of the input
-    }
-  }
+  const showInput = (prefix) => isIngredientPrefix(prefix) ? $(`#${prefix}-input`).removeClass('d-none') : $(`#${prefix}-input`).removeClass('d-none').focus(); // Try to get the cursor to appear at the end of the input
 
   const inputIsEnabled = (prefix) => !$(`#${prefix}-input`).hasClass('d-none')
 
   function clickIsOutsideInput(click, prefix) {
     if(isIngredientPrefix(prefix)) {
-      return click.target.id !== `${prefix}-input` && click.target.id !== `${prefix}-amount-input` && click.target.id !== `${prefix}-unit-input` && click.target.id !== `${prefix}-food-input` && click.target.id !== `${prefix}-preparation-input`
+      return click.target.id !== `${prefix}-input` && $.inArray(click.target.id, ingredientInputIds(prefix)) === -1
     } else {
       return click.target.id !== `${prefix}-input`
     }
+  }
+
+  function ingredientInputIds(prefix) {
+    return $.map(ingredientColumns, function(column) {
+      return `${prefix}-${column}-input`
+    })
   }
 
   const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
