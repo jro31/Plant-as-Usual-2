@@ -176,7 +176,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function ingredientInputIds(prefix) {
     return $.map(ingredientColumns, function(column) {
-      return `${prefix}-${column}-input`
+      return [`${prefix}-${column}-input`, `${prefix}-${column}-input-label`]
     })
   }
 

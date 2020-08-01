@@ -5,7 +5,8 @@ class Ingredient < ApplicationRecord
     amount: 'amount',
     unit: 'unit',
     food: 'food',
-    preparation: 'preparation'
+    preparation: 'preparation',
+    optional: 'optional'
   }
 
   UNIT_KEYS = %w(
@@ -27,7 +28,8 @@ class Ingredient < ApplicationRecord
       self::USER_EDITABLE_COLUMNS[:amount] => 'Amount',
       self::USER_EDITABLE_COLUMNS[:unit] => 'Measurement',
       self::USER_EDITABLE_COLUMNS[:food] => 'Ingredient',
-      self::USER_EDITABLE_COLUMNS[:preparation] => 'Preparation'
+      self::USER_EDITABLE_COLUMNS[:preparation] => 'Preparation',
+      self::USER_EDITABLE_COLUMNS[:optional] => 'This ingredient is optional'
     }
   end
 

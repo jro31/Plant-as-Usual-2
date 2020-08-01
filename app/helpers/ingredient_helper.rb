@@ -4,16 +4,20 @@ module IngredientHelper
     is_unit_column?(column) ? units : false
   end
 
+  def ingredient_input_label(column)
+    is_optional_column?(column) ? ingredient_placeholder_text(column) : false
+  end
+
   def ingredient_input_placeholder(column)
-    is_unit_column?(column) ? false : ingredient_placeholder_text(Ingredient::USER_EDITABLE_COLUMNS[column], optional: is_amount_column?(column) || is_preparation_column?(column))
+    is_unit_column?(column) || is_optional_column?(column) ? false : ingredient_placeholder_text(column, optional: is_amount_column?(column) || is_preparation_column?(column))
   end
 
   def ingredient_input_prompt(column)
-    is_unit_column?(column) ? ingredient_placeholder_text(Ingredient::USER_EDITABLE_COLUMNS[:unit], optional: true) : false
+    is_unit_column?(column) ? ingredient_placeholder_text(column, optional: true) : false
   end
 
-  def ingredient_placeholder_text(column, optional = false)
-    "#{Ingredient.user_facing_editable_column_names[column]}#{optional ? ' (optional)' : ''}"
+  def ingredient_placeholder_text(column, optional: false)
+    "#{Ingredient.user_facing_editable_column_names[Ingredient::USER_EDITABLE_COLUMNS[column]]}#{optional ? ' (optional)' : ''}"
   end
 
   private
@@ -28,5 +32,9 @@ module IngredientHelper
 
   def is_preparation_column?(column)
     Ingredient::USER_EDITABLE_COLUMNS[column] === Ingredient::USER_EDITABLE_COLUMNS[:preparation]
+  end
+
+  def is_optional_column?(column)
+    Ingredient::USER_EDITABLE_COLUMNS[column] === Ingredient::USER_EDITABLE_COLUMNS[:optional]
   end
 end

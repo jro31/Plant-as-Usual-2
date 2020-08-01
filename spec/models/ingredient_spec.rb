@@ -24,7 +24,7 @@ describe Ingredient, type: :model do
 
   describe '#ordered_editable_column_keys' do
     it 'returns the keys in the display order' do
-      expect(Ingredient.ordered_editable_column_keys).to eq([:amount, :unit, :food, :preparation])
+      expect(Ingredient.ordered_editable_column_keys).to eq([:amount, :unit, :food, :preparation, :optional])
     end
   end
 
