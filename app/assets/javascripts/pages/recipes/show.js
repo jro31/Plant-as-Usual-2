@@ -78,17 +78,25 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   function ingredientData(prefix) {
     let ingredientObject = {}
     $.each(ingredientColumns, function(_, column) {
-      ingredientObject[column] = $(`#${prefix}-${column}-input`).val()
+      ingredientObject[column] = columnIsOptional(column) ? $(`#${prefix}-${column}-input`)[0].checked : $(`#${prefix}-${column}-input`).val()
     })
     return ingredientObject
   }
 
   function inputHasBeenUpdated(prefix, data) {
     if(isIngredientPrefix(prefix)) {
-      return data.ingredient.amount != initialInputValue.amount || data.ingredient.unit != initialInputValue.unit || data.ingredient.food != initialInputValue.food || data.ingredient.preparation != initialInputValue.preparation
+      return ingredientHasBeenUpdated(prefix, data)
     } else {
       return data.recipe[prefix] != initialInputValue[prefix]
     }
+  }
+
+  function ingredientHasBeenUpdated(prefix, data) {
+    let changesDetected = false
+    $.each(ingredientColumns, function(_, column) {
+      if (data.ingredient[column] != initialInputValue[column]) changesDetected = true
+    })
+    return changesDetected
   }
 
   function ajaxRequest(type, url, data = null, component = 'recipe', verb = 'save') {
@@ -132,8 +140,18 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function ingredientDisplayContent(prefix) {
     $.each(ingredientColumns, function(_, column) {
-      $(`#${prefix}-${column}-display`).text(column === 'preparation' ? preparationText(prefix) : $(`#${prefix}-${column}-input`).val())
+      $(`#${prefix}-${column}-display`).text(ingredientDisplayColumnContent(prefix, column))
     })
+  }
+
+  function ingredientDisplayColumnContent(prefix, column) {
+    if(columnIsPreparation(column)) {
+      return preparationText(prefix)
+    } else if(columnIsOptional(column)) {
+      return $(`#${prefix}-${column}-input`)[0].checked ? '(optional)' : ''
+    } else {
+      return $(`#${prefix}-${column}-input`).val()
+    }
   }
 
   const preparationText = (prefix) => $(`#${prefix}-preparation-input`).val() == '' ? '' : `(${$(`#${prefix}-preparation-input`).val()})`
@@ -144,7 +162,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function initialIngredientInputValue(prefix) {
     $.each(ingredientColumns, function(_, column) {
-      initialInputValue[column] = $(`#${prefix}-${column}-input`).val()
+      initialInputValue[column] = ingredientColumnValue(prefix, column)
     })
   }
 
@@ -187,4 +205,9 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   const ingredientIdNumber = (cssId) => cssId.replace(/[^0-9]/g, '')
 
   const setSpinnerDimensions = () => $(`#spinner`).height($('#photo-container').height()).width($('#photo-container').height());
+
+  const ingredientColumnValue = (prefix, column) => columnIsOptional(column) ? $(`#${prefix}-${column}-input`)[0].checked : $(`#${prefix}-${column}-input`).val()
+
+  const columnIsPreparation = (column) => column === 'preparation'
+  const columnIsOptional = (column) => column === 'optional'
 }
