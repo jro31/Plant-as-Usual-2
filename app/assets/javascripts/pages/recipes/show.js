@@ -60,7 +60,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     setSpinnerDimensions()
   }
 
-  const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId)
+  const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false)
 
   function disableAddIngredient() {
     $('#add-ingredient-container').addClass('d-none')
@@ -88,6 +88,8 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     }
     if(inputHasBeenUpdated(prefix, data) && foodIsPresent(prefix)) {
       ajaxRequest('patch', url, data, prefix, component)
+    } else if (newIngredientIsEmpty(prefix)) {
+      deleteIngredient(ingredientIdNumber(prefix))
     }
   }
 
@@ -113,19 +115,22 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     return isIngredientPrefix(prefix) ? !!$(`#${prefix}-food-input`).val().trim() : true
   }
 
-  function ajaxRequest(type, url, data = null, prefix = null, component = 'recipe', verb = 'save', ingredientId = null) {
-    // Read up on if you need to do something here in the event of an error
+  function newIngredientIsEmpty(prefix) {
+    return jQuery.isEmptyObject(initialInputValue) && !foodIsPresent(prefix)
+  }
+
+  function ajaxRequest(type, url, data = null, prefix = null, component = 'recipe', verb = 'save', ingredientId = null, displaySuccess = true, displayFail = true) {
     $.ajax({
       type: type,
       url: url,
       dataType: 'json', // If you're having trouble getting a js.erb page to display, try changing this to 'script' (it worked in some now deleted code with dark mode)
       data: data,
       success: function() {
-        displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
+        if (displaySuccess) displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
         $('#mark-as-complete-button').removeClass('d-none')
       },
       error: function() {
-        displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')
+        if (displayFail) displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')
         if (type === 'delete' && component === 'ingredient') {
           // DO SOMETHING HERE
         } else {
@@ -177,7 +182,11 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   const preparationText = (prefix) => $(`#${prefix}-preparation-input`).val() == '' ? '' : `(${$(`#${prefix}-preparation-input`).val()})`
 
-  const showDisplayElement = (prefix) => $(`#${prefix}-display`).removeClass('d-none');
+  function showDisplayElement(prefix) {
+    if(!isIngredientPrefix(prefix) || foodIsPresent(prefix)) {
+      $(`#${prefix}-display`).removeClass('d-none');
+    }
+  }
 
   const setInitialInputValue = (prefix) => isIngredientPrefix(prefix) ? initialIngredientInputValue(prefix) : initialInputValue[prefix] = $(`#${prefix}-input`).val()
 

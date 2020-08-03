@@ -15,7 +15,7 @@ class Ingredient < ApplicationRecord
     small leaf pound ounce pint fluid_ounce quart gallon sprig
   ).sort.freeze
 
-  validates_presence_of :food
+  validates_presence_of :food, on: :update
 
   def self.ordered_editable_column_keys
     self::USER_EDITABLE_COLUMNS.keys
