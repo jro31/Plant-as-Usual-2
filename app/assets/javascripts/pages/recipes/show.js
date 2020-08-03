@@ -19,24 +19,22 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
         inputIdPrefixes.forEach((prefix) => {
           if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
             click.preventDefault()
-            saveInput(prefix)
-            hideInput(prefix) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
+            hideInput(prefix)
             populateDisplayElement(prefix)
             showDisplayElement(prefix)
-            resetInitialInputValue()
             enableAddIngredient()
             noInputWasEnabled = false
+            saveInput(prefix)
+            resetInitialInputValue()
           }
         })
         if (noInputWasEnabled) {
           if (deleteIngredientWasClicked(click)) {
+            hideIngredient(ingredientIdNumber(click.target.id))
             deleteIngredient(ingredientIdNumber(click.target.id))
-            hideIngredient(ingredientIdNumber(click.target.id)) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
-          } else if (addIngredientWasClicked(click)) {
-            disableAddIngredient()
           } else {
             inputIdPrefixes.forEach((prefix) => {
-              if(click.target.id.includes(prefix) && click.target.id.includes('-display')){
+              if(click.target.id.includes(`${prefix}-`) && click.target.id.includes('-display')) {
                 setInitialInputValue(prefix)
                 matchInputHeightToDisplayElement(prefix, click.target)
                 hideDisplayElement(click.target)
@@ -62,7 +60,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     setSpinnerDimensions()
   }
 
-  const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, component = 'ingredient', verb = 'delete')
+  const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId)
 
   function disableAddIngredient() {
     $('#add-ingredient-container').addClass('d-none')
@@ -88,8 +86,8 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       data = { 'recipe' : { [prefix] : $(`#${prefix}-input`).val() } }
       component = 'recipe'
     }
-    if(inputHasBeenUpdated(prefix, data)) {
-      ajaxRequest('patch', url, data, component)
+    if(inputHasBeenUpdated(prefix, data) && foodIsPresent(prefix)) {
+      ajaxRequest('patch', url, data, prefix, component)
     }
   }
 
@@ -111,7 +109,11 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     return changesDetected
   }
 
-  function ajaxRequest(type, url, data = null, component = 'recipe', verb = 'save', displaySuccessMessage = true, displayFailMessage = true) {
+  function foodIsPresent(prefix) {
+    return isIngredientPrefix(prefix) ? !!$(`#${prefix}-food-input`).val().trim() : true
+  }
+
+  function ajaxRequest(type, url, data = null, prefix = null, component = 'recipe', verb = 'save', ingredientId = null) {
     // Read up on if you need to do something here in the event of an error
     $.ajax({
       type: type,
@@ -119,14 +121,15 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       dataType: 'json', // If you're having trouble getting a js.erb page to display, try changing this to 'script' (it worked in some now deleted code with dark mode)
       data: data,
       success: function() {
-        if (displaySuccessMessage) {
-          displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
-          $('#mark-as-complete-button').removeClass('d-none')
-        }
+        displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
+        $('#mark-as-complete-button').removeClass('d-none')
       },
       error: function() {
-        if (displayFailMessage) {
-          displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')
+        displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')
+        if (type === 'delete' && component === 'ingredient') {
+          // DO SOMETHING HERE
+        } else {
+          // DO SOMETHING HERE
         }
       }
     });
@@ -155,9 +158,11 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   }
 
   function ingredientDisplayContent(prefix) {
-    $.each(ingredientColumns, function(_, column) {
-      $(`#${prefix}-${column}-display`).text(ingredientDisplayColumnContent(prefix, column))
-    })
+    if (foodIsPresent(prefix)) {
+      $.each(ingredientColumns, function(_, column) {
+        $(`#${prefix}-${column}-display`).text(ingredientDisplayColumnContent(prefix, column))
+      })
+    }
   }
 
   function ingredientDisplayColumnContent(prefix, column) {
@@ -217,7 +222,6 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
 
   const deleteIngredientWasClicked = (click) => click.target.id.includes('ingredient-') && click.target.id.includes('-delete')
-  const addIngredientWasClicked = (click) => click.target.id === 'add-ingredient'
 
   const ingredientIdNumber = (cssId) => cssId.replace(/[^0-9]/g, '')
 

@@ -2,4 +2,4 @@
   = f.input_field column, id: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input", class: 'input-edit'
   = f.label column, for: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input", label: ingredient_input_label(column), id: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input-label"
 - else
-  = f.input column, collection: ingredient_input_collection(column, @units), label: ingredient_input_label(column), placeholder: ingredient_input_placeholder(column), prompt: ingredient_input_prompt(column), input_html: { id: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input", class: 'input-edit' }
+  = f.input column, collection: ingredient_input_collection(column, @units), label: ingredient_input_label(column), placeholder: ingredient_input_placeholder(column), prompt: ingredient_input_prompt(column), error: false, input_html: { id: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input", class: 'input-edit' }

@@ -22,6 +22,12 @@ describe Ingredient, type: :model do
     end
   end
 
+  describe 'validations' do
+    describe 'validates presence of food' do
+      # COMPLETE THIS
+    end
+  end
+
   describe '#ordered_editable_column_keys' do
     it 'returns the keys in the display order' do
       expect(Ingredient.ordered_editable_column_keys).to eq([:amount, :unit, :food, :preparation, :optional])
