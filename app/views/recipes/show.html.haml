@@ -42,8 +42,10 @@
           :javascript
             inputIdPrefixes.push(`ingredient-${#{ingredient.id}}`)
       - if @user_can_edit
-        #add-ingredient
-          = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true
+        #add-ingredient-container
+          = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true, id: 'add-ingredient'
+        #add-ingredient-container-disabled.d-none
+          Add ingredient
 
 = link_to 'Click here to submit changes to your recipe', mark_as_complete_recipe_path(@recipe), method: :patch, class: "btn btn-success fixed-bottom-left #{@recipe.incomplete? ? '' : 'd-none'}", id: 'mark-as-complete-button'
 

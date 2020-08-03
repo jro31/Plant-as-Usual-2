@@ -10,6 +10,10 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     if(userCanEdit) {
       setPhotoUploader()
 
+      $('#add-ingredient').click(function(click) {
+        disableAddIngredient()
+      })
+
       $(document).click(function(click) {
         let noInputWasEnabled = true
         inputIdPrefixes.forEach((prefix) => {
@@ -20,6 +24,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
             populateDisplayElement(prefix)
             showDisplayElement(prefix)
             resetInitialInputValue()
+            enableAddIngredient()
             noInputWasEnabled = false
           }
         })
@@ -27,6 +32,8 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
           if (deleteIngredientWasClicked(click)) {
             deleteIngredient(ingredientIdNumber(click.target.id))
             hideIngredient(ingredientIdNumber(click.target.id)) // Should this rest of this method be called from the 'success' of the Ajax request instead of here?
+          } else if (addIngredientWasClicked(click)) {
+            disableAddIngredient()
           } else {
             inputIdPrefixes.forEach((prefix) => {
               if(click.target.id.includes(prefix) && click.target.id.includes('-display')){
@@ -34,6 +41,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
                 matchInputHeightToDisplayElement(prefix, click.target)
                 hideDisplayElement(click.target)
                 showInput(prefix)
+                disableAddIngredient()
               }
             })
           }
@@ -55,6 +63,16 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   }
 
   const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, component = 'ingredient', verb = 'delete')
+
+  function disableAddIngredient() {
+    $('#add-ingredient-container').addClass('d-none')
+    $('#add-ingredient-container-disabled').removeClass('d-none')
+  }
+
+  function enableAddIngredient() {
+    $('#add-ingredient-container-disabled').addClass('d-none')
+    $('#add-ingredient-container').removeClass('d-none')
+  }
 
   const hideIngredient = (ingredientId) => $(`#ingredient-${ingredientId}-display`).addClass('d-none')
 
@@ -83,13 +101,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     return ingredientObject
   }
 
-  function inputHasBeenUpdated(prefix, data) {
-    if(isIngredientPrefix(prefix)) {
-      return ingredientHasBeenUpdated(prefix, data)
-    } else {
-      return data.recipe[prefix] != initialInputValue[prefix]
-    }
-  }
+  const inputHasBeenUpdated = (prefix, data) => isIngredientPrefix(prefix) ? ingredientHasBeenUpdated(prefix, data) : data.recipe[prefix] != initialInputValue[prefix]
 
   function ingredientHasBeenUpdated(prefix, data) {
     let changesDetected = false
@@ -99,7 +111,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     return changesDetected
   }
 
-  function ajaxRequest(type, url, data = null, component = 'recipe', verb = 'save') {
+  function ajaxRequest(type, url, data = null, component = 'recipe', verb = 'save', displaySuccessMessage = true, displayFailMessage = true) {
     // Read up on if you need to do something here in the event of an error
     $.ajax({
       type: type,
@@ -107,11 +119,15 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       dataType: 'json', // If you're having trouble getting a js.erb page to display, try changing this to 'script' (it worked in some now deleted code with dark mode)
       data: data,
       success: function() {
-        displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
-        $('#mark-as-complete-button').removeClass('d-none')
+        if (displaySuccessMessage) {
+          displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
+          $('#mark-as-complete-button').removeClass('d-none')
+        }
       },
       error: function() {
-        displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')
+        if (displayFailMessage) {
+          displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')
+        }
       }
     });
   }
@@ -201,6 +217,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
 
   const deleteIngredientWasClicked = (click) => click.target.id.includes('ingredient-') && click.target.id.includes('-delete')
+  const addIngredientWasClicked = (click) => click.target.id === 'add-ingredient'
 
   const ingredientIdNumber = (cssId) => cssId.replace(/[^0-9]/g, '')
 
