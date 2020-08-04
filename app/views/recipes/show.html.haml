@@ -54,5 +54,7 @@
   const isRecipeShow = #{current_page?(controller: 'recipes', action: 'show')}
   const userCanEdit = #{@user_can_edit}
   const placeholders = {name: `#{@name_placeholder}`, process: `#{@process_placeholder}`}
-  const ingredientColumns = #{raw @editable_ingredient_columns}
-  const ingredientDisplayColumns = #{raw @ingredient_display_columns}
+  const ingredientColumns = #{raw Ingredient.ordered_editable_column_values}
+  const ingredientDisplayColumns = #{raw Ingredient.ordered_display_columns}
+  const unitsHumanized = JSON.parse('#{raw(Ingredient.units_humanized.to_json)}')
+  const unitsPluralized = JSON.parse('#{raw(Ingredient.units_pluralized.to_json)}')

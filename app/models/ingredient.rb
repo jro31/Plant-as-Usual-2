@@ -49,6 +49,14 @@ class Ingredient < ApplicationRecord
     units_humanized
   end
 
+  def self.units_pluralized
+    units_pluralized = {}
+    self::UNIT_KEYS.each do |unit_key|
+      units_pluralized[unit_key.to_sym] = unit_key.humanize.pluralize
+    end
+    units_pluralized
+  end
+
   def self.inhuman_units
     inhuman_units = {}
     self::UNIT_KEYS.each do |unit_key|

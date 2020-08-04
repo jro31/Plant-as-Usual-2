@@ -87,6 +87,10 @@ describe Ingredient, type: :model do
     end
   end
 
+  describe '#units_pluralized' do
+    # COMPLETE THIS
+  end
+
   describe '#inhuman_units' do
     it 'returns a hash of inhuman units' do
       expect(Ingredient.inhuman_units).to eq(

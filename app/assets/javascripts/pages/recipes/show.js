@@ -172,18 +172,40 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function ingredientDisplayColumnContent(prefix, column) {
     if (columnIsFood(column)) {
-      return `${$(`#${prefix}-amount-input`).val()} ${unitDisplayContent(prefix)} ${$(`#${prefix}-food-input`).val()}`
+      return foodDisplayRow(prefix)
     } else if (columnIsPreparation(column)) {
-      return `${preparationText(prefix)} ${$(`#${prefix}-optional-input`)[0].checked ? '(optional)' : ''}`
+      return preparationDisplayRow(prefix)
     }
   }
 
-  function unitDisplayContent(prefix) {
-      if ($(`#${prefix}-unit-input`).val() === "") return ""
-      return $(`#${prefix}-unit-input`)[0].textContent.split('\n')[$(`#${prefix}-unit-input`)[0].selectedIndex]
+  function foodDisplayRow(prefix) {
+    const displayString = `${$(`#${prefix}-amount-input`).val()} ${unitDisplayContent(prefix)} ${$(`#${prefix}-food-input`).val()}`.trim().toLowerCase()
+    return displayString.charAt(0).toUpperCase() + displayString.slice(1)
   }
 
-  const preparationText = (prefix) => $(`#${prefix}-preparation-input`).val() == '' ? '' : `(${$(`#${prefix}-preparation-input`).val()})`
+  function unitDisplayContent(prefix) {
+    if ($(`#${prefix}-unit-input`).val() === "") return ""
+    const amount = $(`#${prefix}-amount-input`).val().toLowerCase()
+    if (!amount || amount == '1' || amount == 'one' || amount == 'a' || amount == 'an') {
+      return unitsHumanized[$(`#${prefix}-unit-input`).val()]
+    } else {
+      return unitsPluralized[$(`#${prefix}-unit-input`).val()]
+    }
+  }
+
+  function preparationDisplayRow(prefix) {
+    if (!!preparationText(prefix) || $(`#${prefix}-optional-input`)[0].checked) {
+      let displayString = "("
+      displayString = displayString.concat(preparationText(prefix))
+      if (!!preparationText(prefix) && $(`#${prefix}-optional-input`)[0].checked) displayString = displayString.concat(', ')
+      displayString = displayString.concat($(`#${prefix}-optional-input`)[0].checked ? 'optional' : '')
+      return displayString.concat(")")
+    } else {
+      return ''
+    }
+  }
+
+  const preparationText = (prefix) => $(`#${prefix}-preparation-input`).val()
 
   function showDisplayElement(prefix) {
     if(!isIngredientPrefix(prefix) || foodIsPresent(prefix)) {
