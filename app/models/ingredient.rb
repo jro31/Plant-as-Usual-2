@@ -37,6 +37,10 @@ class Ingredient < ApplicationRecord
     }
   end
 
+  def self.ordered_display_columns
+    [self::USER_EDITABLE_COLUMNS[:food], self::USER_EDITABLE_COLUMNS[:preparation]]
+  end
+
   def self.units_humanized
     units_humanized = {}
     self::UNIT_KEYS.each do |unit_key|

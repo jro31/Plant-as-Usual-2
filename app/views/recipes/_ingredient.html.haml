@@ -1,8 +1,9 @@
-%p.input-display{ id: "ingredient-#{ingredient.id}-display", class: [show_input ? 'd-none' : '', @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : ''] }
-  - Ingredient.ordered_editable_column_keys.each do |column|
-    = render 'recipes/ingredient_display', ingredient: ingredient, column: column
+.input-display.ingredient-input-display{ id: "ingredient-#{ingredient.id}-display", class: [show_input ? 'd-none' : '', @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : ''] }
+  %div
+    - Ingredient.ordered_display_columns.each do |column|
+      = render 'recipes/ingredient_display', ingredient: ingredient, column: column
   - if @user_can_edit
-    %span.float-right{ id: "ingredient-#{ingredient.id}-delete"}
+    .ml-auto{ id: "ingredient-#{ingredient.id}-delete"}
       delete
 = simple_form_for [@recipe, ingredient] do |f|
   %div{ id: "ingredient-#{ingredient.id}-input", class: show_input ? '' : 'd-none' }

@@ -164,23 +164,23 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function ingredientDisplayContent(prefix) {
     if (foodIsPresent(prefix)) {
-      $.each(ingredientColumns, function(_, column) {
+      $.each(ingredientDisplayColumns, function(_, column) {
         $(`#${prefix}-${column}-display`).text(ingredientDisplayColumnContent(prefix, column))
       })
     }
   }
 
   function ingredientDisplayColumnContent(prefix, column) {
-    if (columnIsUnit(column)) {
-      if ($(`#${prefix}-${column}-input`).val() === "") return ""
-      return $(`#${prefix}-${column}-input`)[0].textContent.split('\n')[$(`#${prefix}-${column}-input`)[0].selectedIndex]
+    if (columnIsFood(column)) {
+      return `${$(`#${prefix}-amount-input`).val()} ${unitDisplayContent(prefix)} ${$(`#${prefix}-food-input`).val()}`
     } else if (columnIsPreparation(column)) {
-      return preparationText(prefix)
-    } else if(columnIsOptional(column)) {
-      return $(`#${prefix}-${column}-input`)[0].checked ? '(optional)' : ''
-    } else {
-      return $(`#${prefix}-${column}-input`).val()
+      return `${preparationText(prefix)} ${$(`#${prefix}-optional-input`)[0].checked ? '(optional)' : ''}`
     }
+  }
+
+  function unitDisplayContent(prefix) {
+      if ($(`#${prefix}-unit-input`).val() === "") return ""
+      return $(`#${prefix}-unit-input`)[0].textContent.split('\n')[$(`#${prefix}-unit-input`)[0].selectedIndex]
   }
 
   const preparationText = (prefix) => $(`#${prefix}-preparation-input`).val() == '' ? '' : `(${$(`#${prefix}-preparation-input`).val()})`
@@ -235,7 +235,8 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   const ingredientColumnValue = (prefix, column) => columnIsOptional(column) ? $(`#${prefix}-${column}-input`)[0].checked : $(`#${prefix}-${column}-input`).val()
 
-  const columnIsUnit = (column) => column === 'unit'
+  // const columnIsUnit = (column) => column === 'unit'
+  const columnIsFood = (column) => column === 'food'
   const columnIsPreparation = (column) => column === 'preparation'
   const columnIsOptional = (column) => column === 'optional'
 }

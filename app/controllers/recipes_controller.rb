@@ -25,6 +25,7 @@ class RecipesController < ApplicationController
     @process_placeholder = 'Write your recipe here...'
     @name_placeholder = 'What the name of your recipe?'
     @editable_ingredient_columns = Ingredient.ordered_editable_column_values
+    @ingredient_display_columns = Ingredient.ordered_display_columns
   end
 
   def update
