@@ -20,7 +20,7 @@ class RecipesController < ApplicationController
     @recipe = Recipe.find(params[:id])
     authorize @recipe
     @ingredients = @recipe.ingredients.order(created_at: :asc)
-    @units = Ingredient.inhuman_units
+    @units = Ingredient.units_humanized
     @user_can_edit = user_is_owner_or_admin?
     @process_placeholder = 'Write your recipe here...'
     @name_placeholder = 'What the name of your recipe?'

@@ -23,8 +23,8 @@ describe Ingredient, type: :model do
   end
 
   describe 'callbacks' do
-    describe 'before_validation' do
-      describe '#numerify_amount' do
+    describe 'before_save' do
+      describe '#set_amount_as_float' do
         # COMPLETE THIS
       end
     end

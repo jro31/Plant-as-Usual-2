@@ -1,7 +1,15 @@
 # SPEC THIS WHOLE FILE
 module IngredientHelper
   def ingredient_input_collection(column, units)
-    is_unit_column?(column) ? units : false
+    is_unit_column?(column) ? units.map{ |unit| unit } : false
+  end
+
+  def ingredient_label_method(column)
+    is_unit_column?(column) ? :second : nil
+  end
+
+  def ingredient_value_method(column)
+    is_unit_column?(column) ? :first : nil
   end
 
   def ingredient_input_label(column)

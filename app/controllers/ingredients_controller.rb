@@ -7,7 +7,7 @@ class IngredientsController < ApplicationController
     params[:ingredient] = { recipe_id: params[:recipe_id] }
     @ingredient = Ingredient.new(ingredient_params)
     @recipe = Recipe.find(params[:recipe_id])
-    @units = Ingredient.inhuman_units
+    @units = Ingredient.units_humanized
     @user_can_edit = true
     if @ingredient.save
       respond_to do |format|

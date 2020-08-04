@@ -171,7 +171,9 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   }
 
   function ingredientDisplayColumnContent(prefix, column) {
-    if(columnIsPreparation(column)) {
+    if (columnIsUnit(column)) {
+      return $(`#${prefix}-${column}-input`)[0].textContent.split('\n')[$(`#${prefix}-${column}-input`)[0].selectedIndex]
+    } else if (columnIsPreparation(column)) {
       return preparationText(prefix)
     } else if(columnIsOptional(column)) {
       return $(`#${prefix}-${column}-input`)[0].checked ? '(optional)' : ''
@@ -232,6 +234,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   const ingredientColumnValue = (prefix, column) => columnIsOptional(column) ? $(`#${prefix}-${column}-input`)[0].checked : $(`#${prefix}-${column}-input`).val()
 
+  const columnIsUnit = (column) => column === 'unit'
   const columnIsPreparation = (column) => column === 'preparation'
   const columnIsOptional = (column) => column === 'optional'
 }

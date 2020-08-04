@@ -15,7 +15,7 @@ class Ingredient < ApplicationRecord
     small leaf pound ounce pint fluid_ounce quart gallon sprig
   ).sort.freeze
 
-  before_save :numerify_amount
+  before_save :set_amount_as_float
 
   validates_presence_of :food, on: :update
 
@@ -55,9 +55,9 @@ class Ingredient < ApplicationRecord
 
   private
 
-  def numerify_amount
+  def set_amount_as_float
     return unless amount
 
-    self.amount = NumbersInWords.in_numbers(amount) if !NumbersInWords.in_numbers(amount).zero?
+    self.amount_as_float = NumbersInWords.in_numbers(amount).to_f if !NumbersInWords.in_numbers(amount).zero?
   end
 end
