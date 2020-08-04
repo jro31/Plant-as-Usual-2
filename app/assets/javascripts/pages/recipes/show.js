@@ -172,6 +172,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function ingredientDisplayColumnContent(prefix, column) {
     if (columnIsUnit(column)) {
+      if ($(`#${prefix}-${column}-input`).val() === "") return ""
       return $(`#${prefix}-${column}-input`)[0].textContent.split('\n')[$(`#${prefix}-${column}-input`)[0].selectedIndex]
     } else if (columnIsPreparation(column)) {
       return preparationText(prefix)
