@@ -22,6 +22,14 @@ describe Ingredient, type: :model do
     end
   end
 
+  describe 'callbacks' do
+    describe 'before_validation' do
+      describe '#numerify_amount' do
+        # COMPLETE THIS
+      end
+    end
+  end
+
   describe 'validations' do
     describe 'validates presence of food' do
       # COMPLETE THIS

@@ -201,9 +201,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   }
 
   function matchInputHeightToDisplayElement(prefix, clickTarget) {
-    if(isIngredientPrefix(prefix)) {
-
-    } else {
+    if(!isIngredientPrefix(prefix)) {
       $(`#${prefix}-input`).height($(clickTarget).height());
     }
   }
@@ -215,11 +213,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   const inputIsEnabled = (prefix) => !$(`#${prefix}-input`).hasClass('d-none')
 
   function clickIsOutsideInput(click, prefix) {
-    if(isIngredientPrefix(prefix)) {
-      return click.target.id !== `${prefix}-input` && $.inArray(click.target.id, ingredientInputIds(prefix)) === -1
-    } else {
-      return click.target.id !== `${prefix}-input`
-    }
+    return isIngredientPrefix(prefix) ? click.target.id !== `${prefix}-input` && $.inArray(click.target.id, ingredientInputIds(prefix)) === -1 : click.target.id !== `${prefix}-input`
   }
 
   function ingredientInputIds(prefix) {

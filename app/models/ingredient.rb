@@ -15,6 +15,8 @@ class Ingredient < ApplicationRecord
     small leaf pound ounce pint fluid_ounce quart gallon sprig
   ).sort.freeze
 
+  before_save :numerify_amount
+
   validates_presence_of :food, on: :update
 
   def self.ordered_editable_column_keys
@@ -49,5 +51,13 @@ class Ingredient < ApplicationRecord
       inhuman_units[unit_key.to_sym] = unit_key
     end
     inhuman_units
+  end
+
+  private
+
+  def numerify_amount
+    return unless amount
+
+    self.amount = NumbersInWords.in_numbers(amount) if !NumbersInWords.in_numbers(amount).zero?
   end
 end

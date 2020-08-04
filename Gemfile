@@ -25,6 +25,7 @@ gem 'fog-aws'
 gem 'mini_magick'
 gem 'figaro'
 gem 'state_machines-activerecord'
+gem 'numbers_in_words'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
