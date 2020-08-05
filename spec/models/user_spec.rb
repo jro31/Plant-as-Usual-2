@@ -3,17 +3,14 @@ require 'rails_helper'
 describe User, type: :model do
   it { should have_many :recipes }
 
-  describe 'destroying a user destroys their recipes' do
-    # COMPLETE THIS
-  end
+  let(:user) { create(:user) }
 
-  describe 'something' do
-    context 'user' do
-      let(:user) { create(:user) }
-      it 'does something' do
-        puts user.first_name
-        puts user.last_name
-      end
+  describe 'destroying a user destroys their recipes' do
+    let!(:recipe) { create(:recipe, id: 999, user: user) }
+    it 'destroys the recipe' do
+      expect(Recipe.find(999)).to eq(recipe)
+      user.destroy
+      expect { Recipe.find(999) }.to raise_exception(ActiveRecord::RecordNotFound)
     end
   end
 end
