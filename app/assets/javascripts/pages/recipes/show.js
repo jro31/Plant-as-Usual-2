@@ -164,7 +164,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function ingredientDisplayContent(prefix) {
     if (foodIsPresent(prefix)) {
-      $.each(ingredientDisplayColumns, function(_, column) {
+      $.each(ingredientDisplayRows, function(_, column) {
         $(`#${prefix}-${column}-display`).text(ingredientDisplayColumnContent(prefix, column))
       })
     }

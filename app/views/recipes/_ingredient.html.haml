@@ -1,6 +1,6 @@
 .input-display.ingredient-input-display{ id: "ingredient-#{ingredient.id}-display", class: [show_input ? 'd-none' : '', @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : ''] }
   %div
-    - Ingredient.ordered_display_columns.each do |column|
+    - Ingredient.ordered_display_rows.each do |column|
       = render 'recipes/ingredient_display', ingredient: ingredient, column: column
   - if @user_can_edit
     .ml-auto{ id: "ingredient-#{ingredient.id}-delete"}

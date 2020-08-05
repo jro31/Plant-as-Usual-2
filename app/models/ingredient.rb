@@ -37,7 +37,7 @@ class Ingredient < ApplicationRecord
     }
   end
 
-  def self.ordered_display_columns
+  def self.ordered_display_rows
     [self::USER_EDITABLE_COLUMNS[:food], self::USER_EDITABLE_COLUMNS[:preparation]]
   end
 
@@ -52,7 +52,14 @@ class Ingredient < ApplicationRecord
   def self.units_pluralized
     units_pluralized = {}
     self::UNIT_KEYS.each do |unit_key|
-      units_pluralized[unit_key.to_sym] = unit_key.humanize.pluralize
+      units_pluralized[unit_key.to_sym] = case unit_key
+                                          when 'leaf'
+                                            'leaves'.humanize
+                                          when 'large', 'medium', 'small', 'whole'
+                                            unit_key.humanize
+                                          else
+                                            unit_key.humanize.pluralize
+                                          end
     end
     units_pluralized
   end
@@ -68,8 +75,10 @@ class Ingredient < ApplicationRecord
   private
 
   def set_amount_as_float
-    return unless amount
-
-    self.amount_as_float = NumbersInWords.in_numbers(amount).to_f if !NumbersInWords.in_numbers(amount).zero?
+    self.amount_as_float = if amount && !NumbersInWords.in_numbers(amount).zero?
+                             NumbersInWords.in_numbers(amount).to_f
+                           else
+                             nil
+                           end
   end
 end
