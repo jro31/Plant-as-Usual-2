@@ -6,8 +6,21 @@ describe Recipe do
 
   let(:recipe) { create(:recipe) }
 
+  describe 'NUMBER_OF_RECIPES_OF_THE_DAY' do
+    it { expect(Recipe::NUMBER_OF_RECIPES_OF_THE_DAY).to eq(1) }
+  end
+
+  describe 'NUMBER_OF_FEATURED_RECIPES' do
+    it { expect(Recipe::NUMBER_OF_FEATURED_RECIPES).to eq(10) }
+  end
+
   describe 'destroying a recipe destroys ingredients' do
-    # COMPLETE THIS
+    let!(:ingredient) { create(:ingredient, id: 999, recipe: recipe) }
+    it 'destroys the ingredient' do
+      expect(Ingredient.find(999)).to eq(ingredient)
+      recipe.destroy
+      expect { Ingredient.find(999) }.to raise_exception(ActiveRecord::RecordNotFound)
+    end
   end
 
   describe 'validations' do
@@ -158,7 +171,7 @@ describe Recipe do
       it { expect(subject).not_to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
     end
 
-    describe '.current_recipe_of_the_day' do
+    describe '.current_recipes_of_the_day' do
       subject { Recipe.current_recipes_of_the_day }
       it { expect(subject).to eq([current_recipe_of_the_day_recipe]) }
     end
@@ -341,7 +354,7 @@ describe Recipe do
       end
     end
 
-    describe 'callbacks' do
+    describe 'state machine callbacks' do
       describe 'after_transition' do
         describe '[:currently_featured, :recipe_of_the_day_as_currently_featured] => any' do
           subject { recipe.revert_from_highlighted }
