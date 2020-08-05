@@ -17,12 +17,13 @@
         .photo-box
           = image_tag 'temp-bowl'
 
-  - if Recipe.any?
-    = render 'shared/wide_recipe_card', recipe: Recipe.last, photo_first: true
+  - Recipe.current_recipes_of_the_day.each do |recipe_of_the_day|
+    = render 'shared/wide_recipe_card', recipe: recipe_of_the_day, photo_first: true, recipe_of_the_day: Recipe.current_recipes_of_the_day.count == 1
+
 
     .container
       .row
         .col-md-6
-          = render 'shared/narrow_recipe_card', recipe: Recipe.last
+          = render 'shared/narrow_recipe_card', recipe: Recipe.first
         .col-md-6
-          = render 'shared/narrow_recipe_card', recipe: Recipe.last
+          = render 'shared/narrow_recipe_card', recipe: Recipe.first

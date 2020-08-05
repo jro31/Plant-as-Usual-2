@@ -17,7 +17,8 @@
       - if @recipe.photo.file&.exists?
         = image_tag @recipe.photo.url
       - else
-        PLACEHOLDER HERE
+        %div
+          PLACEHOLDER HERE
 
 
       // REMEMBER THAT WHEN IT COMES TO DISPLAYING RECIPE PHOTOS OF DIFFERENT SIZES SEE LINE 32 'THUMB' OF /Users/jethrowilliams/Google Drive/code/Plant-as-Usual-2/app/uploaders/photo_uploader.rb

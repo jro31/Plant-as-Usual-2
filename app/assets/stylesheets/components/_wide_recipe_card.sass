@@ -1,4 +1,18 @@
 .wide-recipe-card
+  @media (min-width: $grid-md)
+    max-height: 75vh
+  .photo-container, .details-container
+    max-height: inherit
+  .photo-container
+    img
+      object-fit: cover
+  .details-container
+    padding: 10vw 0
+    .details
+      max-height: inherit
+      padding: 0 10%
+      @media (min-width: $grid-md)
+        padding: 0 20%
 
 .wide-recipe-card-light-mode
   background: $light-mode-card-background-color
