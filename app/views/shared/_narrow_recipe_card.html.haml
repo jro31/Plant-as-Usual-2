@@ -1,16 +1,16 @@
-.row{class: component_classes(DarkMode::CLASSES[:narrow_recipe_card])}
-  .col-12
-    .d-flex.flex-column.justify-content-start.align-items-center
-      %div
+= link_to recipe_path(recipe) do
+  .row.h-100.mb-4.mb-md-0{class: component_classes(DarkMode::CLASSES[:narrow_recipe_card])}
+    .col-12.content-container
+      .image-container
         - if recipe.photo.file&.exists?
-          = image_tag recipe.photo.url, class: 'w-100'
+          = image_tag recipe.photo.url, class: 'w-100 h-100'
         - else
           -# SOMETHING HERE
-      .d-flex.flex-column.justify-content-between.content-container
-        %h2
+      .d-flex.flex-column.justify-content-between.py-3.py-md-0.text-container
+        %h3.mt-3.mt-md-5
           = recipe.name
-        %div
+        .d-flex.d-md-none.align-items-center.flex-grow-1
+          = recipe.process.truncate(150, separator: ' ')
+        .d-none.d-md-flex.align-items-center.flex-grow-1
           = recipe.process.truncate(300, separator: ' ')
-        .text-right
-          Buttons
 

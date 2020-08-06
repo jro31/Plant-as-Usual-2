@@ -1,0 +1,5 @@
+.container.mosaic-container
+  .row
+    - recipes.each do |recipe|
+      .col-md-6.col-xl-4
+        = render 'shared/narrow_recipe_card', recipe: recipe

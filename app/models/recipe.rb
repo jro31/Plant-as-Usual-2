@@ -1,6 +1,6 @@
 class Recipe < ApplicationRecord
   NUMBER_OF_RECIPES_OF_THE_DAY = 1.freeze
-  NUMBER_OF_FEATURED_RECIPES = 10.freeze
+  NUMBER_OF_FEATURED_RECIPES = 12.freeze
 
   belongs_to :user
   has_many :ingredients, dependent: :destroy

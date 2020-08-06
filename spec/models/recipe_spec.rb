@@ -11,7 +11,7 @@ describe Recipe do
   end
 
   describe 'NUMBER_OF_FEATURED_RECIPES' do
-    it { expect(Recipe::NUMBER_OF_FEATURED_RECIPES).to eq(10) }
+    it { expect(Recipe::NUMBER_OF_FEATURED_RECIPES).to eq(12) }
   end
 
   describe 'destroying a recipe destroys ingredients' do
@@ -27,40 +27,40 @@ describe Recipe do
     describe '#validate_number_of_featured_recipes' do
       before do
         create_list(:recipe, currently_featured_count, state: :currently_featured)
-        create_list(:recipe, 5, state: :recipe_of_the_day_as_currently_featured)
+        create_list(:recipe, 6, state: :recipe_of_the_day_as_currently_featured)
       end
       subject { create(:recipe, state: :approved_for_feature) }
       context 'will_save_change_to_state? is true' do
         context 'subject will update to currently_featured' do
           before { subject.state = 'currently_featured' }
-          context 'there are already ten or more currently featured recipes' do
-            let(:currently_featured_count) { 5 }
+          context 'there are already twelve or more currently featured recipes' do
+            let(:currently_featured_count) { 6 }
             it { expect(subject).not_to be_valid }
           end
 
-          context 'there are less than ten currently featured recipes' do
-            let(:currently_featured_count) { 4 }
+          context 'there are less than twelve currently featured recipes' do
+            let(:currently_featured_count) { 5 }
             it { expect(subject).to be_valid }
           end
         end
 
         context 'subject will update to recipe_of_the_day_as_currently_featured' do
           before { subject.state = 'recipe_of_the_day_as_currently_featured' }
-          context 'there are already ten or more currently featured recipes' do
-            let(:currently_featured_count) { 5 }
+          context 'there are already twelve or more currently featured recipes' do
+            let(:currently_featured_count) { 6 }
             it { expect(subject).not_to be_valid }
           end
 
-          context 'there are less than ten currently featured recipes' do
-            let(:currently_featured_count) { 4 }
+          context 'there are less than twelve currently featured recipes' do
+            let(:currently_featured_count) { 5 }
             it { expect(subject).to be_valid }
           end
         end
 
         context 'subject will update to something else' do
           before { subject.state = 'current_recipe_of_the_day' }
-          context 'there are already ten or more currently featured recipes' do
-            let(:currently_featured_count) { 5 }
+          context 'there are already twelve or more currently featured recipes' do
+            let(:currently_featured_count) { 6 }
             it { expect(subject).to be_valid }
           end
         end
@@ -68,8 +68,8 @@ describe Recipe do
 
       context 'will_save_change_to_state? is false' do
         before { subject.name = 'Big Papa' }
-        context 'there are already ten or more currently featured recipes' do
-          let(:currently_featured_count) { 5 }
+        context 'there are already twelve or more currently featured recipes' do
+          let(:currently_featured_count) { 6 }
           it { expect(subject).to be_valid }
         end
       end
@@ -520,26 +520,30 @@ describe Recipe do
       before { Timecop.freeze }
       after { Timecop.return }
       subject { Recipe.update_featured_recipes }
-      let!(:currently_featured_recipe_1) { create(:recipe, state: :currently_featured, last_featured_at: 23.hours.ago) }
-      let!(:currently_featured_recipe_2) { create(:recipe, state: :currently_featured, last_featured_at: 23.hours.ago - 1.minute) }
-      let!(:currently_featured_recipe_3) { create(:recipe, state: :currently_featured, last_featured_at: 23.hours.ago + 1.minute) }
-      let!(:recipe_of_the_day_as_currently_featured_recipe_1) { create(:recipe, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 23.hours.ago) }
-      let!(:recipe_of_the_day_as_currently_featured_recipe_2) { create(:recipe, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 23.hours.ago - 2.minutes) }
-      let!(:recipe_of_the_day_as_currently_featured_recipe_3) { create(:recipe, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 23.hours.ago + 2.minutes) }
-      let!(:approved_for_feature_recipe_1) { create(:recipe, state: :approved_for_feature, last_featured_at: nil) }
-      let!(:approved_for_feature_recipe_2) { create(:recipe, state: :approved_for_feature, last_featured_at: 1.month.ago) }
-      let!(:approved_for_feature_recipe_3) { create(:recipe, state: :approved_for_feature, last_featured_at: 1.week.ago) }
-      let!(:approved_for_recipe_of_the_day_recipe_1) { create(:recipe, state: :approved_for_recipe_of_the_day, last_featured_at: nil) }
-      let!(:approved_for_recipe_of_the_day_recipe_2) { create(:recipe, state: :approved_for_recipe_of_the_day, last_featured_at: 1.month.ago) }
-      let!(:approved_for_recipe_of_the_day_recipe_3) { create(:recipe, state: :approved_for_recipe_of_the_day, last_featured_at: 1.week.ago) }
-      it 'calls set_next_featured_recipe 8 times' do
-        expect(Recipe).to receive(:set_next_featured_recipe).exactly(8).times.and_call_original
+      let!(:currently_featured_recipe_1) { create(:recipe, id: 1, state: :currently_featured, last_featured_at: 23.hours.ago) }
+      let!(:currently_featured_recipe_2) { create(:recipe, id: 2, state: :currently_featured, last_featured_at: 23.hours.ago - 1.minute) }
+      let!(:currently_featured_recipe_3) { create(:recipe, id: 3, state: :currently_featured, last_featured_at: 23.hours.ago + 1.minute) }
+      let!(:currently_featured_recipe_4) { create(:recipe, id: 4, state: :currently_featured, last_featured_at: 23.hours.ago - 3.minutes) }
+      let!(:recipe_of_the_day_as_currently_featured_recipe_1) { create(:recipe, id: 5, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 23.hours.ago) }
+      let!(:recipe_of_the_day_as_currently_featured_recipe_2) { create(:recipe, id: 6, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 23.hours.ago - 2.minutes) }
+      let!(:recipe_of_the_day_as_currently_featured_recipe_3) { create(:recipe, id: 7, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 23.hours.ago + 2.minutes) }
+      let!(:recipe_of_the_day_as_currently_featured_recipe_4) { create(:recipe, id: 8, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 23.hours.ago - 4.minutes) }
+      let!(:approved_for_feature_recipe_1) { create(:recipe, id: 9, state: :approved_for_feature, last_featured_at: nil) }
+      let!(:approved_for_feature_recipe_2) { create(:recipe, id: 10, state: :approved_for_feature, last_featured_at: 1.month.ago) }
+      let!(:approved_for_feature_recipe_3) { create(:recipe, id: 11, state: :approved_for_feature, last_featured_at: 1.week.ago) }
+      let!(:approved_for_feature_recipe_4) { create(:recipe, id: 12, state: :approved_for_feature, last_featured_at: 14.days.ago) }
+      let!(:approved_for_recipe_of_the_day_recipe_1) { create(:recipe, id: 13, state: :approved_for_recipe_of_the_day, last_featured_at: nil) }
+      let!(:approved_for_recipe_of_the_day_recipe_2) { create(:recipe, id: 14, state: :approved_for_recipe_of_the_day, last_featured_at: 1.month.ago) }
+      let!(:approved_for_recipe_of_the_day_recipe_3) { create(:recipe, id: 15, state: :approved_for_recipe_of_the_day, last_featured_at: 1.week.ago) }
+      let!(:approved_for_recipe_of_the_day_recipe_4) { create(:recipe, id: 16, state: :approved_for_recipe_of_the_day, last_featured_at: 14.days.ago) }
+      it 'calls set_next_featured_recipe 10 times' do
+        expect(Recipe).to receive(:set_next_featured_recipe).exactly(10).times.and_call_original
         subject
       end
 
-      it 'features a total of ten recipes' do
+      it 'features a total of twelve recipes' do
         subject
-        expect(Recipe.currently_featured.count).to eq(10)
+        expect(Recipe.currently_featured.count).to eq(12)
       end
 
       it 'features all of the approved for feature recipes' do
@@ -547,9 +551,11 @@ describe Recipe do
         expect(approved_for_feature_recipe_1.reload.state).to eq('currently_featured')
         expect(approved_for_feature_recipe_2.reload.state).to eq('currently_featured')
         expect(approved_for_feature_recipe_3.reload.state).to eq('currently_featured')
+        expect(approved_for_feature_recipe_4.reload.state).to eq('currently_featured')
         expect(approved_for_recipe_of_the_day_recipe_1.reload.state).to eq('recipe_of_the_day_as_currently_featured')
         expect(approved_for_recipe_of_the_day_recipe_2.reload.state).to eq('recipe_of_the_day_as_currently_featured')
         expect(approved_for_recipe_of_the_day_recipe_3.reload.state).to eq('recipe_of_the_day_as_currently_featured')
+        expect(approved_for_recipe_of_the_day_recipe_4.reload.state).to eq('recipe_of_the_day_as_currently_featured')
       end
 
       it 'continues to feature the recipes that were featured less than 23 hours ago' do
@@ -560,14 +566,14 @@ describe Recipe do
 
       it 're-features the remaining currently featured recipes that were featured the longest time ago' do
         subject
-        expect(currently_featured_recipe_2.reload.state).to eq('currently_featured')
-        expect(recipe_of_the_day_as_currently_featured_recipe_2.reload.state).to eq('recipe_of_the_day_as_currently_featured')
+        expect(currently_featured_recipe_4.reload.state).to eq('currently_featured')
+        expect(recipe_of_the_day_as_currently_featured_recipe_4.reload.state).to eq('recipe_of_the_day_as_currently_featured')
       end
 
       it 'does not re-feature the remanining currently featured receipes that were featured most recently' do
         subject
-        expect(currently_featured_recipe_1.reload.state).to eq('approved_for_feature')
-        expect(recipe_of_the_day_as_currently_featured_recipe_1.reload.state).to eq('approved_for_recipe_of_the_day')
+        expect(currently_featured_recipe_2.reload.state).to eq('approved_for_feature')
+        expect(recipe_of_the_day_as_currently_featured_recipe_2.reload.state).to eq('approved_for_recipe_of_the_day')
       end
     end
 
@@ -578,10 +584,10 @@ describe Recipe do
       let!(:approved_for_feature_recipe) { create(:recipe, state: :approved_for_feature) }
       context 'number of currently featured recipes is greater/equal to NUMBER_OF_FEATURED_RECIPES' do
         before do
-          create_list(:recipe, 5, state: :currently_featured)
-          create_list(:recipe, 5, state: :recipe_of_the_day_as_currently_featured)
+          create_list(:recipe, 6, state: :currently_featured)
+          create_list(:recipe, 6, state: :recipe_of_the_day_as_currently_featured)
         end
-        it { expect(Recipe.currently_featured.count).to eq(10) }
+        it { expect(Recipe.currently_featured.count).to eq(12) }
 
         it 'does not call next_recipe_to_feature' do
           expect(Recipe).to receive(:next_recipe_to_feature).never

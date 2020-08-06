@@ -21,13 +21,6 @@
       .h-100.photo-container
         = image_tag 'temp-bowl'
 
-  - Recipe.current_recipes_of_the_day.each do |recipe_of_the_day|
-    = render 'shared/wide_recipe_card', recipe: recipe_of_the_day, photo_first: true, recipe_of_the_day: Recipe.current_recipes_of_the_day.count == 1
+= render 'shared/recipe_ladder', recipes: Recipe.current_recipes_of_the_day
 
-
-    .container
-      .row
-        .col-md-6
-          = render 'shared/narrow_recipe_card', recipe: Recipe.first
-        .col-md-6
-          = render 'shared/narrow_recipe_card', recipe: Recipe.first
+= render 'shared/recipe_mosaic', recipes: [Recipe.find(10), Recipe.find(14)] # Recipe.currently_featured

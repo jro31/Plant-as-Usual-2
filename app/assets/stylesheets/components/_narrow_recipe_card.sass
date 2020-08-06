@@ -1,7 +1,32 @@
 .narrow-recipe-card
   .content-container
-    height: 18em
+    @media (min-width: $grid-md)
+      padding: 0 15px
+
+    .image-container
+      @media (min-width: $grid-md)
+        height: 52%
+      img
+        object-fit: cover
+
+    .text-container
+      padding: 0 8%
+      @media (min-width: $grid-md)
+        h2
+          font-size: 20px
+        height: 48%
+        padding: 0 15%
 
 .narrow-recipe-card-light-mode
+  .text-container
+    background: $light-mode-card-background-color
+    color: $light-mode-card-text-color
+    h2
+      color: $light-mode-card-h2-text-color
 
 .narrow-recipe-card-dark-mode
+  .text-container
+    background: $dark-mode-card-background-color
+    color: $dark-mode-card-text-color
+    h2
+      color: $dark-mode-card-h2-text-color
