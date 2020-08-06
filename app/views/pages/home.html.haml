@@ -2,20 +2,24 @@
 
 .container-fluid
   .row{class: component_classes(DarkMode::CLASSES[:welcome_banner])}
-    .col-md-6
-      .text-box-container.d-flex.justify-content-center.align-items-center.p-5.h-100
-        .d-flex.flex-column.justify-content-around.align-items-center.p-5.h-100{class: component_classes(DarkMode::CLASSES[:text_box])}
+    .col-md-6.p-0
+      .d-flex.justify-content-center.align-items-center.h-100.text-box-container
+        .d-flex.flex-column.justify-content-around.align-items-center.h-100{class: component_classes(DarkMode::CLASSES[:text_box])}
           %h1.text-center
             Welcome to Plant as Usual
+          .text-center.my-4.my-md-2
+            Plant as Usual is the place for you to find user-added vegan recipes, and to add your own. Whether an experienced plant-based chef, or just starting-out, you're sure to find something that will whet your appetite.
           .text-center
-            Really interesting text here
-          .text-center
-            Buttons
+            = link_to 'Browse recipes', recipes_path, class: 'btn btn-primary mb-1 mb-sm-0'
+            - if current_user
+              .btn.btn-secondary.mt-1.mt-sm-0{'data-toggle' => 'modal', 'data-target' => '#add-recipe-modal'}
+                Add your own
+            - else
+              = link_to 'Login to add your own', new_user_session_path, class: 'btn btn-secondary mt-1 mt-sm-0'
 
-    .col-md-6
-      .photo-box-container
-        .photo-box
-          = image_tag 'temp-bowl'
+    .col-md-6.p-0.d-none.d-md-block
+      .h-100.photo-container
+        = image_tag 'temp-bowl'
 
   - Recipe.current_recipes_of_the_day.each do |recipe_of_the_day|
     = render 'shared/wide_recipe_card', recipe: recipe_of_the_day, photo_first: true, recipe_of_the_day: Recipe.current_recipes_of_the_day.count == 1
