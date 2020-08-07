@@ -7,6 +7,7 @@ describe DarkMode do
         {
           can_edit_input_display: 'can-edit-input-display',
           custom_navbar: 'custom-navbar',
+          input_edit: 'input-edit',
           keen_modal: 'keen-modal',
           narrow_recipe_card: 'narrow-recipe-card',
           page_container: 'page-container',
@@ -23,6 +24,7 @@ describe DarkMode do
       expect(DarkMode.css_classes).to eq([
         'can-edit-input-display',
         'custom-navbar',
+        'input-edit',
         'keen-modal',
         'narrow-recipe-card',
         'page-container',

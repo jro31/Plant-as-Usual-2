@@ -28,15 +28,9 @@
     .col-12.text-center
       %h1#name-display.input-display{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
       = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
-        = f.input :name, label: false, placeholder: @name_placeholder, input_html: { id: 'name-input', class: 'input-edit d-none text-center' }
+        = f.input :name, label: false, placeholder: @name_placeholder, input_html: { id: 'name-input', class: "d-none text-center #{component_classes(DarkMode::CLASSES[:input_edit])}" }
   .row
-    .col-8
-      // If not the user's recipe, do not add #process-display. Make sure that pundit works for this. Also spec that the classes only exist when the user is the current user.
-      #process-display.input-display{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
-      // Perhaps add a safeguard where the recipe saves after every (100?) characters typed
-      = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
-        = f.input :process, label: false, placeholder: @process_placeholder, input_html: { id: 'process-input', class: 'input-edit d-none' }
-    .col-4
+    .col-md-4
       #ingredients-container
         - @ingredients.each do |ingredient|
           = render 'ingredient', ingredient: ingredient, show_input: false
@@ -47,6 +41,12 @@
           = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true, id: 'add-ingredient'
         #add-ingredient-container-disabled.d-none
           Add ingredient
+    .col-md-8.order-md-first
+      // If not the user's recipe, do not add #process-display. Make sure that pundit works for this. Also spec that the classes only exist when the user is the current user.
+      #process-display.input-display{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
+      // Perhaps add a safeguard where the recipe saves after every (100?) characters typed
+      = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
+        = f.input :process, label: false, placeholder: @process_placeholder, input_html: { id: 'process-input', class: "d-none #{component_classes(DarkMode::CLASSES[:input_edit])}" }
 
 = link_to 'Click here to submit changes to your recipe', mark_as_complete_recipe_path(@recipe), method: :patch, class: "btn btn-success fixed-bottom-left #{@recipe.incomplete? ? '' : 'd-none'}", id: 'mark-as-complete-button'
 

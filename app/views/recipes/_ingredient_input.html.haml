@@ -1,5 +1,5 @@
 - if column == :optional
-  = f.input_field column, id: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input", class: 'input-edit'
+  = f.input_field column, id: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input", class: component_classes(DarkMode::CLASSES[:input_edit])
   = f.label column, for: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input", label: ingredient_input_label(column), id: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input-label"
 - else
-  = f.input column, collection: ingredient_input_collection(column, @units), include_blank: ingredient_input_prompt(column), label_method: ingredient_label_method(column), value_method: ingredient_value_method(column), label: ingredient_input_label(column), placeholder: ingredient_input_placeholder(column), error: false, input_html: { id: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input", class: 'input-edit', autocomplete: 'off' }
+  = f.input column, collection: ingredient_input_collection(column, @units), include_blank: ingredient_input_prompt(column), label_method: ingredient_label_method(column), value_method: ingredient_value_method(column), label: ingredient_input_label(column), placeholder: ingredient_input_placeholder(column), error: false, input_html: { id: "ingredient-#{id}-#{Ingredient::USER_EDITABLE_COLUMNS[column]}-input", class: component_classes(DarkMode::CLASSES[:input_edit]), autocomplete: 'off' }

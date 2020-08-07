@@ -1,6 +1,6 @@
 .input-display
   border: 1px solid transparent
-  padding: $input-x-padding $input-y-padding
+  padding: $input-y-padding $input-x-padding
 
 .can-edit-input-display
 
@@ -16,5 +16,34 @@
   white-space: pre-wrap
 
 #name-input
-  color: red
   font-size: 30px
+
+#add-ingredient-container, #add-ingredient-container-disabled
+  padding: $input-x-padding $input-y-padding
+
+.input-edit
+  font-size: $paragraph-font-size
+
+.input-edit#name-input
+  font-size: $h1-font-size
+  font-weight: $h1-font-weight
+
+.input-edit-light-mode
+  color: $light-mode-paragraph-text-color
+  background-color: $light-mode-input-background-color
+  &:focus
+    color: $light-mode-paragraph-text-color
+    background-color: $light-mode-input-background-color
+
+.input-edit-light-mode#name-input
+  color: $light-mode-h1-text-color
+
+.input-edit-dark-mode
+  color: $dark-mode-paragraph-text-color
+  background-color: $dark-mode-input-background-color
+  &:focus
+    color: $dark-mode-paragraph-text-color
+    background-color: $dark-mode-input-background-color
+
+.input-edit-dark-mode#name-input
+  color: $dark-mode-h1-text-color
