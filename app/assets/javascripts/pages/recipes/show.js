@@ -257,7 +257,6 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   const ingredientColumnValue = (prefix, column) => columnIsOptional(column) ? $(`#${prefix}-${column}-input`)[0].checked : $(`#${prefix}-${column}-input`).val()
 
-  // const columnIsUnit = (column) => column === 'unit'
   const columnIsFood = (column) => column === 'food'
   const columnIsPreparation = (column) => column === 'preparation'
   const columnIsOptional = (column) => column === 'optional'

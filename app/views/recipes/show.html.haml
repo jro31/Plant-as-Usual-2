@@ -10,15 +10,17 @@
         = f.file_field :photo, id: 'photo-uploader', class: 'd-none'
         = f.submit id: 'submit-photo', class: 'd-none'
 
-  .row.justify-content-center
+  .row.justify-content-center{ class: component_classes(DarkMode::CLASSES[:photo_uploader]) }
     #spinner.spinner-grow.text-warning.position-absolute.d-none{ style: 'z-index: 100' }
 
     #photo-container.col-12.text-center
       - if @recipe.photo.file&.exists?
         = image_tag @recipe.photo.url
       - else
-        %div
-          PLACEHOLDER HERE
+        - if @user_can_edit
+          #photo-placeholder-container.d-flex.justify-content-center.align-items-center
+            #photo-placeholder.d-flex.justify-content-center.align-items-center
+              Add photo
 
 
       // REMEMBER THAT WHEN IT COMES TO DISPLAYING RECIPE PHOTOS OF DIFFERENT SIZES SEE LINE 32 'THUMB' OF /Users/jethrowilliams/Google Drive/code/Plant-as-Usual-2/app/uploaders/photo_uploader.rb
@@ -29,9 +31,11 @@
       %h1#name-display.input-display{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
       = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
         = f.input :name, label: false, placeholder: @name_placeholder, input_html: { id: 'name-input', class: "d-none text-center #{component_classes(DarkMode::CLASSES[:input_edit])}" }
-  .row
-    .col-md-4
+  .row{ class: component_classes(DarkMode::CLASSES[:recipe_content_row]) }
+    .col-md-5.col-lg-4
       #ingredients-container
+        %h4
+          Ingredients
         - @ingredients.each do |ingredient|
           = render 'ingredient', ingredient: ingredient, show_input: false
           :javascript
@@ -41,14 +45,15 @@
           = link_to 'Add ingredient', recipe_ingredients_path(@recipe), method: :post, remote: true, id: 'add-ingredient'
         #add-ingredient-container-disabled.d-none
           Add ingredient
-    .col-md-8.order-md-first
+    .col-md-7.col-lg-8.order-md-first.mt-5.mt-md-0
       // If not the user's recipe, do not add #process-display. Make sure that pundit works for this. Also spec that the classes only exist when the user is the current user.
       #process-display.input-display{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
       // Perhaps add a safeguard where the recipe saves after every (100?) characters typed
       = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
         = f.input :process, label: false, placeholder: @process_placeholder, input_html: { id: 'process-input', class: "d-none #{component_classes(DarkMode::CLASSES[:input_edit])}" }
 
-= link_to 'Click here to submit changes to your recipe', mark_as_complete_recipe_path(@recipe), method: :patch, class: "btn btn-success fixed-bottom-left #{@recipe.incomplete? ? '' : 'd-none'}", id: 'mark-as-complete-button'
+- if @user_can_edit
+  = link_to 'Click here to submit your changes', mark_as_complete_recipe_path(@recipe), method: :patch, class: "btn btn-success fixed-bottom-left #{@recipe.incomplete? ? '' : 'd-none'}", id: 'mark-as-complete-button'
 
 :javascript
   inputIdPrefixes.push('name', 'process')

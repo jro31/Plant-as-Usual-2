@@ -6,6 +6,8 @@ class DarkMode < ApplicationRecord
     keen_modal: 'keen-modal',
     narrow_recipe_card: 'narrow-recipe-card',
     page_container: 'page-container',
+    photo_uploader: 'photo-uploader',
+    recipe_content_row: 'recipe-content-row',
     text_box: 'text-box',
     welcome_banner: 'welcome-banner',
     wide_recipe_card: 'wide-recipe-card'

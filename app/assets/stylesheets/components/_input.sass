@@ -18,9 +18,6 @@
 #name-input
   font-size: 30px
 
-#add-ingredient-container, #add-ingredient-container-disabled
-  padding: $input-x-padding $input-y-padding
-
 .input-edit
   font-size: $paragraph-font-size
 
@@ -31,6 +28,7 @@
 .input-edit-light-mode
   color: $light-mode-paragraph-text-color
   background-color: $light-mode-input-background-color
+  border-color: $light-mode-input-border-color !important
   &:focus
     color: $light-mode-paragraph-text-color
     background-color: $light-mode-input-background-color
@@ -41,6 +39,7 @@
 .input-edit-dark-mode
   color: $dark-mode-paragraph-text-color
   background-color: $dark-mode-input-background-color
+  border-color: $dark-mode-input-border-color !important
   &:focus
     color: $dark-mode-paragraph-text-color
     background-color: $dark-mode-input-background-color

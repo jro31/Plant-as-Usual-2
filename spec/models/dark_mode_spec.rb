@@ -11,6 +11,8 @@ describe DarkMode do
           keen_modal: 'keen-modal',
           narrow_recipe_card: 'narrow-recipe-card',
           page_container: 'page-container',
+          photo_uploader: 'photo-uploader',
+          recipe_content_row: 'recipe-content-row',
           text_box: 'text-box',
           welcome_banner: 'welcome-banner',
           wide_recipe_card: 'wide-recipe-card'
@@ -28,6 +30,8 @@ describe DarkMode do
         'keen-modal',
         'narrow-recipe-card',
         'page-container',
+        'photo-uploader',
+        'recipe-content-row',
         'text-box',
         'welcome-banner',
         'wide-recipe-card'

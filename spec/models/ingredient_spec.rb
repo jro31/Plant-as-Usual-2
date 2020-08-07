@@ -19,7 +19,7 @@ describe Ingredient, type: :model do
     it 'returns the unit keys in alphabetical order' do
       expect(Ingredient::UNIT_KEYS).to eq(
         %w(
-          can centimetre clove cup dash fluid_ounce gallon gram inch kilogram
+          can centimetre clove cup dash fluid_ounce gallon gram handful inch kilogram
           large leaf litre medium millilitre ounce pack piece pinch pint pound quart small
           splash sprig tablespoon teaspoon whole
         )
@@ -282,6 +282,7 @@ describe Ingredient, type: :model do
           fluid_ounce: 'Fluid ounce',
           gallon: 'Gallon',
           gram: 'Gram',
+          handful: 'Handful',
           inch: 'Inch',
           kilogram: 'Kilogram',
           large: 'Large',
@@ -319,6 +320,7 @@ describe Ingredient, type: :model do
           fluid_ounce: 'Fluid ounces',
           gallon: 'Gallons',
           gram: 'Grams',
+          handful: 'Handfuls',
           inch: 'Inches',
           kilogram: 'Kilograms',
           large: 'Large',
@@ -356,6 +358,7 @@ describe Ingredient, type: :model do
           fluid_ounce: 'fluid_ounce',
           gallon: 'gallon',
           gram: 'gram',
+          handful: 'handful',
           inch: 'inch',
           kilogram: 'kilogram',
           large: 'large',

@@ -1,11 +1,70 @@
 #recipe-show-page
   padding-bottom: $expected-button-height
 
+  .photo-uploader
+    #photo-container
+      img
+        max-width: 100%
+        object-fit: cover
+
+      #photo-placeholder-container
+        height: 30vh
+        #photo-placeholder
+          width: 75vw
+          height: 100%
+          cursor: pointer
+
+  .photo-uploader-light-mode
+    #photo-container
+      #photo-placeholder-container
+        #photo-placeholder
+          background-color: $light-mode-photo-uploader-background-color
+
+  .photo-uploader-dark-mode
+    #photo-container
+      #photo-placeholder-container
+        #photo-placeholder
+          background-color: $dark-mode-photo-uploader-background-color
+
+  .can-edit-input-display
+    cursor: pointer
+
   #name-display
     min-height: 1.55em
 
-  #process-display
-    min-height: 50vh
+  .recipe-content-row
+    #process-display
+      min-height: 50vh
 
-  .ingredient-input-display
-    display: flex
+    #ingredients-container
+      h4
+        padding: $input-y-padding $input-x-padding
+
+    .ingredient-input-display
+      display: flex
+
+    #add-ingredient-container, #add-ingredient-container-disabled
+      padding: $input-y-padding $input-x-padding
+
+    #add-ingredient-container
+      a
+        color: inherit
+
+  .recipe-content-row-light-mode
+    #ingredients-container
+      background-color: $light-mode-input-background-color
+
+    #process-display
+      background-color: $light-mode-input-background-color
+
+  .recipe-content-row-dark-mode
+    #ingredients-container
+      background-color: $dark-mode-input-background-color
+
+    #process-display
+      background-color: $dark-mode-input-background-color
+
+#mark-as-complete-button
+  width: 100%
+  @media (min-width: $grid-md)
+    width: auto
