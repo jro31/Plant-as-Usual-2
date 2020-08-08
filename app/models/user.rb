@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :recipes, dependent: :destroy
+  has_many :user_favourite_recipes, dependent: :destroy
+  has_many :favourites, through: :user_favourite_recipes, class_name: 'Recipe', source: :recipe
 
   # validates :username, presence: true, uniqueness: true, length: { minimum: 3 }
 end
