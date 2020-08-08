@@ -1,6 +1,15 @@
 #recipe-show-page
   padding-bottom: $expected-button-height
 
+  #interaction-icons-container
+    line-height: 1
+    top: $recipe-interaction-icons-mobile-top
+    left: 0
+    z-index: $interaction-icons-z-index
+    width: 100%
+    @media (min-width: $grid-md)
+      width: auto
+
   .photo-uploader
     #photo-container
       img

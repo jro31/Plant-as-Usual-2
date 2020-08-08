@@ -1,5 +1,5 @@
 = link_to recipe_path(recipe) do
-  .row.my-0.my-md-5{class: component_classes(DarkMode::CLASSES[:wide_recipe_card])}
+  .row.my-0.mt-md-5{class: component_classes(DarkMode::CLASSES[:wide_recipe_card])}
     .col-md-6.p-0.photo-container{class: photo_first ? "order-first" : "order-last"}
       - if recipe.photo.file&.exists?
         = image_tag recipe.photo.url, class: 'w-100 h-100'

@@ -1,5 +1,5 @@
 .container.mosaic-container
-  .row
+  .row.mt-5
     - recipes.each do |recipe|
       .col-md-6.col-xl-4.mt-3.mt-md-0.mb-3
         = render 'shared/narrow_recipe_card', recipe: recipe

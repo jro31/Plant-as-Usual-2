@@ -3,7 +3,8 @@ class RecipesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show] # You don't want update or upload_photo here
 
   def index
-    @recipes = Recipe.last(10)
+    @recipe_category = params[:recipe_filter]
+    @recipes = filtered_recipes
     @recipe_iterator = 0
   end
 
@@ -79,6 +80,15 @@ class RecipesController < ApplicationController
 
   def recipe_params
     params.require(:recipe).permit(:name, :process, :photo)
+  end
+
+  def filtered_recipes # SPEC THIS
+    case @recipe_filter
+    when 'user_is_owner'
+      Recipe.where(user: current_user).order(updated_at: :desc)
+    else
+      Recipe.all.order(created_at: :desc)
+    end
   end
 
   def user_is_owner_or_admin?

@@ -1,7 +1,9 @@
 // Variables
 $navbar-dropdown-menu-z-index: 1000
+$custom-navbar-z-index: calc(#{$navbar-dropdown-menu-z-index} - 1)
 $logo-z-index: calc(#{$navbar-dropdown-menu-z-index} + 1)
-$fixed-bottom-left-z-index: calc(#{$navbar-dropdown-menu-z-index} - 1)
+$interaction-icons-z-index: calc(#{$custom-navbar-z-index} - 1)
+$fixed-bottom-left-z-index: calc(#{$custom-navbar-z-index} - 1)
 
 // Classes
 .fixed-bottom-left

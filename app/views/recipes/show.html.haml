@@ -4,6 +4,16 @@
 = render 'shared/hidden_flash', text: ''
 
 .container#recipe-show-page
+
+  #interaction-icons-container.position-fixed.d-flex.flex-md-column.justify-content-around
+    %div
+      = link_to '#' do
+        %i.fas.fa-heart
+        -# %i.far.fa-heart
+    %div
+      = link_to '#' do
+        %i.far.fa-share-square
+
   .row
     .col-12.text-center
       = simple_form_for @recipe, url: upload_photo_recipe_url, remote: true, html: { id: nil } do |f|
