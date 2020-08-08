@@ -1,14 +1,28 @@
 #recipe-show-page
   padding-bottom: $expected-button-height
 
-  #interaction-icons-container
+  .interaction-icons
     line-height: 1
     top: $recipe-interaction-icons-mobile-top
     left: 0
     z-index: $interaction-icons-z-index
     width: 100%
+    padding: 0 $recipe-interaction-icons-container-mobile-padding
     @media (min-width: $grid-md)
+      top: $recipe-interaction-icons-desktop-top
       width: auto
+      left: $recipe-interaction-icons-desktop-left
+      padding: 0
+      .non-initial-icon
+        margin-top: $recipe-interaction-icons-desktop-separation-margin
+
+  .interaction-icons-light-mode
+    a
+      color: $light-mode-paragraph-text-color
+
+  .interaction-icons-dark-mode
+    a
+      color: $dark-mode-paragraph-text-color
 
   .photo-uploader
     #photo-container

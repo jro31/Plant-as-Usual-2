@@ -5,12 +5,12 @@
 
 .container#recipe-show-page
 
-  #interaction-icons-container.position-fixed.d-flex.flex-md-column.justify-content-around
+  .position-fixed.d-flex.flex-md-column.justify-content-around{ class: component_classes(DarkMode::CLASSES[:interaction_icons]) }
     %div
       = link_to '#' do
         %i.fas.fa-heart
         -# %i.far.fa-heart
-    %div
+    .non-initial-icon
       = link_to '#' do
         %i.far.fa-share-square
 

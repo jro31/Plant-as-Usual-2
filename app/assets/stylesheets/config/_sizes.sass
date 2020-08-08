@@ -37,8 +37,10 @@ $navbar-menu-item-icon-right-margin: calc(#{$toggle-switch-width} - (#{$navbar-m
 
 // Recipe interaction icons
 $recipe-interaction-icons-mobile-top: calc((#{$navbar-height} / 2) - (#{$navbar-font-size} / 2))
-
-// $recipe-interaction-icons-mobile-left:
+$recipe-interaction-icons-container-mobile-padding: calc((((#{$site-logo-position} * 2) + #{$site-logo-width}) + (#{$search-logo-position} * 2) + #{$navbar-font-size}) / 2)
+$recipe-interaction-icons-desktop-top: calc(#{$navbar-height} + #{$site-logo-position})
+$recipe-interaction-icons-desktop-left: calc((#{$site-logo-position} + (#{$site-logo-width} / 2)) - (#{$navbar-font-size} / 2))
+$recipe-interaction-icons-desktop-separation-margin: calc(#{$site-logo-position} * 2)
 
 // Inputs
 $input-x-padding: 0.75rem

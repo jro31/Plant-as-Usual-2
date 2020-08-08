@@ -3,6 +3,7 @@ class DarkMode < ApplicationRecord
     can_edit_input_display: 'can-edit-input-display',
     custom_navbar: 'custom-navbar',
     input_edit: 'input-edit',
+    interaction_icons: 'interaction-icons',
     keen_modal: 'keen-modal',
     narrow_recipe_card: 'narrow-recipe-card',
     page_container: 'page-container',
