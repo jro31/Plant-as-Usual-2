@@ -1,12 +1,13 @@
 Rails.application.routes.draw do
   devise_for :users
   root to: 'pages#home'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   resources :recipes do # REMOVE METHODS YOU DON'T NEED
     patch 'upload_photo', on: :member
     patch 'mark_as_complete', on: :member
-    resources :ingredients # REMOVE METHODS YOU DON'T NEED
+    delete 'remove_as_favourite', on: :member
+    resources :ingredients, only: [:create, :update, :destroy]
+    resources :user_favourite_recipes, only: [:create]
   end
 
   get 'current_user_data' => "users#current_user_data"

@@ -21,14 +21,9 @@ class IngredientsController < ApplicationController
   def update
     # ADD PUNDIT TO THIS METHOD
 
-    # Remember, 'amount' is now a string. Add a check so that any numbers
-    # are typed (for example 'one, two, three'), they get saved as, for
-    # example 1, 2, 3.
-    # A possible alternative/addition to this is to require numbers for
-    # when the unit would usually expect a number (for example, grams, pound
-    # kilos etc).
     @ingredient = Ingredient.find(params[:id])
     @recipe = Recipe.find(params[:recipe_id])
+    raise unless @ingredient.recipe = @recipe
     if @ingredient.update(ingredient_params)
       @recipe.revised
       # Show positive flash message somehow
@@ -41,6 +36,8 @@ class IngredientsController < ApplicationController
   def destroy
     # ADD PUNDIT TO THIS METHOD
     @ingredient = Ingredient.find(params[:id])
+    @recipe = Recipe.find(params[:recipe_id])
+    raise unless @ingredient.recipe = @recipe
     @ingredient.destroy
   end
 

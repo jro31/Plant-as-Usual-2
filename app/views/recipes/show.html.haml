@@ -6,11 +6,11 @@
 .container#recipe-show-page
 
   .position-fixed.d-flex.flex-md-column.justify-content-around{ class: component_classes(DarkMode::CLASSES[:interaction_icons]) }
-    %div
-      = link_to '#' do
-        %i.fas.fa-heart
-        -# %i.far.fa-heart
-    .non-initial-icon
+    - if current_user
+      %div
+        %i.fas.fa-heart#full-heart{ class: @recipe_is_favourite ? '' : 'd-none' }
+        %i.far.fa-heart#empty-heart{ class: @recipe_is_favourite ? 'd-none' : '' }
+    %div{ class: current_user ? 'non-initial-icon' : ''}
       = link_to '#' do
         %i.far.fa-share-square
 

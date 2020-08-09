@@ -23,6 +23,7 @@ class RecipesController < ApplicationController
     @ingredients = @recipe.ingredients.order(created_at: :asc)
     @units = Ingredient.units_humanized
     @user_can_edit = user_is_owner_or_admin?
+    @recipe_is_favourite = recipe_is_favourite?
     @process_placeholder = 'Write your recipe here...'
     @name_placeholder = 'What the name of your recipe?'
   end
@@ -76,6 +77,11 @@ class RecipesController < ApplicationController
     end
   end
 
+  # def remove_as_favourite
+  #   # Add pundit
+  #   @recipe = Recipe.find(params[:id])
+  # end
+
   private
 
   def recipe_params
@@ -95,5 +101,11 @@ class RecipesController < ApplicationController
     return false unless current_user
 
     @recipe.user == current_user || current_user&.admin
+  end
+
+  def recipe_is_favourite? # SPEC THIS
+    return false unless current_user
+
+    current_user.favourites.include?(@recipe)
   end
 end

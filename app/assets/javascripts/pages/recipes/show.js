@@ -29,7 +29,10 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
           }
         })
         if (noInputWasEnabled) {
-          if (deleteIngredientWasClicked(click)) {
+          if (favouriteRecipeWasClicked(click)) {
+            heartTransplant()
+            updateFavourite(click.target.id)
+          } else if (deleteIngredientWasClicked(click)) {
             hideIngredient(ingredientIdNumber(click.target.id))
             deleteIngredient(ingredientIdNumber(click.target.id))
           } else {
@@ -58,6 +61,19 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       $('#photo-uploader').click()
     })
     setSpinnerDimensions()
+  }
+
+  const heartTransplant = () => $('#full-heart, #empty-heart').toggleClass('d-none')
+
+  function updateFavourite(heart) {
+    if (heart === 'full-heart') {
+      // DESTROY
+    } else {
+      // CREATE
+      type = 'post'
+      url = `/recipes/${recipeId}/user_favourite_recipes`
+    }
+    ajaxRequest(type, url, undefined, undefined, undefined, undefined, undefined, displaySuccess = false, displayFail = false)
   }
 
   const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false)
@@ -248,6 +264,8 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   }
 
   const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
+
+  const favouriteRecipeWasClicked = (click) => click.target.id === 'full-heart' || click.target.id === 'empty-heart'
 
   const deleteIngredientWasClicked = (click) => click.target.id.includes('ingredient-') && click.target.id.includes('-delete')
 
