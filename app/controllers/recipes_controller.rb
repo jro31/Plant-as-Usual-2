@@ -1,3 +1,5 @@
+# Remember to add the ability for users to delete (mark as hidden) recipes
+
 class RecipesController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
   skip_before_action :authenticate_user!, only: %i[index show] # You don't want update or upload_photo here
@@ -77,10 +79,11 @@ class RecipesController < ApplicationController
     end
   end
 
-  # def remove_as_favourite
-  #   # Add pundit
-  #   @recipe = Recipe.find(params[:id])
-  # end
+  def remove_as_favourite
+    # Add pundit
+    @recipe = Recipe.find(params[:id])
+    UserFavouriteRecipe.where(user: current_user, recipe: @recipe).destroy_all
+  end
 
   private
 
@@ -89,11 +92,18 @@ class RecipesController < ApplicationController
   end
 
   def filtered_recipes # SPEC THIS
+    # When all else is equal, perhaps sort recipes by:
+    # 1) State - Approved recipes before others
+    # 2) Number of favourites
+    # 3) Has a photo
+    # or
+    # 1) State - Approved
+    # 2) Date created
     case @recipe_filter
     when 'user_is_owner'
-      Recipe.where(user: current_user).order(updated_at: :desc)
+      Recipe.not_hidden.where(user: current_user).order(updated_at: :desc)
     else
-      Recipe.all.order(created_at: :desc)
+      Recipe.not_hidden.order(created_at: :desc)
     end
   end
 

@@ -67,9 +67,9 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function updateFavourite(heart) {
     if (heart === 'full-heart') {
-      // DESTROY
+      type = 'delete'
+      url = `/recipes/${recipeId}/remove_as_favourite`
     } else {
-      // CREATE
       type = 'post'
       url = `/recipes/${recipeId}/user_favourite_recipes`
     }
