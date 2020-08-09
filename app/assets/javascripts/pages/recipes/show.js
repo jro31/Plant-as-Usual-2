@@ -73,7 +73,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       type = 'post'
       url = `/recipes/${recipeId}/user_favourite_recipes`
     }
-    ajaxRequest(type, url, undefined, undefined, undefined, undefined, undefined, displaySuccess = false, displayFail = false)
+    ajaxRequest(type, url, undefined, undefined, undefined, undefined, undefined, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = false)
   }
 
   const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false)
@@ -135,7 +135,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     return jQuery.isEmptyObject(initialInputValue) && !foodIsPresent(prefix)
   }
 
-  function ajaxRequest(type, url, data = null, prefix = null, component = 'recipe', verb = 'save', ingredientId = null, displaySuccess = true, displayFail = true) {
+  function ajaxRequest(type, url, data = null, prefix = null, component = 'recipe', verb = 'save', ingredientId = null, displaySuccess = true, displayFail = true, showMarkAsCompleteButton = true) {
     $.ajax({
       type: type,
       url: url,
@@ -143,7 +143,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       data: data,
       success: function() {
         if (displaySuccess) displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
-        $('#mark-as-complete-button').removeClass('d-none')
+        if (showMarkAsCompleteButton) $('#mark-as-complete-button').removeClass('d-none')
       },
       error: function() {
         if (displayFail) displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')

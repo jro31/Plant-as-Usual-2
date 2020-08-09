@@ -10,12 +10,12 @@
           .text-center.my-4.my-md-2
             Plant as Usual is the place for you to find user-added vegan recipes, and to add your own. Whether an experienced plant-based chef, or just starting-out, you're sure to find something that will whet your appetite.
           .text-center
-            = link_to 'Browse recipes', recipes_path, class: 'btn btn-primary mb-1 mb-sm-0'
+            = link_to 'Browse recipes', recipes_path, class: "btn mb-1 mb-sm-0 #{component_classes(DarkMode::CLASSES[:btn_keen])}"
             - if current_user
-              .btn.btn-secondary.mt-1.mt-sm-0{'data-toggle' => 'modal', 'data-target' => '#add-recipe-modal'}
+              .btn.mt-1.mt-sm-0{ class: component_classes(DarkMode::CLASSES[:btn_docile]), 'data-toggle' => 'modal', 'data-target' => '#add-recipe-modal' }
                 Add your own
             - else
-              = link_to 'Login to add your own', new_user_session_path, class: 'btn btn-secondary mt-1 mt-sm-0'
+              = link_to 'Login to add your own', new_user_session_path, class: "btn mt-1 mt-sm-0 #{component_classes(DarkMode::CLASSES[:btn_docile])}"
 
     .col-md-6.p-0.d-none.d-md-block
       .h-100.photo-container

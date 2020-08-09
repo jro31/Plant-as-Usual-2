@@ -4,7 +4,7 @@
       - if recipe.photo.file&.exists?
         = image_tag recipe.photo.url, class: 'w-100 h-100'
       - else
-        -# SOMETHING HERE
+        -# SOMETHING HERE; probably placeholder image
     .col-md-6.p-md-0.d-flex.flex-column.details-container
       .d-flex.flex-column.justify-content-center.flex-grow-1.py-4.details
         %h2

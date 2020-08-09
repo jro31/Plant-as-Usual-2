@@ -5,6 +5,8 @@ describe DarkMode do
     it 'returns a hash of classes' do
       expect(DarkMode::CLASSES).to eq(
         {
+          btn_docile: 'btn-docile',
+          btn_keen: 'btn-keen',
           can_edit_input_display: 'can-edit-input-display',
           custom_navbar: 'custom-navbar',
           input_edit: 'input-edit',
@@ -25,6 +27,8 @@ describe DarkMode do
   describe '#css_classes' do
     it 'returns an array of classes' do
       expect(DarkMode.css_classes).to eq([
+        'btn-docile',
+        'btn-keen',
         'can-edit-input-display',
         'custom-navbar',
         'input-edit',

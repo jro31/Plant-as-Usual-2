@@ -3,7 +3,7 @@
     %i.fas.fa-user.navbar-menu-item-icon.d-inline-block.d-md-none.d-lg-inline-block
     %span
       My recipes
-  = link_to '#', class: mobile ? 'dropdown-item' : '' do
+  = link_to recipes_path(recipe_filter: 'user_favourites'), class: mobile ? 'dropdown-item' : '' do
     %i.fas.fa-heart.navbar-menu-item-icon.d-inline-block.d-md-none.d-lg-inline-block
     %span
       Favourites

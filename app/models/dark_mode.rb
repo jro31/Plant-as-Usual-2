@@ -1,5 +1,7 @@
 class DarkMode < ApplicationRecord
   CLASSES = {
+    btn_docile: 'btn-docile',
+    btn_keen: 'btn-keen',
     can_edit_input_display: 'can-edit-input-display',
     custom_navbar: 'custom-navbar',
     input_edit: 'input-edit',

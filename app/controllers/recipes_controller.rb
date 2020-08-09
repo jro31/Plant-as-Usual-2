@@ -5,7 +5,7 @@ class RecipesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show] # You don't want update or upload_photo here
 
   def index
-    @recipe_category = params[:recipe_filter]
+    @recipe_filter = params[:recipe_filter]
     @recipes = filtered_recipes
     @recipe_iterator = 0
   end
@@ -102,8 +102,10 @@ class RecipesController < ApplicationController
     case @recipe_filter
     when 'user_is_owner'
       Recipe.not_hidden.where(user: current_user).order(updated_at: :desc)
+    when 'user_favourites'
+      current_user.favourites.available_to_show.order(name: :asc)
     else
-      Recipe.not_hidden.order(created_at: :desc)
+      Recipe.available_to_show.order(created_at: :desc)
     end
   end
 
