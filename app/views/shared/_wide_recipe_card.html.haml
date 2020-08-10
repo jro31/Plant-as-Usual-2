@@ -1,10 +1,11 @@
 = link_to recipe_path(recipe) do
   .row.my-0.mt-md-5{class: component_classes(DarkMode::CLASSES[:wide_recipe_card])}
-    .col-md-6.p-0.photo-container{class: photo_first ? "order-first" : "order-last"}
+    .col-md-6.p-0.photo-container{class: "#{photo_first ? 'order-first' : 'order-last'} #{recipe.photo.file&.exists? ? '' : 'placeholder-photo-container' }"}
       - if recipe.photo.file&.exists?
+        -# SHOULD ONLY BE FIRST/LAST ON DESKTOP. ALWAYS LAST ON MOBILE.
         = image_tag recipe.photo.url, class: 'w-100 h-100'
       - else
-        -# SOMETHING HERE; probably placeholder image
+        = render 'shared/site_placeholder'
     .col-md-6.p-md-0.d-flex.flex-column.details-container
       .d-flex.flex-column.justify-content-center.flex-grow-1.py-4.details
         %h2
