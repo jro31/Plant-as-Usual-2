@@ -11,6 +11,7 @@ class DarkMode < ApplicationRecord
     page_container: 'page-container',
     photo_uploader: 'photo-uploader',
     recipe_content_row: 'recipe-content-row',
+    site_logo: 'site-logo',
     text_box: 'text-box',
     welcome_banner: 'welcome-banner',
     wide_recipe_card: 'wide-recipe-card'
