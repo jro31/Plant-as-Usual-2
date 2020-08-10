@@ -1,5 +1,6 @@
 - photo_first = true
 .container-fluid
   - recipes.each do |recipe|
-    = render 'shared/wide_recipe_card', recipe: recipe, photo_first: photo_first
+    .mb-0{ class: recipes.first === recipe ? 'mt-0' : 'mt-4 mt-md-5' }
+      = render 'shared/wide_recipe_card', recipe: recipe, photo_first: photo_first
     - photo_first = !photo_first

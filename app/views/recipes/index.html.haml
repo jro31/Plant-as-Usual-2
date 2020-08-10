@@ -1,7 +1,5 @@
-.container-fluid.recipe-index-page
-  - if @recipes.any?
-    - @recipes.each do |recipe|
-      = render 'shared/wide_recipe_card', recipe: recipe, photo_first: @recipe_iterator.odd?, recipe_of_the_day: false
-      - @recipe_iterator += 1
-  - else
+- if @recipes.any?
+  = render 'shared/recipe_ladder', recipes: @recipes
+- else
+  .container-fluid
     -# SOMETHING HERE
