@@ -1,6 +1,7 @@
 .w-100{class: component_classes(DarkMode::CLASSES[:custom_navbar])}
   = link_to root_path, class: 'site-logo position-fixed' do
-    = image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png"
+    = image_tag 'light-mode-logo.svg', class: 'light-mode-logo'
+    = image_tag 'dark-mode-logo.svg', class: 'dark-mode-logo'
 
   .dropleft.position-fixed.search-logo
     = link_to "#", class: 'dropdown-toggle', id: 'navbarSearchDropdown', 'role' => 'button', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false' do

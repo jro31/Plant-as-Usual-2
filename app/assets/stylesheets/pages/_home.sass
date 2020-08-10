@@ -14,14 +14,21 @@
       padding: 9%
     .text-box
       padding: 8%
+      .logo
+        width: $home-page-logo-width
+        border-radius: 50%
       .btn
         width: 100%
         @media (min-width: $grid-sm)
           width: auto
     .text-box-light-mode
       background-color: $light-mode-welcome-banner-text-box-background-color
+      .dark-mode-logo
+        display: none
     .text-box-dark-mode
       background-color: $dark-mode-welcome-banner-text-box-background-color
+      .light-mode-logo
+        display: none
 
   .photo-container
     img

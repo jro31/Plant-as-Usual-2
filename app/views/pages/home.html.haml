@@ -5,8 +5,11 @@
     .col-md-6.p-0
       .d-flex.justify-content-center.align-items-center.h-100.text-box-container
         .d-flex.flex-column.justify-content-around.align-items-center.h-100{class: component_classes(DarkMode::CLASSES[:text_box])}
-          %h1.text-center
-            Welcome to Plant as Usual
+          .text-center
+            = image_tag 'light-mode-logo.svg', class: 'logo light-mode-logo'
+            = image_tag 'dark-mode-logo.svg', class: 'logo dark-mode-logo'
+            %h1.text-center
+              Welcome to Plant as Usual
           .text-center.my-4.my-md-2
             Plant as Usual is the place for you to find user-added vegan recipes, and to add your own. Whether an experienced plant-based chef, or just starting-out, you're sure to find something that will whet your appetite.
           .text-center
