@@ -1,6 +1,6 @@
 if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
-  const recipeId = $('body').data('params-id');
-  let initialInputValue = {}
+  var recipeId = $('body').data('params-id');
+  var initialInputValue = {}
 
   $(function() {
     inputIdPrefixes.forEach((prefix) => {
@@ -117,7 +117,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     return ingredientObject
   }
 
-  const inputHasBeenUpdated = (prefix, data) => isIngredientPrefix(prefix) ? ingredientHasBeenUpdated(prefix, data) : data.recipe[prefix] != initialInputValue[prefix]
+  var inputHasBeenUpdated = (prefix, data) => isIngredientPrefix(prefix) ? ingredientHasBeenUpdated(prefix, data) : data.recipe[prefix] != initialInputValue[prefix]
 
   function ingredientHasBeenUpdated(prefix, data) {
     let changesDetected = false
@@ -221,7 +221,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     }
   }
 
-  const preparationText = (prefix) => $(`#${prefix}-preparation-input`).val()
+  var preparationText = (prefix) => $(`#${prefix}-preparation-input`).val()
 
   function showDisplayElement(prefix) {
     if(!isIngredientPrefix(prefix) || foodIsPresent(prefix)) {
@@ -263,19 +263,19 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     })
   }
 
-  const isIngredientPrefix = (prefix) => prefix.includes('ingredient')
+  var isIngredientPrefix = (prefix) => prefix.includes('ingredient')
 
   const favouriteRecipeWasClicked = (click) => click.target.id === 'full-heart' || click.target.id === 'empty-heart'
 
   const deleteIngredientWasClicked = (click) => click.target.id.includes('ingredient-') && click.target.id.includes('-delete')
 
-  const ingredientIdNumber = (cssId) => cssId.replace(/[^0-9]/g, '')
+  var ingredientIdNumber = (cssId) => cssId.replace(/[^0-9]/g, '')
 
-  const setSpinnerDimensions = () => $(`#spinner`).height($('#photo-container').height()).width($('#photo-container').height());
+  var setSpinnerDimensions = () => $(`#spinner`).height($('#photo-container').height()).width($('#photo-container').height());
 
-  const ingredientColumnValue = (prefix, column) => columnIsOptional(column) ? $(`#${prefix}-${column}-input`)[0].checked : $(`#${prefix}-${column}-input`).val()
+  var ingredientColumnValue = (prefix, column) => columnIsOptional(column) ? $(`#${prefix}-${column}-input`)[0].checked : $(`#${prefix}-${column}-input`).val()
 
-  const columnIsFood = (column) => column === 'food'
-  const columnIsPreparation = (column) => column === 'preparation'
-  const columnIsOptional = (column) => column === 'optional'
+  var columnIsFood = (column) => column === 'food'
+  var columnIsPreparation = (column) => column === 'preparation'
+  var columnIsOptional = (column) => column === 'optional'
 }
