@@ -6,11 +6,12 @@
 
       = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
         .form-inputs
-          = f.input :email, required: false, autofocus: true, input_html: { autocomplete: "email" }
-          = f.input :password, required: false, input_html: { autocomplete: "current-password" }
-          = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
+          = f.input :email, required: false, autofocus: true, input_html: { autocomplete: "email" }, input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) }
+          = f.input :password, required: false, input_html: { autocomplete: "current-password" }, input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) }
+          = f.input :remember_me, as: :boolean, input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) } if devise_mapping.rememberable?
 
         .form-actions
           = f.button :submit, "Log in", class: "btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
 
-      = render "devise/shared/links"
+      .mt-2
+        = render "devise/shared/links"

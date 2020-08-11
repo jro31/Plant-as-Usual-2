@@ -2,22 +2,23 @@
   = link_to root_path, class: 'site-logo position-fixed' do
     = render 'shared/site_logo'
 
-  .dropleft.position-fixed.search-logo
-    = link_to "#", class: 'dropdown-toggle', id: 'navbarSearchDropdown', 'role' => 'button', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false' do
-      %i.fas.fa-search
-    .dropdown-menu
-      %form.form-inline.my-2.my-lg-0.dropdown-item
-        %input.form-control.mr-sm-2{type: :search, 'placeholder' => 'Search', 'aria-label' => 'Search'}
-        %button.btn.btn-outline-success.my-2.my-sm-0{type: :search}
-          Search
+  - unless params[:controller].include?('devise/')
+    .dropleft.position-fixed.search-logo
+      = link_to "#", class: 'dropdown-toggle', id: 'navbarSearchDropdown', 'role' => 'button', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false' do
+        %i.fas.fa-search
+      .dropdown-menu
+        %form.form-inline.my-2.my-lg-0.dropdown-item
+          %input.form-control.mr-sm-2{type: :search, 'placeholder' => 'Search', 'aria-label' => 'Search'}
+          %button.btn.btn-outline-success.my-2.my-sm-0{type: :search}
+            Search
 
-  .w-100.h-100
-    .dropdown.d-flex.d-md-none.justify-content-center.w-100.h-100
-      %button.dropdown-toggle#navbarMenuDropdown{type: :button, 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false'}
-        %i.fas.fa-bars
-      .dropdown-menu.w-100#dropdown-item-container{'aria-labelledby' => 'navbarMenuDropdown'}
-        = render 'shared/navbar/menu_items', mobile: true
-    .d-none.d-md-flex.justify-content-around.align-items-center.h-100.w-100#menu-items-desktop-container
-      = render 'shared/navbar/menu_items', mobile: false
+    .w-100.h-100
+      .dropdown.d-flex.d-md-none.justify-content-center.w-100.h-100
+        %button.dropdown-toggle#navbarMenuDropdown{type: :button, 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false'}
+          %i.fas.fa-bars
+        .dropdown-menu.w-100#dropdown-item-container{'aria-labelledby' => 'navbarMenuDropdown'}
+          = render 'shared/navbar/menu_items', mobile: true
+      .d-none.d-md-flex.justify-content-around.align-items-center.h-100.w-100#menu-items-desktop-container
+        = render 'shared/navbar/menu_items', mobile: false
 
 = render 'shared/add_recipe_modal'
