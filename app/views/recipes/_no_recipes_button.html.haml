@@ -1,0 +1,6 @@
+- case @recipe_filter
+- when 'user_is_owner'
+  %button.btn{class: component_classes(DarkMode::CLASSES[:btn_keen]), 'data-toggle' => 'modal', 'data-target' => '#add-recipe-modal'}
+    Add a recipe instead
+- else
+  = link_to 'Browse recipes', recipes_path, class: "btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"

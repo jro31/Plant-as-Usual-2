@@ -1,5 +1,10 @@
 - if @recipes.any?
   = render 'shared/recipe_ladder', recipes: @recipes
 - else
-  .container-fluid
-    -# SOMETHING HERE
+  .container.screen-height-container
+    .row.h-100.d-flex.align-items-center
+      .col-12.text-center
+        %h1
+          = no_recipes_headline_text(@recipe_filter)
+        %div
+          = render 'no_recipes_button'

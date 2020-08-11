@@ -10,4 +10,4 @@
         %h2
           = recipe.name
         %div.overflow-hidden
-          = recipe.process.truncate(300, separator: ' ')
+          = recipe.process&.truncate(300, separator: ' ')

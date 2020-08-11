@@ -24,4 +24,4 @@
 
 = render 'shared/recipe_ladder', recipes: Recipe.current_recipes_of_the_day
 
-= render 'shared/recipe_mosaic', recipes: [Recipe.find(10), Recipe.find(14)] # Recipe.currently_featured
+= render 'shared/recipe_mosaic', recipes: Recipe.currently_featured

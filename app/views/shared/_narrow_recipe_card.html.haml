@@ -5,12 +5,12 @@
         - if recipe.photo.file&.exists?
           = image_tag recipe.photo.url, class: 'w-100 h-100'
         - else
-          -# SOMETHING HERE
+          = render 'shared/site_placeholder'
       .d-flex.flex-column.justify-content-between.py-3.py-md-0.text-container
         %h3.mt-3.mt-md-5
           = recipe.name
         .d-flex.d-xxl-none.align-items-center.flex-grow-1
-          = recipe.process.truncate(150, separator: ' ')
+          = recipe.process&.truncate(150, separator: ' ')
         .d-none.d-xxl-flex.align-items-center.flex-grow-1
-          = recipe.process.truncate(250, separator: ' ')
+          = recipe.process&.truncate(250, separator: ' ')
 
