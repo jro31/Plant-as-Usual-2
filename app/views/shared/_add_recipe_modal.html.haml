@@ -5,12 +5,12 @@
         .modal-header
           %h5.modal-title#add-recipe-modal-label
             What is the name of your recipe?
-          %button.class{type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close'}
+          %button.class{ type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close' }
             %span{'aria-hidden' => "true"}
               &times;
         .modal-body
           = f.input :name, label: false
         .modal-footer
-          %button.btn.btn-secondary{type: :button, 'data-dismiss' => 'modal'}
+          %button.btn{ type: :button, 'data-dismiss' => 'modal', class: component_classes(DarkMode::CLASSES[:btn_docile]) }
             Close
-          = f.button :submit, class: 'btn btn-primary'
+          = f.button :submit, class: "btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
