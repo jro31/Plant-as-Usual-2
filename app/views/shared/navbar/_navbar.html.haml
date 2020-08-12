@@ -10,7 +10,7 @@
         = form_tag recipes_path, method: :get, class: 'dropdown-item', id: 'search-form' do
           = hidden_field_tag 'recipe_filter', 'search'
           = text_field_tag :query, params[:query], class: "form-control", id: 'search-input'
-          %button.p-0#search-button{ type: :submit }
+          %button.p-0#search-button{ type: :submit, disabled: true }
             %i.fas.fa-search
           =# submit_tag 'Search', class: "btn my-2 my-sm-0 #{component_classes(DarkMode::CLASSES[:btn_keen])}" do
 
