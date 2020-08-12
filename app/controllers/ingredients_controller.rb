@@ -47,20 +47,3 @@ class IngredientsController < ApplicationController
     params.require(:ingredient).permit(:recipe_id, :amount, :unit, :food, :preparation, :optional)
   end
 end
-
-# The idea for ingredients, is to have a '+' button below all the
-# ingredients. If this is clicked, a new 'blank' ingredient gets
-# created (via the 'create' method) and added to the form.
-
-# Data being added to this will then be handled via the 'update'
-# method (via an ajax request) and updated on the page in a similar
-# way as other fields are (probably just displaying the input values
-# until the page is refreshed).
-
-# Blank ingredients that get added, but not completed, will have to be
-# destroyed some way. As will existing ingredients that have no data -
-# not sure how to do this yet.
-
-# Ingredients should also be able to be deleted (probably by pressing
-# a 'delete' button that appears next to each ingredient; if possible
-# only when that ingredient is hovered over).

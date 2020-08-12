@@ -6,11 +6,11 @@
     .dropleft.position-fixed.search-logo
       = link_to "#", class: 'dropdown-toggle', id: 'navbarSearchDropdown', 'role' => 'button', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false' do
         %i.fas.fa-search
-      .dropdown-menu
-        %form.form-inline.my-2.my-lg-0.dropdown-item
-          %input.form-control.mr-sm-2{type: :search, 'placeholder' => 'Search', 'aria-label' => 'Search'}
-          %button.btn.btn-outline-success.my-2.my-sm-0{type: :search}
-            Search
+      .dropdown-menu#search-form-container
+        = form_tag recipes_path, method: :get, class: 'form-inline my-2 my-lg-0 dropdown-item', id: 'search-form' do
+          = hidden_field_tag 'recipe_filter', 'search'
+          = text_field_tag :query, params[:query], class: 'form-control mr-sm-2'
+          = submit_tag 'Search', class: "btn my-2 my-sm-0 #{component_classes(DarkMode::CLASSES[:btn_keen])}"
 
     .w-100.h-100
       .dropdown.d-flex.d-md-none.justify-content-center.w-100.h-100

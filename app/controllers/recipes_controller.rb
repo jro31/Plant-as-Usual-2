@@ -6,6 +6,7 @@ class RecipesController < ApplicationController
 
   def index
     @recipe_filter = params[:recipe_filter]
+    @search_query = params[:query]
     @recipes = filtered_recipes
     @recipe_iterator = 0
   end
@@ -101,9 +102,15 @@ class RecipesController < ApplicationController
       Recipe.not_hidden.where(user: current_user).order(updated_at: :desc)
     when 'user_favourites'
       current_user.favourites.available_to_show.order(name: :asc)
+    when 'search'
+      Recipe.available_to_show.joins(:ingredients).where(search_sql_query, query: "%#{@search_query}%").distinct
     else
       Recipe.available_to_show.order(created_at: :desc)
     end
+  end
+
+  def search_sql_query
+    "recipes.name @@ :query OR ingredients.food @@ :query"
   end
 
   def user_is_owner_or_admin?
