@@ -74,9 +74,20 @@
           top: calc(#{$inner-toggle-switch-top} - 1px)
 
   #search-form-container
+    transform: translate3d(-249px, -16px, 0px) !important
+    border-width: $search-input-border-width
+    width: 291px
     #search-form
       background-color: transparent
-
+      padding: 0 $search-input-x-padding
+      #search-input
+        margin-right: $search-input-margin-right
+        display: inline-block;
+        width: auto;
+        vertical-align: middle;
+      #search-button
+        border: none
+        font-size: $search-button-font-size
 
 .custom-navbar-light-mode
   background: $light-mode-default-background-color
@@ -89,6 +100,9 @@
   #search-form-container
     border-color: $light-mode-navbar-search-dropdown-border-color
     #search-form
+      #search-button
+        color: $light-mode-search-button-icon-color
+        background-color: $light-mode-search-button-background-color
 
 .custom-navbar-dark-mode
   background: $dark-mode-default-background-color
@@ -101,3 +115,6 @@
   #search-form-container
     border-color: $dark-mode-navbar-search-dropdown-border-color
     #search-form
+      #search-button
+        color: $dark-mode-search-button-icon-color
+        background-color: $dark-mode-search-button-background-color
