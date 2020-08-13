@@ -88,6 +88,41 @@ describe User, type: :model do
             expect(user).to be_valid
           end
         end
+
+        context 'username is sixteen characters' do
+          it 'is valid' do
+            user.username = 'sixteencharacter'
+            expect(user).to be_valid
+          end
+        end
+
+        context 'username is seventeen characters' do
+          it 'is not valid' do
+            user.username = 'seventeencharacte'
+            expect(user).not_to be_valid
+            expect(user.errors.messages[:username]).to include('is too long (maximum is 16 characters)')
+          end
+        end
+
+        context 'username contains spaces' do
+          it 'is not valid' do
+            user.username = 'Hag rid'
+            expect(user).not_to be_valid
+            expect(user.errors.messages[:username]).to include('cannot contain spaces')
+          end
+
+          it 'is not valid' do
+            user.username = ' fleurdelacour'
+            expect(user).not_to be_valid
+            expect(user.errors.messages[:username]).to include('cannot contain spaces')
+          end
+
+          it 'is not valid' do
+            user.username = 'wormtail '
+            expect(user).not_to be_valid
+            expect(user.errors.messages[:username]).to include('cannot contain spaces')
+          end
+        end
       end
     end
 

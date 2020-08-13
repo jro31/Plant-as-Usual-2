@@ -8,5 +8,5 @@ class User < ApplicationRecord
   has_many :user_favourite_recipes, dependent: :destroy
   has_many :favourites, through: :user_favourite_recipes, class_name: 'Recipe', source: :recipe
 
-  validates :username, uniqueness: true, length: { minimum: 3 }
+  validates :username, uniqueness: true, length: { minimum: 3, maximum: 16 }, format: { without: /\s/, message: 'cannot contain spaces' }
 end
