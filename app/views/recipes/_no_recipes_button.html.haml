@@ -1,5 +1,4 @@
-- case @recipe_filter
-- when 'user_is_owner'
+- if @recipe_filter == 'user_recipes' && @searched_for_user_id == current_user.id
   %button.btn{class: component_classes(DarkMode::CLASSES[:btn_keen]), 'data-toggle' => 'modal', 'data-target' => '#add-recipe-modal'}
     Add a recipe instead
 - else

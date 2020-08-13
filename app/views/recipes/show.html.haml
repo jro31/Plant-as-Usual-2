@@ -11,8 +11,13 @@
         %i.fas.fa-heart#full-heart{ class: @recipe_is_favourite ? '' : 'd-none' }
         %i.far.fa-heart#empty-heart{ class: @recipe_is_favourite ? 'd-none' : '' }
     %div{ class: current_user ? 'non-initial-icon' : ''}
+      %i.far.fa-user
+    .non-initial-icon
       = link_to '#' do
         %i.far.fa-share-square
+    - if @user_can_edit
+      .non-initial-icon
+        %i.far.fa-trash-alt
 
   .row
     .col-12.text-center

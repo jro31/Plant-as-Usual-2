@@ -7,6 +7,7 @@ class RecipesController < ApplicationController
 
   def index
     @recipe_filter = params[:recipe_filter]
+    @searched_for_user_id = params[:user_id].to_i
     @search_query = params[:query]
     @recipes = filtered_recipes
     @recipe_iterator = 0
@@ -94,8 +95,14 @@ class RecipesController < ApplicationController
     # 1) State - Approved
     # 2) Date created
     case @recipe_filter
-    when 'user_is_owner'
-      Recipe.not_hidden.where(user: current_user).order(updated_at: :desc)
+    when 'user_recipes'
+      if @searched_for_user_id == current_user.id
+        Recipe.not_hidden.where(user: current_user).order(updated_at: :desc)
+      elsif @searched_for_user_id
+        Recipe.available_to_show.where(user: User.find(@searched_for_user_id)).order(updated_at: :desc)
+      else
+        nil
+      end
     when 'user_favourites'
       current_user.favourites.available_to_show.order(name: :asc)
     when 'search'

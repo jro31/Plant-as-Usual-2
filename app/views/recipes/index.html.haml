@@ -1,12 +1,13 @@
--# HAVE A TITLE HERE?
+%h1.text-center
+  = render 'index_title_text'
 
-- if @recipes.any?
+- if @recipes&.any?
   = render 'shared/recipe_ladder', recipes: @recipes
 - else
   .container.screen-height-container
     .row.h-100.d-flex.align-items-center
       .col-12.text-center
-        %h1
-          = no_recipes_headline_text(@recipe_filter)
+        %h2
+          = render 'no_recipes_headline_text'
         %div
           = render 'no_recipes_button'

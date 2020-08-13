@@ -16,6 +16,7 @@ $container-max-width-xxl: 1320px
 $default-font-size: 18px
 $default-button-font-size: 16px
 $h1-font-size: 2.5rem
+$h1-margin-bottom: 0.5rem
 $paragraph-font-size: $default-font-size
 $navbar-font-size: $default-font-size
 $search-button-font-size: $navbar-font-size
@@ -61,4 +62,4 @@ $expected-button-height: calc((#{$default-button-font-size} * #{$button-line-hei
 $site-placeholder-text-size: $h1-font-size
 
 // Containers
-$screen-height-container-height: calc(100vh - #{$navbar-height})
+$screen-height-container-height: calc(100vh - (#{$navbar-height} + (#{$h1-font-size} + #{$h1-margin-bottom})))
