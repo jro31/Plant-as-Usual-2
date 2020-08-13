@@ -13,9 +13,11 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       $('#add-ingredient').click(function(click) {
         disableAddIngredient()
       })
+    }
 
-      $(document).click(function(click) {
-        let noInputWasEnabled = true
+    $(document).click(function(click) {
+      let noInputWasEnabled = true
+      if(userCanEdit) {
         inputIdPrefixes.forEach((prefix) => {
           if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
             click.preventDefault()
@@ -28,11 +30,13 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
             resetInitialInputValue()
           }
         })
-        if (noInputWasEnabled) {
-          if (favouriteRecipeWasClicked(click)) { // NEEDS TO WORK WHEN USER IS NOT OWNER
-            heartTransplant()
-            updateFavourite(click.target.id)
-          } else if (deleteIngredientWasClicked(click)) {
+      }
+      if (noInputWasEnabled) {
+        if (favouriteRecipeWasClicked(click)) {
+          heartTransplant()
+          updateFavourite(click.target.id)
+        } else if (userCanEdit) {
+          if (deleteIngredientWasClicked(click)) {
             hideIngredient(ingredientIdNumber(click.target.id))
             deleteIngredient(ingredientIdNumber(click.target.id))
           } else {
@@ -47,8 +51,8 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
             })
           }
         }
-      })
-    }
+      }
+    })
   });
 
   function setPhotoUploader() {
