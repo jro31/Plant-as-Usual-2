@@ -52,4 +52,8 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe '#page_title' do
+    # COMPLETE THIS
+  end
 end

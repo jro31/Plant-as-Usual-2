@@ -3,6 +3,7 @@
 class RecipesController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
   skip_before_action :authenticate_user!, only: %i[index show] # You don't want update or upload_photo here
+  before_action :set_recipe, except: %i(index create)
 
   def index
     @recipe_filter = params[:recipe_filter]
@@ -21,7 +22,6 @@ class RecipesController < ApplicationController
   end
 
   def show
-    @recipe = Recipe.find(params[:id])
     authorize @recipe
     @ingredients = @recipe.ingredients.order(created_at: :asc)
     @units = Ingredient.units_humanized
@@ -32,7 +32,6 @@ class RecipesController < ApplicationController
   end
 
   def update
-    @recipe = Recipe.find(params[:id])
     authorize @recipe
     if @recipe.update(recipe_params)
       @recipe.revised
@@ -49,7 +48,6 @@ class RecipesController < ApplicationController
   end
 
   def upload_photo
-    @recipe = Recipe.find(params[:id])
     authorize @recipe
     if @recipe.update(recipe_params)
       @recipe.revised
@@ -72,14 +70,12 @@ class RecipesController < ApplicationController
 
   def mark_as_complete
     # Add pundit
-    @recipe = Recipe.find(params[:id])
     @recipe.complete
     redirect_to recipe_path(@recipe)
   end
 
   def remove_as_favourite
     # Add pundit
-    @recipe = Recipe.find(params[:id])
     UserFavouriteRecipe.where(user: current_user, recipe: @recipe).destroy_all
   end
 
@@ -123,5 +119,9 @@ class RecipesController < ApplicationController
     return false unless current_user
 
     current_user.favourites.include?(@recipe)
+  end
+
+  def set_recipe
+    @recipe = Recipe.find(params[:id])
   end
 end

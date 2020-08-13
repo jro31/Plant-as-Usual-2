@@ -17,7 +17,3 @@ class ApplicationController < ActionController::Base
     @dark_mode_css_classes = DarkMode.css_classes
   end
 end
-
-
-
-
