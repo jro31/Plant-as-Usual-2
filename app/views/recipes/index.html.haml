@@ -1,10 +1,11 @@
-%h1.text-center
-  = render 'index_title_text'
+- if @h1_text
+  %h1.text-center
+    = @h1_text
 
 - if @recipes&.any?
   = render 'shared/recipe_ladder', recipes: @recipes
 - else
-  .container.screen-height-container
+  .container{ class: @h1_text ? 'screen-height-container-with-h1' : 'screen-height-container-without-h1' }
     .row.h-100.d-flex.align-items-center
       .col-12.text-center
         %h2

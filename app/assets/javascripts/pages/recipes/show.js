@@ -29,7 +29,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
           }
         })
         if (noInputWasEnabled) {
-          if (favouriteRecipeWasClicked(click)) {
+          if (favouriteRecipeWasClicked(click)) { // NEEDS TO WORK WHEN USER IS NOT OWNER
             heartTransplant()
             updateFavourite(click.target.id)
           } else if (deleteIngredientWasClicked(click)) {

@@ -11,6 +11,7 @@ class RecipesController < ApplicationController
     @search_query = params[:query]
     @recipes = filtered_recipes
     @recipe_iterator = 0
+    @h1_text = h1_index_text
   end
 
   def create
@@ -114,6 +115,14 @@ class RecipesController < ApplicationController
 
   def search_sql_query
     "recipes.name @@ :query OR ingredients.food @@ :query"
+  end
+
+  def h1_index_text
+    if @recipe_filter == 'user_recipes' && @searched_for_user_id && @searched_for_user_id != current_user.id
+      "#{User.find(@searched_for_user_id).username}'s recipes"
+    elsif @recipe_filter == 'search' && @search_query
+      "'#{@search_query}' recipes"
+    end
   end
 
   def user_is_owner_or_admin?
