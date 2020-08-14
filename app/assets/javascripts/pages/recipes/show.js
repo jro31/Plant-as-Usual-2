@@ -38,7 +38,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
         } else if (userCanEdit) {
           if (deleteIngredientWasClicked(click)) {
             hideIngredient(ingredientIdNumber(click.target.id))
-            deleteIngredient(ingredientIdNumber(click.target.id))
+            deleteIngredient(ingredientIdNumber(click.target.id), true)
           } else {
             inputIdPrefixes.forEach((prefix) => {
               if(click.target.id.includes(`${prefix}-`) && click.target.id.includes('-display')) {
@@ -80,7 +80,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     ajaxRequest(type, url, undefined, undefined, undefined, undefined, undefined, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = false)
   }
 
-  const deleteIngredient = (ingredientId) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false)
+  const deleteIngredient = (ingredientId, displayMarkAsCompleteButton) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = displayMarkAsCompleteButton)
 
   function disableAddIngredient() {
     $('#add-ingredient-container').addClass('d-none')
@@ -109,7 +109,9 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     if(inputHasBeenUpdated(prefix, data) && foodIsPresent(prefix)) {
       ajaxRequest('patch', url, data, prefix, component)
     } else if (newIngredientIsEmpty(prefix)) {
-      deleteIngredient(ingredientIdNumber(prefix))
+      deleteIngredient(ingredientIdNumber(prefix), false)
+    } else if (!foodIsPresent(prefix)) {
+      repopulateIngredientInput(prefix)
     }
   }
 
@@ -133,6 +135,12 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function foodIsPresent(prefix) {
     return isIngredientPrefix(prefix) ? !!$(`#${prefix}-food-input`).val().trim() : true
+  }
+
+  function repopulateIngredientInput(prefix) {
+    $.each(ingredientColumns, function(_, column) {
+      $(`#${prefix}-${column}-input`).val(initialInputValue[column])
+    })
   }
 
   function newIngredientIsEmpty(prefix) {
@@ -183,11 +191,9 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   }
 
   function ingredientDisplayContent(prefix) {
-    if (foodIsPresent(prefix)) {
-      $.each(ingredientDisplayRows, function(_, column) {
-        $(`#${prefix}-${column}-display`).text(ingredientDisplayColumnContent(prefix, column))
-      })
-    }
+    $.each(ingredientDisplayRows, function(_, column) {
+      $(`#${prefix}-${column}-display`).text(ingredientDisplayColumnContent(prefix, column))
+    })
   }
 
   function ingredientDisplayColumnContent(prefix, column) {
@@ -199,17 +205,22 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   }
 
   function foodDisplayRow(prefix) {
-    const displayString = `${$(`#${prefix}-amount-input`).val()} ${unitDisplayContent(prefix)} ${$(`#${prefix}-food-input`).val()}`.trim().toLowerCase()
+    let displayString = ""
+    if (foodIsPresent(prefix)) {
+      displayString = `${$(`#${prefix}-amount-input`).val()} ${unitDisplayContent($(`#${prefix}-unit-input`).val())} ${$(`#${prefix}-food-input`).val()}`.trim().toLowerCase()
+    } else {
+      displayString = `${initialInputValue['amount']} ${unitDisplayContent(initialInputValue['unit'])} ${initialInputValue['food']}`.trim().toLowerCase()
+    }
     return displayString.charAt(0).toUpperCase() + displayString.slice(1)
   }
 
-  function unitDisplayContent(prefix) {
-    if ($(`#${prefix}-unit-input`).val() === "") return ""
-    const amount = $(`#${prefix}-amount-input`).val().toLowerCase()
+  function unitDisplayContent(unitValue) {
+    if (!unitValue) return ""
+    const amount = unitValue.toLowerCase()
     if (!amount || amount == '1' || amount == 'one' || amount == 'a' || amount == 'an') {
-      return unitsHumanized[$(`#${prefix}-unit-input`).val()]
+      return unitsHumanized[unitValue]
     } else {
-      return unitsPluralized[$(`#${prefix}-unit-input`).val()]
+      return unitsPluralized[unitValue]
     }
   }
 
@@ -228,7 +239,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   var preparationText = (prefix) => $(`#${prefix}-preparation-input`).val()
 
   function showDisplayElement(prefix) {
-    if(!isIngredientPrefix(prefix) || foodIsPresent(prefix)) {
+    if(!isIngredientPrefix(prefix) || !newIngredientIsEmpty(prefix)) {
       $(`#${prefix}-display`).removeClass('d-none');
     }
   }

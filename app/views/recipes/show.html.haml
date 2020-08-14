@@ -10,7 +10,7 @@
       %div
         %i.fas.fa-heart#full-heart{ class: @recipe_is_favourite ? '' : 'd-none' }
         %i.far.fa-heart#empty-heart{ class: @recipe_is_favourite ? 'd-none' : '' }
-    %div{ class: current_user ? 'non-initial-icon' : ''}
+    = link_to recipes_path(recipe_filter: 'user_recipes', user_id: @recipe.user.id), class: current_user ? 'non-initial-icon' : '' do
       %i.far.fa-user
     .non-initial-icon
       = link_to '#' do
