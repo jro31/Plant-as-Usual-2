@@ -4,6 +4,7 @@ class DarkMode < ApplicationRecord
     btn_keen: 'btn-keen',
     can_edit_input_display: 'can-edit-input-display',
     custom_navbar: 'custom-navbar',
+    hidden_flash_message_container: 'hidden-flash-message-container',
     input_edit: 'input-edit',
     interaction_icons: 'interaction-icons',
     keen_modal: 'keen-modal',

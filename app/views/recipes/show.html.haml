@@ -7,7 +7,7 @@
 
   .position-fixed.d-flex.flex-md-column.justify-content-around{ class: component_classes(DarkMode::CLASSES[:interaction_icons]) }
     - if current_user
-      %div
+      .cursor-pointer
         %i.fas.fa-heart#full-heart{ class: @recipe_is_favourite ? '' : 'd-none' }
         %i.far.fa-heart#empty-heart{ class: @recipe_is_favourite ? 'd-none' : '' }
     = link_to recipes_path(recipe_filter: 'user_recipes', user_id: @recipe.user.id), class: current_user ? 'non-initial-icon' : '' do
@@ -16,7 +16,7 @@
       = link_to '#' do
         %i.far.fa-share-square
     - if @user_can_edit
-      .non-initial-icon
+      = link_to recipe_path(@recipe), method: :delete, data: {confirm: 'This will permanently delete this recipe. Are you sure?'}, class: 'non-initial-icon' do
         %i.far.fa-trash-alt
 
   .row
@@ -34,7 +34,7 @@
       - else
         - if @user_can_edit
           #photo-placeholder-container.d-flex.justify-content-center.align-items-center
-            #photo-placeholder.d-flex.justify-content-center.align-items-center
+            #photo-placeholder.cursor-pointer.d-flex.justify-content-center.align-items-center
               Add photo
 
 

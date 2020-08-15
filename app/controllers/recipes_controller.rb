@@ -81,6 +81,15 @@ class RecipesController < ApplicationController
     UserFavouriteRecipe.where(user: current_user, recipe: @recipe).destroy_all
   end
 
+  def destroy
+    # Add pundit
+    if @recipe.destroy
+      redirect_to root_path
+    else
+      # Do something here
+    end
+  end
+
   private
 
   def recipe_params
