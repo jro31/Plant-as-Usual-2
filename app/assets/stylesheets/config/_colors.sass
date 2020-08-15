@@ -42,6 +42,10 @@ $dark-mode-search-button-icon-color: $dark-mode-paragraph-text-color
 $dark-mode-hidden-flash-text-color: $dark-subtle
 
 // Backgrounds
+$imposing-icon-blur: 15px
+$imposing-icon-spread: 15px
+$imposing-icon-background-alpha: 0.9
+
 $light-mode-default-background-color: $light-deep
 $light-mode-card-background-color: $light-shallow
 $light-mode-welcome-banner-background-color: $light-standout
@@ -56,6 +60,8 @@ $light-mode-site-placeholder-background-color: $light-mode-site-logo-background-
 $light-mode-search-button-background-color: $light-mode-default-background-color
 $light-mode-hidden-flash-success-background-color: $light-keen
 $light-mode-hidden-flash-fail-background-color: $light-highlight
+$light-mode-imposing-icon-box-shadow: 0 0 $imposing-icon-blur $imposing-icon-spread $light-mode-default-background-color
+$light-mode-imposing-icon-background-color: rgba($light-mode-default-background-color, $imposing-icon-background-alpha)
 
 $dark-mode-default-background-color: $dark-deep
 $dark-mode-card-background-color: $dark-shallow
@@ -71,6 +77,8 @@ $dark-mode-site-placeholder-background-color: $dark-mode-site-logo-background-fi
 $dark-mode-search-button-background-color: $dark-mode-default-background-color
 $dark-mode-hidden-flash-success-background-color: $dark-keen
 $dark-mode-hidden-flash-fail-background-color: $dark-highlight
+$dark-mode-imposing-icon-box-shadow: 0 0 $imposing-icon-blur $imposing-icon-spread $dark-mode-default-background-color
+$dark-mode-imposing-icon-background-color: rgba($dark-mode-default-background-color, $imposing-icon-background-alpha)
 
 $success-flash-message-background-color: #28a745 // UPDATE FOR LIGHT/DARK MODE
 $fail-flash-message-background-color: #dc3545 // UPDATE FOR LIGHT/DARK MODE

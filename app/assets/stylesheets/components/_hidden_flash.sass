@@ -4,11 +4,13 @@
     top: calc(5px + #{$navbar-height})
     right: 25px
     min-width: 200px
-    min-height: 50px
+    min-height: 30px
     text-align: center
     display: none
     z-index: $hidden-flash-z-index
     border-radius: 3%
+    @media (min-width: $grid-md)
+      min-height: 50px
     > div
       min-height: inherit
 

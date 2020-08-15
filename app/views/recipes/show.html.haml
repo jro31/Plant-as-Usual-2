@@ -20,21 +20,20 @@
         %div
           -# This one needs testing once online
           = link_to "https://facebook.com/sharer/sharer.php?u=#{request.original_url}", target: "_blank", 'aria-label' => "Share on Facebook" do
-            %i.fab.fa-facebook-square
+            %i.fab.fa-facebook-square.social-media-icon
         %div
           = link_to "https://twitter.com/intent/tweet/?text=#{@recipe.name}%20on%20Plant%20as%20Usual. %23vegan %23plantbased %23plantasusual&amp;url=#{request.original_url}", target: "_blank", 'aria-label' => "Share on Twitter" do
-            %i.fab.fa-twitter
+            %i.fab.fa-twitter.social-media-icon
         %div
           -# Needs testing
           = link_to "whatsapp://send?text=#{@recipe.name}%20#{request.original_url}", target: "_blank", 'aria-label' => "Share on WhatsApp" do
-            %i.fab.fa-whatsapp
+            %i.fab.fa-whatsapp.social-media-icon
         %div
           -# This isn't adding the title; can't figure-out why
           = link_to "https://reddit.com/submit/?url=#{request.original_url}&amp;resubmit=true&amp;title=#{@recipe.name}", target: "_blank", 'aria-label' => "Share on Reddit" do
-            %i.fab.fa-reddit-alien
-
+            %i.fab.fa-reddit-alien.social-media-icon
         %div
-          %i.fas.fa-link.cursor-pointer#copy-link-icon
+          %i.fas.fa-link.cursor-pointer#copy-link-icon.social-media-icon
     - if @user_can_edit
       = link_to recipe_path(@recipe), method: :delete, data: {confirm: 'This will permanently delete this recipe. Are you sure?'}, class: 'non-initial-icon', id: 'delete-recipe-link' do
         %i.far.fa-trash-alt
@@ -65,6 +64,7 @@
     .col-12.text-center
       %h1#name-display.input-display{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
       = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
+        -# This doesn't wrap when multiple lines (like on mobile). Perhaps update to text area rather than input.
         = f.input :name, label: false, placeholder: @name_placeholder, input_html: { id: 'name-input', class: "d-none text-center #{component_classes(DarkMode::CLASSES[:input_edit])}" }
   .row{ class: component_classes(DarkMode::CLASSES[:recipe_content_row]) }
     .col-md-5.col-lg-4
