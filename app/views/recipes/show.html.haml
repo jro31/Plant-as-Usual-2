@@ -13,12 +13,13 @@
     = link_to recipes_path(recipe_filter: 'user_recipes', user_id: @recipe.user.id), class: current_user ? 'non-initial-icon' : '' do
       %i.far.fa-user
     .non-initial-icon.d-flex
-      %i.far.fa-share-square.cursor-pointer#share-square
+      %i.far.fa-share-square.cursor-pointer#empty-share-square
+      %i.fas.fa-share-square.d-none#full-share-square
       #social-media-icons-container.d-none
         %div
           1
         %div
-          2
+          %i.fas.fa-link.cursor-pointer#copy-link-icon
     - if @user_can_edit
       = link_to recipe_path(@recipe), method: :delete, data: {confirm: 'This will permanently delete this recipe. Are you sure?'}, class: 'non-initial-icon' do
         %i.far.fa-trash-alt
@@ -34,7 +35,7 @@
 
     #photo-container.col-12.text-center
       - if @recipe.photo.file&.exists?
-        = image_tag @recipe.photo.url
+        = image_tag @recipe.photo.url, id: 'recipe-photo', class: 'cursor-pointer'
       - else
         - if @user_can_edit
           #photo-placeholder-container.d-flex.justify-content-center.align-items-center
@@ -73,6 +74,8 @@
 
 - if @user_can_edit
   = link_to 'Click here to submit your changes', mark_as_complete_recipe_path(@recipe), method: :patch, class: "btn btn-success fixed-bottom-left #{@recipe.incomplete? ? '' : 'd-none'}", id: 'mark-as-complete-button'
+
+%input#url-dummy-input{ value: request.original_url }
 
 :javascript
   inputIdPrefixes.push('name', 'process')

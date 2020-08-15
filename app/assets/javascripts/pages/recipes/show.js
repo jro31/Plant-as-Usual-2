@@ -19,6 +19,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       let noInputWasEnabled = true
       let displaySocialMediaIcons = true
       if ($('#social-media-icons-container').hasClass('d-flex')) {
+        handleSocialMediaClick(click)
         hideSocialMediaIcons()
         noInputWasEnabled = false
         displaySocialMediaIcons = false
@@ -68,7 +69,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       $('#submit-photo').click()
     })
 
-    $('#photo-container').click(function() { // Update this so only the photo is clickable. Having the whole row clickable is a bit annoying when clicking to close the navbar dropdown
+    $('#recipe-photo, #photo-placeholder').click(function() {
       $('#photo-uploader').click()
     })
     setSpinnerDimensions()
@@ -87,14 +88,23 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     ajaxRequest(type, url, undefined, undefined, undefined, undefined, undefined, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = false)
   }
 
+  function handleSocialMediaClick(click) {
+    if (click.target.id === 'copy-link-icon') {
+      $('#url-dummy-input').select()
+      document.execCommand('copy')
+    }
+  }
+
   function showSocialMediaIcons() {
-    $('#social-media-icons-container').addClass('d-flex')
-    $('#social-media-icons-container').removeClass('d-none')
+    $('#social-media-icons-container').addClass('d-flex').removeClass('d-none')
+    $('#empty-share-square').addClass('d-none')
+    $('#full-share-square').removeClass('d-none')
   }
 
   function hideSocialMediaIcons() {
-    $('#social-media-icons-container').removeClass('d-flex')
-    $('#social-media-icons-container').addClass('d-none')
+    $('#social-media-icons-container').removeClass('d-flex').addClass('d-none')
+    $('#full-share-square').addClass('d-none')
+    $('#empty-share-square').removeClass('d-none')
   }
 
   const deleteIngredient = (ingredientId, displayMarkAsCompleteButton) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = displayMarkAsCompleteButton)
@@ -296,7 +306,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   }
 
   function shareSquareWasClicked(click) {
-    return click.target.id === 'share-square'
+    return click.target.id === 'empty-share-square' || click.target.id === 'full-share-square'
   }
 
   var isIngredientPrefix = (prefix) => prefix.includes('ingredient')
