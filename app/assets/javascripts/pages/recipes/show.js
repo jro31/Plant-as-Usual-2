@@ -92,6 +92,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     if (click.target.id === 'copy-link-icon') {
       $('#url-dummy-input').select()
       document.execCommand('copy')
+      displayHiddenFlash('Link copied', 'success')
     }
   }
 

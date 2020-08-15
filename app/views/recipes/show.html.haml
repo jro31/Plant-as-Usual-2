@@ -16,8 +16,14 @@
       %i.far.fa-share-square.cursor-pointer#empty-share-square
       %i.fas.fa-share-square.d-none#full-share-square
       #social-media-icons-container.d-none
+        -# See https://sharingbuttons.io/ for below social media links
         %div
-          1
+          -# This one needs testing once online
+          = link_to "https://facebook.com/sharer/sharer.php?u=#{request.original_url}", target: "_blank", 'aria-label' => "Share on Facebook" do
+            %i.fab.fa-facebook-square
+        %div
+          = link_to "https://twitter.com/intent/tweet/?text=#{@recipe.name}%20on%20Plant%20as%20Usual. %23vegan %23plantbased %23plantasusual&amp;url=https://www.mmafighting.com/", target: "_blank", 'aria-label' => "Share on Twitter" do
+            %i.fab.fa-twitter
         %div
           %i.fas.fa-link.cursor-pointer#copy-link-icon
     - if @user_can_edit
