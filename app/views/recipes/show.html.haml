@@ -12,9 +12,13 @@
         %i.far.fa-heart#empty-heart{ class: @recipe_is_favourite ? 'd-none' : '' }
     = link_to recipes_path(recipe_filter: 'user_recipes', user_id: @recipe.user.id), class: current_user ? 'non-initial-icon' : '' do
       %i.far.fa-user
-    .non-initial-icon
-      = link_to '#' do
-        %i.far.fa-share-square
+    .non-initial-icon.d-flex
+      %i.far.fa-share-square.cursor-pointer#share-square
+      #social-media-icons-container.d-none
+        %div
+          1
+        %div
+          2
     - if @user_can_edit
       = link_to recipe_path(@recipe), method: :delete, data: {confirm: 'This will permanently delete this recipe. Are you sure?'}, class: 'non-initial-icon' do
         %i.far.fa-trash-alt

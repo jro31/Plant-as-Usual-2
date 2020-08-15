@@ -3,8 +3,8 @@
     - Ingredient.ordered_display_rows.each do |column|
       = render 'recipes/ingredient_display', ingredient: ingredient, column: column
   - if @user_can_edit
-    .ml-auto{ id: "ingredient-#{ingredient.id}-delete"}
-      delete
+    .ingredient-delete.ml-auto{ id: "ingredient-#{ingredient.id}-delete" }
+      x
 = simple_form_for [@recipe, ingredient] do |f|
   %div{ id: "ingredient-#{ingredient.id}-input", class: show_input ? '' : 'd-none' }
     - Ingredient.ordered_editable_column_keys.each do |column|

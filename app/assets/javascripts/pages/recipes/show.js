@@ -17,7 +17,12 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
     $(document).click(function(click) {
       let noInputWasEnabled = true
-      if(userCanEdit) {
+      let displaySocialMediaIcons = true
+      if ($('#social-media-icons-container').hasClass('d-flex')) {
+        hideSocialMediaIcons()
+        noInputWasEnabled = false
+        displaySocialMediaIcons = false
+      } else if(userCanEdit) {
         inputIdPrefixes.forEach((prefix) => {
           if(inputIsEnabled(prefix) && clickIsOutsideInput(click, prefix)) {
             click.preventDefault()
@@ -35,6 +40,8 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
         if (favouriteRecipeWasClicked(click)) {
           heartTransplant()
           updateFavourite(click.target.id)
+        } else if (shareSquareWasClicked(click) && displaySocialMediaIcons) {
+          showSocialMediaIcons()
         } else if (userCanEdit) {
           if (deleteIngredientWasClicked(click)) {
             hideIngredient(ingredientIdNumber(click.target.id))
@@ -78,6 +85,16 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       url = `/recipes/${recipeId}/user_favourite_recipes`
     }
     ajaxRequest(type, url, undefined, undefined, undefined, undefined, undefined, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = false)
+  }
+
+  function showSocialMediaIcons() {
+    $('#social-media-icons-container').addClass('d-flex')
+    $('#social-media-icons-container').removeClass('d-none')
+  }
+
+  function hideSocialMediaIcons() {
+    $('#social-media-icons-container').removeClass('d-flex')
+    $('#social-media-icons-container').addClass('d-none')
   }
 
   const deleteIngredient = (ingredientId, displayMarkAsCompleteButton) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = displayMarkAsCompleteButton)
@@ -276,6 +293,10 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     return $.map(ingredientColumns, function(column) {
       return [`${prefix}-${column}-input`, `${prefix}-${column}-input-label`]
     })
+  }
+
+  function shareSquareWasClicked(click) {
+    return click.target.id === 'share-square'
   }
 
   var isIngredientPrefix = (prefix) => prefix.includes('ingredient')

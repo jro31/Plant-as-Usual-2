@@ -16,6 +16,11 @@
       .non-initial-icon
         margin-top: $recipe-interaction-icons-desktop-separation-margin
 
+    #social-media-icons-container
+      > *
+        @media (min-width: $grid-md)
+          margin-left: $social-media-icons-container-desktop-margin-left
+
   .interaction-icons-light-mode
     a
       color: $light-mode-paragraph-text-color
@@ -62,8 +67,11 @@
       h4
         padding: $input-y-padding $input-x-padding
 
-    .ingredient-input-display
-      display: flex
+      .ingredient-input-display
+        display: flex
+
+        .ingredient-delete
+          font-weight: bold
 
     #add-ingredient-container, #add-ingredient-container-disabled
       padding: $input-y-padding $input-x-padding
