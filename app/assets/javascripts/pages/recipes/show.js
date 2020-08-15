@@ -21,6 +21,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       if ($('#social-media-icons-container').hasClass('d-flex')) {
         handleSocialMediaClick(click)
         hideSocialMediaIcons()
+        enableDeleteLinks()
         noInputWasEnabled = false
         displaySocialMediaIcons = false
       } else if(userCanEdit) {
@@ -30,7 +31,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
             hideInput(prefix)
             populateDisplayElement(prefix)
             showDisplayElement(prefix)
-            enableAddIngredient()
+            enableDeleteLinks()
             noInputWasEnabled = false
             saveInput(prefix)
             resetInitialInputValue()
@@ -43,6 +44,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
           updateFavourite(click.target.id)
         } else if (shareSquareWasClicked(click) && displaySocialMediaIcons) {
           showSocialMediaIcons()
+          disableDeleteLinks()
         } else if (userCanEdit) {
           if (deleteIngredientWasClicked(click)) {
             hideIngredient(ingredientIdNumber(click.target.id))
@@ -54,7 +56,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
                 matchInputHeightToDisplayElement(prefix, click.target)
                 hideDisplayElement(click.target)
                 showInput(prefix)
-                disableAddIngredient()
+                disableDeleteLinks()
               }
             })
           }
@@ -110,6 +112,20 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   const deleteIngredient = (ingredientId, displayMarkAsCompleteButton) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = displayMarkAsCompleteButton)
 
+  function disableDeleteLinks() {
+    if (userCanEdit) {
+      disableAddIngredient()
+      disableDeleteRecipe()
+    }
+  }
+
+  function enableDeleteLinks() {
+    if (userCanEdit) {
+      enableAddIngredient()
+      enableDeleteRecipe()
+    }
+  }
+
   function disableAddIngredient() {
     $('#add-ingredient-container').addClass('d-none')
     $('#add-ingredient-container-disabled').removeClass('d-none')
@@ -119,6 +135,10 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     $('#add-ingredient-container-disabled').addClass('d-none')
     $('#add-ingredient-container').removeClass('d-none')
   }
+
+  const disableDeleteRecipe = () => $('#delete-recipe-link').css('pointer-events','none')
+
+  const enableDeleteRecipe = () => $('#delete-recipe-link').css('pointer-events','')
 
   const hideIngredient = (ingredientId) => $(`#ingredient-${ingredientId}-display`).addClass('d-none')
 
