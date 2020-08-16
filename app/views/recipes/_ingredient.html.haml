@@ -4,7 +4,7 @@
       = render 'recipes/ingredient_display', ingredient: ingredient, column: column
   - if @user_can_edit
     .ingredient-delete.ml-auto{ id: "ingredient-#{ingredient.id}-delete" }
-      x
+      &#215;
 = simple_form_for [@recipe, ingredient] do |f|
   %div{ id: "ingredient-#{ingredient.id}-input", class: show_input ? '' : 'd-none' }
     - Ingredient.ordered_editable_column_keys.each do |column|
