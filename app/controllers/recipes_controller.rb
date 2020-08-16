@@ -1,9 +1,8 @@
-# Remember to add the ability for users to delete (mark as hidden) recipes
-
 class RecipesController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
-  skip_before_action :authenticate_user!, only: %i[index show] # You don't want update or upload_photo here
+  skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_recipe, except: %i(index create)
+  after_action :verify_authorized, except: [:index, :create, :show, :remove_as_favourite]
 
   def index
     @recipe_filter = params[:recipe_filter]
@@ -15,16 +14,14 @@ class RecipesController < ApplicationController
   end
 
   def create
-    # ADD PUNDIT
     if @recipe = Recipe.create(user: current_user, name: params[:recipe][:name])
       redirect_to recipe_path(@recipe)
     else
-      # DO SOMETHING
+      redirect_to root_path
     end
   end
 
   def show
-    authorize @recipe
     @ingredients = @recipe.ingredients.order(created_at: :asc)
     @units = Ingredient.units_humanized
     @user_can_edit = user_is_owner_or_admin?
@@ -37,15 +34,8 @@ class RecipesController < ApplicationController
     authorize @recipe
     if @recipe.update(recipe_params)
       @recipe.revised
-      # flash[:notice] = "Success"
-      # Show positive flash message somehow
     else
-      # Show negative flash message somehow
-      # flash[:notice] = "Fail"
-
-      # Alternative to this, we could use a redirect, or just re-render the partial that it was updating without refreshing the page
-      # Not sure this works
-      render :show
+      # Something here
     end
   end
 
@@ -62,31 +52,25 @@ class RecipesController < ApplicationController
       respond_to do |format|
         format.js
       end
-      # Show negative flash message somehow
-
-      # Alternative to this, we could use a redirect, or just re-render the partial that it was updating without refreshing the page
-      # Not sure this works
-      # render :show
     end
   end
 
   def mark_as_complete
-    # Add pundit
+    authorize @recipe
     @recipe.complete
     redirect_to recipe_path(@recipe)
   end
 
   def remove_as_favourite
-    # Add pundit
     UserFavouriteRecipe.where(user: current_user, recipe: @recipe).destroy_all
   end
 
   def destroy
-    # Add pundit
+    authorize @recipe
     if @recipe.destroy
       redirect_to root_path
     else
-      # Do something here
+      # Something here
     end
   end
 
