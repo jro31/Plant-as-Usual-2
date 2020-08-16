@@ -9,7 +9,7 @@
     left: $site-logo-position
     z-index: $logo-z-index
 
-  .search-logo
+  #search-logo
     top: $search-logo-position
     right: $search-logo-position
     z-index: $logo-z-index
@@ -97,6 +97,10 @@
     color: $light-mode-paragraph-text-color
   .dropdown-menu
     background: $light-mode-default-background-color
+  #search-logo
+    .search-icon
+      box-shadow: $light-mode-imposing-icon-box-shadow
+      background-color: $light-mode-imposing-icon-background-color
   #search-form-container
     border-color: $light-mode-navbar-search-dropdown-border-color
     #search-form
@@ -112,6 +116,10 @@
     color: $dark-mode-paragraph-text-color
   .dropdown-menu
     background: $dark-mode-default-background-color
+  #search-logo
+    .search-icon
+      box-shadow: $dark-mode-imposing-icon-box-shadow
+      background-color: $dark-mode-imposing-icon-background-color
   #search-form-container
     border-color: $dark-mode-navbar-search-dropdown-border-color
     #search-form

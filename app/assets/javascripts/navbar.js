@@ -6,4 +6,11 @@ $(function() {
 
 $('#search-input').change(function() {
   $('#search-input').val().length > 0 ? $('#search-button').prop("disabled", false) : $('#search-button').prop("disabled", true);
-});
+})
+
+$('#search-button-icon').click(function() {
+  if($('#search-input').val().length === 0) {
+    $('#search-logo').removeClass('show')
+    $('#search-form-container').removeClass('show')
+  }
+})

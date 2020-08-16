@@ -15,6 +15,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       })
     }
 
+    // If you can, have it so that the nothing is clickable when the search form is open
     $(document).click(function(click) {
       let noInputWasEnabled = true
       let displaySocialMediaIcons = true
