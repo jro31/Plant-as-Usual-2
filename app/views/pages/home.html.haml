@@ -9,7 +9,7 @@
           %h1.text-center
             Welcome to Plant as Usual
           .text-center.my-4.my-md-2
-            Plant as Usual is the place for you to find user-added vegan recipes, and to add your own. Whether an experienced plant-based chef, or just starting-out, you're sure to find something that will whet your appetite.
+            Plant as Usual is the place to share your favourite vegan recipes. Whether an experienced plant-based chef, or just starting-out, you're sure to find something that will whet your appetite.
           .text-center
             = link_to 'Browse recipes', recipes_path, class: "btn mb-1 mb-sm-0 #{component_classes(DarkMode::CLASSES[:btn_keen])}"
             - if current_user
@@ -20,7 +20,7 @@
 
     .col-md-6.p-0.d-none.d-md-block
       .h-100.photo-container
-        = image_tag 'temp-bowl'
+        = image_tag 'welcome-banner-photo'
 
 = render 'shared/recipe_ladder', recipes: Recipe.current_recipes_of_the_day
 
