@@ -2,7 +2,6 @@ class IngredientsController < ApplicationController
   class WrongRecipeError < StandardError; end
 
   protect_from_forgery unless: -> { request.format.json? }
-  skip_before_action :authenticate_user!, only: %i[destroy] # You don't want create or update or destroy here
   before_action :set_recipe
 
   def create
