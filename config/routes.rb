@@ -11,5 +11,5 @@ Rails.application.routes.draw do
   end
 
   get 'current_user_data' => "users#current_user_data"
-  patch '/users/toggle_dark_mode/:id', to: 'users#toggle_dark_mode'
+  patch '/users/toggle_dark_mode', to: 'users#toggle_dark_mode'
 end

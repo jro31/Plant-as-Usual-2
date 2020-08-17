@@ -17,12 +17,8 @@ function setInitialSwitchState() {
 }
 
 function toggleDarkMode(darkModeOn) {
-  $.get('/current_user_data', function(result) {
-    if(result != null) {
-      toggleClasses(darkModeOn);
-      selectMode(result, darkModeOn);
-    }
-  });
+  toggleClasses(darkModeOn);
+  selectMode(darkModeOn);
 }
 
 function toggleClasses(darkModeOn) {
@@ -36,8 +32,8 @@ function toggleClasses(darkModeOn) {
 }
 
 
-function selectMode(user, darkModeOn) {
-  var url = `/users/toggle_dark_mode/${user.id}`
+function selectMode(darkModeOn) {
+  var url = `/users/toggle_dark_mode`
   // Read up on if you need to do something here in the event of an error
   $.ajax({
     type: 'patch',

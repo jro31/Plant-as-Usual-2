@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i(current_user_data toggle_dark_mode) # We don't want this here
+  protect_from_forgery unless: -> { request.format.json? }
 
   def current_user_data
     return unless current_user
@@ -8,13 +8,8 @@ class UsersController < ApplicationController
   end
 
   def toggle_dark_mode
-    @user = User.find(params[:id])
-    # Add pundit
-    if @user.update(user_params)
-
-    else
-
-    end
+    @user = current_user
+    @user.update(user_params)
   end
 
   private
