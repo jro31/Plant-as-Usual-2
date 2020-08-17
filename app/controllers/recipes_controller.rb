@@ -81,13 +81,6 @@ class RecipesController < ApplicationController
   end
 
   def filtered_recipes # SPEC THIS
-    # When all else is equal, perhaps sort recipes by:
-    # 1) State - Approved recipes before others
-    # 2) Number of favourites
-    # 3) Has a photo
-    # or
-    # 1) State - Approved
-    # 2) Date created
     case @recipe_filter
     when 'user_recipes'
       if @searched_for_user_id == current_user.id
@@ -100,14 +93,29 @@ class RecipesController < ApplicationController
     when 'user_favourites'
       current_user.favourites.available_to_show.order(name: :asc)
     when 'search'
-      Recipe.available_to_show.joins(:ingredients).where(search_sql_query, query: "%#{@search_query}%").distinct
+      ordered_recipes(Recipe.available_to_show.joins(:ingredients).where(search_sql_query, query: "%#{@search_query}%").distinct)
     else
-      Recipe.available_to_show.order(created_at: :desc)
+      ordered_recipes(Recipe.available_to_show.distinct)
     end
   end
 
   def search_sql_query
     "recipes.name @@ :query OR ingredients.food @@ :query"
+  end
+
+  def ordered_recipes(recipes)
+    first_recipes = []
+    second_recipes =[]
+    third_recipes = []
+    fourth_recipes = []
+    recipes.order(created_at: :desc).each do |recipe|
+      if recipe.has_photo?
+        recipe.awaiting_approval? ? second_recipes << recipe : first_recipes << recipe
+      else
+        recipe.awaiting_approval? ? fourth_recipes << recipe : third_recipes << recipe
+      end
+    end
+    [first_recipes, second_recipes, third_recipes, fourth_recipes].flatten
   end
 
   def h1_index_text

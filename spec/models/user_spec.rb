@@ -48,9 +48,17 @@ describe User, type: :model do
           end
         end
 
-        context 'username is not unique' do
+        context 'username already exists' do
           it 'is not valid' do
             user.username = 'patronus'
+            expect(user).not_to be_valid
+            expect(user.errors.messages[:username]).to include('has already been taken')
+          end
+        end
+
+        context 'username already exists case insensitively' do
+          it 'is not valid' do
+            user.username = 'Patronus'
             expect(user).not_to be_valid
             expect(user.errors.messages[:username]).to include('has already been taken')
           end

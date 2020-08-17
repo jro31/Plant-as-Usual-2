@@ -680,4 +680,30 @@ describe Recipe do
       end
     end
   end
+
+  describe 'instance methods' do
+    describe '#awaiting_approval?' do
+      context 'state is awaiting_approval' do
+        before { recipe.update(state: 'awaiting_approval') }
+        it { expect(recipe.awaiting_approval?).to eq(true) }
+      end
+
+      context 'state is not awaiting_approval' do
+        before { recipe.update(state: 'incomplete') }
+        it { expect(recipe.awaiting_approval?).to eq(false) }
+      end
+    end
+
+    describe '#has_photo?' do
+      let(:test_photo) { fixture_file_upload(Rails.root.join('public', 'test-photo.jpg'), 'image/jpg') }
+      context 'recipe has a photo' do
+        before { recipe.update(photo: test_photo) }
+        it { expect(recipe.has_photo?).to eq(true) }
+      end
+
+      context 'recipe does not have a photo' do
+        it { expect(recipe.has_photo?).to eq(false) }
+      end
+    end
+  end
 end

@@ -133,6 +133,16 @@ class Recipe < ApplicationRecord
     self.approved_for_feature.order(last_featured_at: :asc).first
   end
 
+  def awaiting_approval?
+    state == 'awaiting_approval'
+  end
+
+  def has_photo?
+    photo.present?
+  end
+
+  private
+
   def update_state_updated_at # PERHAPS REMOVE THIS IF THERE'S NO NEED FOR state_updated_at
     return unless saved_change_to_state?
 
