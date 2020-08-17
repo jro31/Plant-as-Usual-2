@@ -1,12 +1,14 @@
 class IngredientsController < ApplicationController
+  class WrongRecipeError < StandardError; end
+
   protect_from_forgery unless: -> { request.format.json? }
-  skip_before_action :authenticate_user!, only: %i[create update destroy] # You don't want create or update or destroy here
+  skip_before_action :authenticate_user!, only: %i[destroy] # You don't want create or update or destroy here
+  before_action :set_recipe
 
   def create
-    # ADD PUNDIT TO THIS METHOD
+    authorize @recipe, :update?
     params[:ingredient] = { recipe_id: params[:recipe_id] }
     @ingredient = Ingredient.new(ingredient_params)
-    @recipe = Recipe.find(params[:recipe_id])
     @units = Ingredient.units_humanized
     @user_can_edit = true
     if @ingredient.save
@@ -19,25 +21,20 @@ class IngredientsController < ApplicationController
   end
 
   def update
-    # ADD PUNDIT TO THIS METHOD
-
+    authorize @recipe, :update?
     @ingredient = Ingredient.find(params[:id])
-    @recipe = Recipe.find(params[:recipe_id])
-    raise unless @ingredient.recipe = @recipe
+    raise IngredientsController::WrongRecipeError unless @ingredient.recipe == @recipe
     if @ingredient.update(ingredient_params)
       @recipe.revised
-      # Show positive flash message somehow
     else
-      # Show negative flash message somehow
-      # Re-render the page
+      # DO SOMETHING
     end
   end
 
   def destroy
-    # ADD PUNDIT TO THIS METHOD
+    authorize @recipe, :update?
     @ingredient = Ingredient.find(params[:id])
-    @recipe = Recipe.find(params[:recipe_id])
-    raise unless @ingredient.recipe = @recipe
+    raise IngredientsController::WrongRecipeError unless @ingredient.recipe == @recipe
     @ingredient.destroy
   end
 
@@ -45,5 +42,9 @@ class IngredientsController < ApplicationController
 
   def ingredient_params
     params.require(:ingredient).permit(:recipe_id, :amount, :unit, :food, :preparation, :optional)
+  end
+
+  def set_recipe
+    @recipe = Recipe.find(params[:recipe_id])
   end
 end

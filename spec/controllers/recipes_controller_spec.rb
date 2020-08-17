@@ -23,9 +23,8 @@ describe RecipesController, type: :controller do
   end
 
   describe 'POST #create' do
+    let(:params) { { recipe: { name: 'Pesto pasta' } } }
     context 'user is signed-in' do
-      let(:params) { { recipe: { name: 'Pesto pasta' } } }
-
       it 'creates a recipe' do
         expect { post :create, params: params }.to change(Recipe, :count).by(1)
       end
@@ -44,8 +43,6 @@ describe RecipesController, type: :controller do
 
     context 'user is not signed-in' do
       before { sign_out user }
-      let(:params) { { recipe: { name: 'Pesto pasta' } } }
-
       it 'does not create a recipe' do
         expect{ post :create, params: params }.to change(Recipe, :count).by(0)
       end
