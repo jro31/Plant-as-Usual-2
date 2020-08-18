@@ -256,17 +256,16 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   function foodDisplayRow(prefix) {
     let displayString = ""
     if (foodIsPresent(prefix)) {
-      displayString = `${$(`#${prefix}-amount-input`).val()} ${unitDisplayContent($(`#${prefix}-unit-input`).val())} ${$(`#${prefix}-food-input`).val()}`.trim().toLowerCase()
+      displayString = `${$(`#${prefix}-amount-input`).val()} ${unitDisplayContent($(`#${prefix}-unit-input`).val(), $(`#${prefix}-amount-input`).val())} ${$(`#${prefix}-food-input`).val()}`.trim().toLowerCase()
     } else {
       displayString = `${initialInputValue['amount']} ${unitDisplayContent(initialInputValue['unit'])} ${initialInputValue['food']}`.trim().toLowerCase()
     }
     return displayString.charAt(0).toUpperCase() + displayString.slice(1)
   }
 
-  function unitDisplayContent(unitValue) {
+  function unitDisplayContent(unitValue, amount) {
     if (!unitValue) return ""
-    const amount = unitValue.toLowerCase()
-    if (!amount || amount == '1' || amount == 'one' || amount == 'a' || amount == 'an') {
+    if (!amount || $.inArray(amount.toLowerCase(), singularUnitAmounts) !== -1) {
       return unitsHumanized[unitValue]
     } else {
       return unitsPluralized[unitValue]

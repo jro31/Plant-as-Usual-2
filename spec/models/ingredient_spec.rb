@@ -27,6 +27,14 @@ describe Ingredient, type: :model do
     end
   end
 
+  describe 'SINGULAR_UNIT_AMOUNTS' do
+    it 'returns the singular unit amounts in alphabetical order' do
+      expect(Ingredient::SINGULAR_UNIT_AMOUNTS).to eq([
+        '1', 'a', 'a half', 'a quarter', 'an', 'half', 'one', 'quarter'
+      ])
+    end
+  end
+
   describe 'callbacks' do
     describe 'before_save' do
       describe '#set_amount_as_float' do

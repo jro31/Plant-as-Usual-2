@@ -15,6 +15,10 @@ class Ingredient < ApplicationRecord
     small leaf pound ounce pint fluid_ounce quart gallon sprig handful
   ).sort.freeze
 
+  SINGULAR_UNIT_AMOUNTS = [
+    '1', 'one', 'a', 'an', 'quarter', 'half', 'a quarter', 'a half'
+  ].sort.freeze
+
   before_save :set_amount_as_float
 
   validates_presence_of :food, on: :update

@@ -88,7 +88,7 @@
         = f.input :process, label: false, placeholder: @process_placeholder, input_html: { id: 'process-input', class: "d-none #{component_classes(DarkMode::CLASSES[:input_edit])}" }
 
 - if @user_can_edit
-  = link_to 'Click here to submit your changes', mark_as_complete_recipe_path(@recipe), method: :patch, class: "btn btn-success fixed-bottom-left #{@recipe.incomplete? ? '' : 'd-none'}", id: 'mark-as-complete-button'
+  = link_to 'Click here to submit your changes', mark_as_complete_recipe_path(@recipe), method: :patch, class: "btn fixed-bottom-left #{@recipe.incomplete? ? '' : 'd-none'} #{component_classes(DarkMode::CLASSES[:btn_keen])}", id: 'mark-as-complete-button'
 
 %input#url-dummy-input{ value: request.original_url }
 
@@ -101,3 +101,4 @@
   const ingredientDisplayRows = #{raw Ingredient.ordered_display_rows}
   const unitsHumanized = JSON.parse('#{raw(Ingredient.units_humanized.to_json)}')
   const unitsPluralized = JSON.parse('#{raw(Ingredient.units_pluralized.to_json)}')
+  const singularUnitAmounts = #{raw Ingredient::SINGULAR_UNIT_AMOUNTS}
