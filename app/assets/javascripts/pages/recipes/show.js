@@ -278,7 +278,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       displayString = displayString.concat(preparationText(prefix))
       if (!!preparationText(prefix) && $(`#${prefix}-optional-input`)[0].checked) displayString = displayString.concat(', ')
       displayString = displayString.concat($(`#${prefix}-optional-input`)[0].checked ? 'optional' : '')
-      return displayString.concat(")")
+      return displayString.concat(")").toLowerCase()
     } else {
       return ''
     }
