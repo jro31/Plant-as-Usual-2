@@ -1,21 +1,28 @@
-- @recipes.each do |recipe|
-  .container.mb-0.p-4{ class: "#{@recipes.first === recipe ? 'mt-0' : 'mt-4'} #{component_classes(DarkMode::CLASSES[:admin_page_recipe])}" }
-    .row
-      = link_to recipe_path(recipe), target: "_blank", class: 'col-md-4 d-none d-md-block' do
-        - if recipe.has_photo?
-          .photo-container.text-center
-            = image_tag recipe.photo.url, class: 'recipe-photo'
-        - else
-          = render 'shared/site_placeholder'
-      = link_to recipe_path(recipe), target: "_blank", class: 'col-md-4 text-center mb-3 mb-md-0' do
+- if @recipes.any?
+  - @recipes.each do |recipe|
+    .container.mb-0.p-4{ class: "#{@recipes.first === recipe ? 'mt-0' : 'mt-4'} #{component_classes(DarkMode::CLASSES[:admin_page_recipe])}" }
+      .row
+        = link_to recipe_path(recipe), target: "_blank", class: 'col-md-4 d-none d-md-block' do
+          - if recipe.has_photo?
+            .photo-container.text-center
+              = image_tag recipe.photo.url, class: 'recipe-photo'
+          - else
+            = render 'shared/site_placeholder'
+        = link_to recipe_path(recipe), target: "_blank", class: 'col-md-4 text-center mb-3 mb-md-0' do
+          %h2
+            = recipe.name
+        .col-md-4
+          .mb-3
+            = link_to 'Approve for recipe of the day', admin_recipe_approve_for_recipe_of_the_day_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
+          .mb-3
+            = link_to 'Approve for feature', admin_recipe_approve_for_feature_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
+          .mb-3
+            = link_to 'Approve', admin_recipe_approve_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
+          .mb-3
+            = link_to 'Decline', admin_recipe_decline_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_docile])}"
+- else
+  .container.screen-height-container-without-h1
+    .row.h-100.d-flex.align-items-center
+      .col-12.text-center
         %h2
-          = recipe.name
-      .col-md-4
-        .mb-3
-          = link_to 'Approve for recipe of the day', admin_recipe_approve_for_recipe_of_the_day_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
-        .mb-3
-          = link_to 'Approve for feature', admin_recipe_approve_for_feature_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
-        .mb-3
-          = link_to 'Approve', admin_recipe_approve_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
-        .mb-3
-          = link_to 'Decline', admin_recipe_decline_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_docile])}"
+          Nothing to see here 🤷‍♂️

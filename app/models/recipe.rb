@@ -75,14 +75,16 @@ class Recipe < ApplicationRecord
   end
 
   def self.update_highlighted_recipes
-    update_recipe_of_the_day
+    update_recipes_of_the_day
     update_featured_recipes
   end
 
-  def self.update_recipe_of_the_day
+  def self.update_recipes_of_the_day
     self.current_recipes_of_the_day.each do |recipe|
       recipe.revert_from_highlighted if recipe.last_recipe_of_the_day_at <= 23.hours.ago
     end
+
+    (NUMBER_OF_RECIPES_OF_THE_DAY - Recipe.current_recipes_of_the_day.count).times { self.set_next_recipe_of_the_day }
   end
 
   def self.set_next_recipe_of_the_day

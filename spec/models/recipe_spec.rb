@@ -415,8 +415,8 @@ describe Recipe do
     let(:recipe) { create(:recipe) }
     describe '#update_highlighted_recipes' do
       subject { Recipe.update_highlighted_recipes }
-      it 'calls update_recipe_of_the_day' do
-        expect(Recipe).to receive(:update_recipe_of_the_day).once.and_call_original
+      it 'calls update_recipes_of_the_day' do
+        expect(Recipe).to receive(:update_recipes_of_the_day).once.and_call_original
         subject
       end
 
@@ -426,10 +426,10 @@ describe Recipe do
       end
     end
 
-    describe '#update_recipe_of_the_day' do
+    describe '#update_recipes_of_the_day' do
       let!(:current_recipe_of_the_day) { create(:recipe, state: :current_recipe_of_the_day, last_recipe_of_the_day_at: 1.day.ago) }
       let!(:next_recipe_of_the_day) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: nil) }
-      subject { Recipe.update_recipe_of_the_day }
+      subject { Recipe.update_recipes_of_the_day }
       context 'last_recipe_of_the_day_at is less than 23 hours ago' do
         before { current_recipe_of_the_day.update(last_recipe_of_the_day_at: 22.hours.ago) }
         it 'does not change the state of the recipe' do
@@ -443,6 +443,14 @@ describe Recipe do
         it 'updates the state of the recipe to approved_for_recipe_of_the_day' do
           subject
           expect(current_recipe_of_the_day.reload.state).to eq('approved_for_recipe_of_the_day')
+        end
+      end
+
+      context 'there is no existing recipe of the day' do
+        let!(:current_recipe_of_the_day) { create(:recipe, state: :approved_for_recipe_of_the_day, last_recipe_of_the_day_at: 1.day.ago) }
+        it 'sets next_recipe_of_the_day as recipe of the day' do
+          subject
+          expect(next_recipe_of_the_day.reload.state).to eq('current_recipe_of_the_day')
         end
       end
     end
