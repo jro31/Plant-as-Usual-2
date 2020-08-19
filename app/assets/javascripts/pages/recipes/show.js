@@ -137,9 +137,9 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     $('#add-ingredient-container').removeClass('d-none')
   }
 
-  const disableDeleteRecipe = () => $('#delete-recipe-link').css('pointer-events','none')
+  var disableDeleteRecipe = () => $('#delete-recipe-link').css('pointer-events','none')
 
-  const enableDeleteRecipe = () => $('#delete-recipe-link').css('pointer-events','')
+  var enableDeleteRecipe = () => $('#delete-recipe-link').css('pointer-events','')
 
   const hideIngredient = (ingredientId) => $(`#ingredient-${ingredientId}-display`).addClass('d-none')
 
