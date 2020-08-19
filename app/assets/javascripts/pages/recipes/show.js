@@ -317,7 +317,13 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   const inputIsEnabled = (prefix) => !$(`#${prefix}-input`).hasClass('d-none')
 
   function clickIsOutsideInput(click, prefix) {
-    return isIngredientPrefix(prefix) ? click.target.id !== `${prefix}-input` && $.inArray(click.target.id, ingredientInputIds(prefix)) === -1 : click.target.id !== `${prefix}-input`
+    return isIngredientPrefix(prefix) ? clickIsOutsideIngredientInput(click, prefix) : click.target.id !== `${prefix}-input`
+  }
+
+  function clickIsOutsideIngredientInput(click, prefix) {
+    return click.target.id !== `${prefix}-input`
+           && $.inArray(click.target.id, ingredientInputIds(prefix)) === -1
+           && $(click.target).parent()[0].id !== `${prefix}-unit-input` // Fixes bug in Firefox where the <option> (rather than the <select> is considered the click target)
   }
 
   function ingredientInputIds(prefix) {
