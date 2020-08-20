@@ -13,7 +13,7 @@ class Ingredient < ApplicationRecord
     gram millilitre pinch splash teaspoon tablespoon cup dash litre
     kilogram piece inch centimetre can pack clove whole large medium
     small leaf pound ounce pint fluid_ounce quart gallon sprig handful
-    block slice dollop
+    block slice dollop tin jar
   ).sort.freeze
 
   SINGULAR_UNIT_AMOUNTS = [

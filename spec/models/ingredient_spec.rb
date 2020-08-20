@@ -19,9 +19,9 @@ describe Ingredient, type: :model do
     it 'returns the unit keys in alphabetical order' do
       expect(Ingredient::UNIT_KEYS).to eq(
         %w(
-          block can centimetre clove cup dash dollop fluid_ounce gallon gram handful inch kilogram
+          block can centimetre clove cup dash dollop fluid_ounce gallon gram handful inch jar kilogram
           large leaf litre medium millilitre ounce pack piece pinch pint pound quart slice small
-          splash sprig tablespoon teaspoon whole
+          splash sprig tablespoon teaspoon tin whole
         )
       )
     end
@@ -294,6 +294,7 @@ describe Ingredient, type: :model do
           gram: 'Gram',
           handful: 'Handful',
           inch: 'Inch',
+          jar: 'Jar',
           kilogram: 'Kilogram',
           large: 'Large',
           leaf: 'Leaf',
@@ -313,6 +314,7 @@ describe Ingredient, type: :model do
           sprig: 'Sprig',
           tablespoon: 'Tablespoon',
           teaspoon: 'Teaspoon',
+          tin: 'Tin',
           whole: 'Whole'
         }
       )
@@ -335,6 +337,7 @@ describe Ingredient, type: :model do
           gram: 'Grams',
           handful: 'Handfuls',
           inch: 'Inches',
+          jar: 'Jars',
           kilogram: 'Kilograms',
           large: 'Large',
           leaf: 'Leaves',
@@ -354,6 +357,7 @@ describe Ingredient, type: :model do
           sprig: 'Sprigs',
           tablespoon: 'Tablespoons',
           teaspoon: 'Teaspoons',
+          tin: 'Tins',
           whole: 'Whole'
         }
       )
@@ -376,6 +380,7 @@ describe Ingredient, type: :model do
           gram: 'gram',
           handful: 'handful',
           inch: 'inch',
+          jar: 'jar',
           kilogram: 'kilogram',
           large: 'large',
           leaf: 'leaf',
@@ -395,6 +400,7 @@ describe Ingredient, type: :model do
           sprig: 'sprig',
           tablespoon: 'tablespoon',
           teaspoon: 'teaspoon',
+          tin: 'tin',
           whole: 'whole'
         }
       )
