@@ -35,7 +35,7 @@ module ApplicationHelper
   def recipe_index_page_title_prefix
     case @recipe_filter
     when 'user_recipes'
-      if @searched_for_user_id == current_user.id
+      if @searched_for_user_id == current_user&.id
         'My recipes'
       elsif @searched_for_user_id
         "#{User.find(@searched_for_user_id).username}'s recipes"

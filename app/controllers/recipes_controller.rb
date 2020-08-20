@@ -83,7 +83,7 @@ class RecipesController < ApplicationController
   def filtered_recipes # SPEC THIS
     case @recipe_filter
     when 'user_recipes'
-      if @searched_for_user_id == current_user.id
+      if @searched_for_user_id == current_user&.id
         Recipe.not_hidden.where(user: current_user).order(updated_at: :desc)
       elsif @searched_for_user_id
         Recipe.available_to_show.where(user: User.find(@searched_for_user_id)).order(updated_at: :desc)
@@ -119,7 +119,7 @@ class RecipesController < ApplicationController
   end
 
   def h1_index_text
-    if @recipe_filter == 'user_recipes' && @searched_for_user_id && @searched_for_user_id != current_user.id
+    if @recipe_filter == 'user_recipes' && @searched_for_user_id && @searched_for_user_id != current_user&.id
       "#{User.find(@searched_for_user_id).username}'s recipes"
     elsif @recipe_filter == 'search' && @search_query
       "'#{@search_query}' recipes"
