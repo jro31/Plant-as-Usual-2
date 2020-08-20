@@ -111,7 +111,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     $('#empty-share-square').removeClass('d-none')
   }
 
-  const deleteIngredient = (ingredientId, displayMarkAsCompleteButton) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = displayMarkAsCompleteButton)
+  var deleteIngredient = (ingredientId, displayMarkAsCompleteButton) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = displayMarkAsCompleteButton)
 
   function disableDeleteLinks() {
     if (userCanEdit) {
