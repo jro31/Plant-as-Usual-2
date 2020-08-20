@@ -19,8 +19,8 @@ describe Ingredient, type: :model do
     it 'returns the unit keys in alphabetical order' do
       expect(Ingredient::UNIT_KEYS).to eq(
         %w(
-          can centimetre clove cup dash fluid_ounce gallon gram handful inch kilogram
-          large leaf litre medium millilitre ounce pack piece pinch pint pound quart small
+          block can centimetre clove cup dash dollop fluid_ounce gallon gram handful inch kilogram
+          large leaf litre medium millilitre ounce pack piece pinch pint pound quart slice small
           splash sprig tablespoon teaspoon whole
         )
       )
@@ -282,11 +282,13 @@ describe Ingredient, type: :model do
     it 'returns a hash of units humanized' do
       expect(Ingredient.units_humanized).to eq(
         {
+          block: 'Block',
           can: 'Can',
           centimetre: 'Centimetre',
           clove: 'Clove',
           cup: 'Cup',
           dash: 'Dash',
+          dollop: 'Dollop',
           fluid_ounce: 'Fluid ounce',
           gallon: 'Gallon',
           gram: 'Gram',
@@ -305,6 +307,7 @@ describe Ingredient, type: :model do
           pint: 'Pint',
           pound: 'Pound',
           quart: 'Quart',
+          slice: 'Slice',
           small: 'Small',
           splash: 'Splash',
           sprig: 'Sprig',
@@ -320,11 +323,13 @@ describe Ingredient, type: :model do
     it 'returns a hash of units humanized and pluralized' do
       expect(Ingredient.units_pluralized).to eq(
         {
+          block: 'Blocks',
           can: 'Cans',
           centimetre: 'Centimetres',
           clove: 'Cloves',
           cup: 'Cups',
           dash: 'Dashes',
+          dollop: 'Dollops',
           fluid_ounce: 'Fluid ounces',
           gallon: 'Gallons',
           gram: 'Grams',
@@ -343,6 +348,7 @@ describe Ingredient, type: :model do
           pint: 'Pints',
           pound: 'Pounds',
           quart: 'Quarts',
+          slice: 'Slices',
           small: 'Small',
           splash: 'Splashes',
           sprig: 'Sprigs',
@@ -358,11 +364,13 @@ describe Ingredient, type: :model do
     it 'returns a hash of inhuman units' do
       expect(Ingredient.inhuman_units).to eq(
         {
+          block: 'block',
           can: 'can',
           centimetre: 'centimetre',
           clove: 'clove',
           cup: 'cup',
           dash: 'dash',
+          dollop: 'dollop',
           fluid_ounce: 'fluid_ounce',
           gallon: 'gallon',
           gram: 'gram',
@@ -381,6 +389,7 @@ describe Ingredient, type: :model do
           pint: 'pint',
           pound: 'pound',
           quart: 'quart',
+          slice: 'slice',
           small: 'small',
           splash: 'splash',
           sprig: 'sprig',
