@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
+  skip_before_action :authenticate_user!, only: :current_user_data
 
   def current_user_data
     return unless current_user
