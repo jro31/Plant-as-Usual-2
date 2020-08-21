@@ -6,5 +6,5 @@ CarrierWave.configure do |config|
       :region                 => ENV['AWS_REGION']
   }
   config.fog_directory  = ENV['S3_BUCKET_NAME']
-  config.fog_use_ssl_for_aws = false
+  config.fog_use_ssl_for_aws = true
 end
