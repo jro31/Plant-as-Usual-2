@@ -2,6 +2,8 @@ $('#spinner').addClass('d-none');
 <% if @result == 'success' %>
   $('#photo-container').children(":first").replaceWith('<%= image_tag @recipe.photo.url %>')
   displayHiddenFlash('Photo uploaded', 'success')
+  recipeHasBeenEdited = true
+  displayMarkAsCompleteButton()
   // SPINNER SHOULD ALSO RESIZE FOR NEW PHOTO
 <% end %>
 <% if @result == 'fail' %>

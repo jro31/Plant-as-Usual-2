@@ -102,4 +102,4 @@
   const unitsHumanized = JSON.parse('#{raw(Ingredient.units_humanized.to_json)}')
   const unitsPluralized = JSON.parse('#{raw(Ingredient.units_pluralized.to_json)}')
   const singularUnitAmounts = #{raw Ingredient::SINGULAR_UNIT_AMOUNTS}
-  const recipeHasBeenEdited = #{@recipe.incomplete?}
+  let recipeHasBeenEdited = #{@recipe.incomplete?}
