@@ -70,14 +70,14 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
 
   function setPhotoUploader() {
     $('#photo-uploader').change(function() {
+      setSpinnerDimensions()
       $('#spinner').removeClass('d-none');
       $('#submit-photo').click()
     })
 
-    $('#recipe-photo, #photo-placeholder').click(function() {
+    $('.recipe-photo, #photo-placeholder').click(function() {
       $('#photo-uploader').click()
     })
-    setSpinnerDimensions()
   }
 
   const heartTransplant = () => $('#full-heart, #empty-heart').toggleClass('d-none')

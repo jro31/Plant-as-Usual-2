@@ -49,7 +49,7 @@
 
     #photo-container.col-12.text-center
       - if @recipe.photo.file&.exists?
-        = image_tag @recipe.photo.url, id: 'recipe-photo', class: @user_can_edit ? 'cursor-pointer' : ''
+        = image_tag @recipe.photo.url, class: "recipe-photo #{@user_can_edit ? 'cursor-pointer' : ''}"
       - else
         - if @user_can_edit
           #photo-placeholder-container.d-flex.justify-content-center.align-items-center

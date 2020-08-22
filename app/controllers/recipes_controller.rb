@@ -41,6 +41,7 @@ class RecipesController < ApplicationController
 
   def upload_photo
     authorize @recipe
+    @user_can_edit = user_is_owner_or_admin?
     if @recipe.update(recipe_params)
       @recipe.revised
       @result = 'success'
