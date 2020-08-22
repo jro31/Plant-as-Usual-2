@@ -36,6 +36,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
             noInputWasEnabled = false
             saveInput(prefix)
             resetInitialInputValue()
+            displayMarkAsCompleteButton()
           }
         })
       }
@@ -58,6 +59,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
                 hideDisplayElement(click.target)
                 showInput(prefix)
                 disableDeleteLinks()
+                hideMarkAsCompleteButton()
               }
             })
           }
@@ -111,7 +113,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
     $('#empty-share-square').removeClass('d-none')
   }
 
-  var deleteIngredient = (ingredientId, displayMarkAsCompleteButton) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = displayMarkAsCompleteButton)
+  var deleteIngredient = (ingredientId, revealMarkAsCompleteButton) => ajaxRequest('delete', `/recipes/${recipeId}/ingredients/${ingredientId}`, undefined, undefined, component = 'ingredient', verb = 'delete', ingredientId = ingredientId, displaySuccess = false, displayFail = false, showMarkAsCompleteButton = revealMarkAsCompleteButton)
 
   function disableDeleteLinks() {
     if (userCanEdit) {
@@ -140,6 +142,12 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   var disableDeleteRecipe = () => $('#delete-recipe-link').css('pointer-events','none')
 
   var enableDeleteRecipe = () => $('#delete-recipe-link').css('pointer-events','')
+
+  function displayMarkAsCompleteButton() {
+    if (recipeHasBeenEdited) $('#mark-as-complete-button').removeClass('d-none')
+  }
+
+  const hideMarkAsCompleteButton = () => $('#mark-as-complete-button').addClass('d-none')
 
   const hideIngredient = (ingredientId) => $(`#ingredient-${ingredientId}-display`).addClass('d-none')
 
@@ -204,7 +212,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       data: data,
       success: function() {
         if (displaySuccess) displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
-        if (showMarkAsCompleteButton) $('#mark-as-complete-button').removeClass('d-none')
+        if (showMarkAsCompleteButton) recipeHasBeenEdited = true
       },
       error: function() {
         if (displayFail) displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')
