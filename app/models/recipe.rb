@@ -155,7 +155,7 @@ class Recipe < ApplicationRecord
     return unless will_save_change_to_state? && (currently_featured? || recipe_of_the_day_as_currently_featured?)
     return unless Recipe.currently_featured.count >= NUMBER_OF_FEATURED_RECIPES
 
-    errors.add(:state, "There can only be ten featured recipes")
+    errors.add(:state, "There can only be twelve featured recipes")
   end
 
   def validate_number_of_recipes_of_the_day

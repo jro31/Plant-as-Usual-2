@@ -29,16 +29,32 @@ class PhotoUploader < CarrierWave::Uploader::Base
   # end
 
   # Create different versions of your uploaded files:
-  version :height_350 do
-    process resize_to_fit: [nil, 350]
+  version :thumb do
+    process resize_to_limit: [200, 200]
   end
 
-  version :height_500 do
-    process resize_to_fit: [nil, 500]
+  version :max_height_350 do
+    process resize_to_limit: [nil, 350]
   end
 
-  version :height_720 do
-    process resize_to_fit: [nil, 720]
+  version :max_height_500 do
+    process resize_to_limit: [nil, 500]
+  end
+
+  version :max_height_720 do
+    process resize_to_limit: [nil, 720]
+  end
+
+  version :max_height_1000 do
+    process resize_to_limit: [nil, 1000]
+  end
+
+  version :max_width_500 do
+    process resize_to_limit: [500, nil]
+  end
+
+  version :max_width_1000 do
+    process resize_to_limit: [1000, nil]
   end
 
   # Add a white list of extensions which are allowed to be uploaded.
