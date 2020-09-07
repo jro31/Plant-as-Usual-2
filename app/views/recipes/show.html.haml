@@ -22,7 +22,7 @@
           = link_to "https://facebook.com/sharer/sharer.php?u=#{request.original_url}", target: "_blank", 'aria-label' => "Share on Facebook" do
             %i.fab.fa-facebook-square.social-media-icon
         %div
-          = link_to "https://twitter.com/intent/tweet/?text=#{@recipe.name}%20on%20Plant%20as%20Usual. %23vegan %23plantbased %23plantasusual&amp;url=#{request.original_url}", target: "_blank", 'aria-label' => "Share on Twitter" do
+          = link_to "https://twitter.com/intent/tweet/?text=#{@recipe.name}%20on%20Plant%20as%20Usual.%20#{request.original_url}%0a%0a%23vegan%20%23plantbased%20%23plantasusual", target: "_blank", 'aria-label' => "Share on Twitter" do
             %i.fab.fa-twitter.social-media-icon
         %div
           -# Needs testing
