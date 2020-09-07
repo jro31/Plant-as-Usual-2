@@ -29,10 +29,6 @@
           = link_to "whatsapp://send?text=#{@recipe.name}%20#{request.original_url}", target: "_blank", 'aria-label' => "Share on WhatsApp" do
             %i.fab.fa-whatsapp.social-media-icon
         %div
-          -# This isn't adding the title; can't figure-out why
-          = link_to "https://reddit.com/submit/?url=#{request.original_url}&amp;resubmit=true&amp;title=#{@recipe.name}", target: "_blank", 'aria-label' => "Share on Reddit" do
-            %i.fab.fa-reddit-alien.social-media-icon
-        %div
           %i.fas.fa-link.cursor-pointer#copy-link-icon.social-media-icon
     - if @user_can_edit
       = link_to recipe_path(@recipe), method: :delete, data: {confirm: 'This will permanently delete this recipe. Are you sure?'}, class: 'non-initial-icon', id: 'delete-recipe-link' do
