@@ -18,14 +18,12 @@
       #social-media-icons-container.d-none.flex-column.flex-md-row
         -# See https://sharingbuttons.io/ for below social media links
         %div
-          -# This one needs testing once online
           = link_to "https://facebook.com/sharer/sharer.php?u=#{request.original_url}", target: "_blank", 'aria-label' => "Share on Facebook" do
             %i.fab.fa-facebook-square.social-media-icon
         %div
           = link_to "https://twitter.com/intent/tweet/?text=#{@recipe.name}%20on%20Plant%20as%20Usual.%20#{request.original_url}%0a%0a%23vegan%20%23plantbased%20%23plantasusual", target: "_blank", 'aria-label' => "Share on Twitter" do
             %i.fab.fa-twitter.social-media-icon
         %div
-          -# Needs testing
           = link_to "whatsapp://send?text=#{@recipe.name}%20#{request.original_url}", target: "_blank", 'aria-label' => "Share on WhatsApp" do
             %i.fab.fa-whatsapp.social-media-icon
         %div
@@ -44,17 +42,13 @@
     #spinner.spinner-grow.text-warning.position-absolute.d-none{ style: 'z-index: 100' }
 
     #photo-container.col-12.text-center
-      - if @recipe.photo.file&.exists?
-        = image_tag @recipe.photo.url, class: "recipe-photo #{@user_can_edit ? 'cursor-pointer' : ''}"
+      - if @recipe.photo.max_height_720.file&.exists?
+        = image_tag @recipe.photo.max_height_720.url, class: "recipe-photo #{@user_can_edit ? 'cursor-pointer' : ''}"
       - else
         - if @user_can_edit
           #photo-placeholder-container.d-flex.justify-content-center.align-items-center
             #photo-placeholder.cursor-pointer.d-flex.justify-content-center.align-items-center
               Add photo
-
-
-      // REMEMBER THAT WHEN IT COMES TO DISPLAYING RECIPE PHOTOS OF DIFFERENT SIZES SEE LINE 32 'THUMB' OF /Users/jethrowilliams/Google Drive/code/Plant-as-Usual-2/app/uploaders/photo_uploader.rb
-      // WHICH CAN THEN BE DISPLAYED AS, FOR EXAMPLE, image_tag photo.image.thumb
 
   .row
     .col-12.text-center

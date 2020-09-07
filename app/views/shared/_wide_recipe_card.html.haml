@@ -1,8 +1,8 @@
 = link_to recipe_path(recipe) do
   .row{class: component_classes(DarkMode::CLASSES[:wide_recipe_card])}
     .col-md-6.p-0.photo-container{class: "#{photo_first ? '' : 'order-md-last'} #{recipe.photo.file&.exists? ? '' : 'placeholder-container' }"}
-      - if recipe.photo.file&.exists?
-        = image_tag recipe.photo.url, class: 'w-100 h-100'
+      - if recipe.photo.max_height_500.file&.exists?
+        = image_tag recipe.photo.max_height_500.url, class: 'w-100 h-100'
       - else
         = render 'shared/site_placeholder'
     .col-md-6.p-md-0.d-flex.flex-column.details-container
