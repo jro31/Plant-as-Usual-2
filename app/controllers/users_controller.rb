@@ -3,9 +3,7 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_user!, only: :current_user_data
 
   def current_user_data
-    return unless current_user
-
-    render json: { id: current_user.id, dark_mode: current_user.dark_mode }
+    render json: current_user ? { id: current_user.id, dark_mode: current_user.dark_mode } : nil
   end
 
   def toggle_dark_mode

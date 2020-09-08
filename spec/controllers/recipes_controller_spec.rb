@@ -151,7 +151,7 @@ describe RecipesController, type: :controller do
       it 'updates the photo url' do
         expect(recipe.photo.url).to eq(nil)
         patch :upload_photo, params: params, format: :js
-        expect(recipe.reload.photo.url).to eq("http://plant-as-usual.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/test-photo.jpg")
+        expect(recipe.reload.photo.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/test-photo.jpg")
       end
     end
 
@@ -162,7 +162,7 @@ describe RecipesController, type: :controller do
       it 'updates the photo url' do
         expect(recipe.photo.url).to eq(nil)
         patch :upload_photo, params: params, format: :js
-        expect(recipe.reload.photo.url).to eq("http://plant-as-usual.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/test-photo.jpg")
+        expect(recipe.reload.photo.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/test-photo.jpg")
       end
     end
 

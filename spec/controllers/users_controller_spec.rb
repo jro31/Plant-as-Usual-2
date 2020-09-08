@@ -13,9 +13,9 @@ describe UsersController, type: :controller do
 
     context 'current user is not signed-in' do
       before { sign_out user }
-      it 'is unsuccessful' do
+      it 'renders a json of nil' do
         get :current_user_data
-        expect(response).not_to be_successful
+        expect(JSON.parse(response.body)).to eq(nil)
       end
     end
   end
