@@ -148,10 +148,24 @@ describe RecipesController, type: :controller do
     let(:params) { { id: recipe.id, recipe: { photo: test_photo } } }
     context 'current user is recipe owner' do
       before { recipe.update(user: user) }
-      it 'updates the photo url' do
+      it 'updates the photo urls' do
         expect(recipe.photo.url).to eq(nil)
+        expect(recipe.photo.thumb.url).to eq(nil)
+        expect(recipe.photo.max_height_350.url).to eq(nil)
+        expect(recipe.photo.max_height_500.url).to eq(nil)
+        expect(recipe.photo.max_height_720.url).to eq(nil)
+        expect(recipe.photo.max_height_1000.url).to eq(nil)
+        expect(recipe.photo.max_width_500.url).to eq(nil)
+        expect(recipe.photo.max_width_1000.url).to eq(nil)
         patch :upload_photo, params: params, format: :js
         expect(recipe.reload.photo.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/test-photo.jpg")
+        expect(recipe.photo.thumb.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/thumb_test-photo.jpg")
+        expect(recipe.photo.max_height_350.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_height_350_test-photo.jpg")
+        expect(recipe.photo.max_height_500.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_height_500_test-photo.jpg")
+        expect(recipe.photo.max_height_720.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_height_720_test-photo.jpg")
+        expect(recipe.photo.max_height_1000.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_height_1000_test-photo.jpg")
+        expect(recipe.photo.max_width_500.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_width_500_test-photo.jpg")
+        expect(recipe.photo.max_width_1000.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_width_1000_test-photo.jpg")
       end
     end
 
@@ -159,10 +173,24 @@ describe RecipesController, type: :controller do
       let(:recipe_owner) { create(:user) }
       before { user.update(admin: true) }
       before { recipe.update(user: recipe_owner) }
-      it 'updates the photo url' do
+      it 'updates the photo urls' do
         expect(recipe.photo.url).to eq(nil)
+        expect(recipe.photo.thumb.url).to eq(nil)
+        expect(recipe.photo.max_height_350.url).to eq(nil)
+        expect(recipe.photo.max_height_500.url).to eq(nil)
+        expect(recipe.photo.max_height_720.url).to eq(nil)
+        expect(recipe.photo.max_height_1000.url).to eq(nil)
+        expect(recipe.photo.max_width_500.url).to eq(nil)
+        expect(recipe.photo.max_width_1000.url).to eq(nil)
         patch :upload_photo, params: params, format: :js
         expect(recipe.reload.photo.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/test-photo.jpg")
+        expect(recipe.photo.thumb.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/thumb_test-photo.jpg")
+        expect(recipe.photo.max_height_350.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_height_350_test-photo.jpg")
+        expect(recipe.photo.max_height_500.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_height_500_test-photo.jpg")
+        expect(recipe.photo.max_height_720.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_height_720_test-photo.jpg")
+        expect(recipe.photo.max_height_1000.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_height_1000_test-photo.jpg")
+        expect(recipe.photo.max_width_500.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_width_500_test-photo.jpg")
+        expect(recipe.photo.max_width_1000.url).to eq("https://plant-as-usual-dev.s3.amazonaws.com/uploads/recipe/photo/#{recipe.id}/max_width_1000_test-photo.jpg")
       end
     end
 
