@@ -469,7 +469,7 @@ describe Recipe do
 
           it 'sets last_recipe_of_the_day_at' do
             subject
-            expect(next_recipe_of_the_day.reload.last_recipe_of_the_day_at).to eq(Time.now)
+            expect(next_recipe_of_the_day.reload.last_recipe_of_the_day_at.round).to eq(Time.now.round)
           end
         end
 
@@ -639,7 +639,7 @@ describe Recipe do
 
           it 'sets last_featured_at of the next recipe to feature' do
             subject
-            expect(approved_for_feature_recipe.reload.last_featured_at).to eq(Time.now)
+            expect(approved_for_feature_recipe.reload.last_featured_at.round).to eq(Time.now.round)
           end
         end
 
