@@ -45,7 +45,7 @@ module ApplicationHelper
     when 'user_favourites'
       'Favourite recipes'
     when 'search'
-      if @search_query
+      if @search_query.present?
         "#{@search_query.capitalize} recipes"
       else
         nil

@@ -331,7 +331,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
   function clickIsOutsideIngredientInput(click, prefix) {
     return click.target.id !== `${prefix}-input`
            && $.inArray(click.target.id, ingredientInputIds(prefix)) === -1
-           && $(click.target).parent()[0].id !== `${prefix}-unit-input` // Fixes bug in Firefox where the <option> (rather than the <select> is considered the click target)
+           && $(click.target).parent()[0].id !== `${prefix}-unit-input` // Fixes bug in Firefox where the <option> (rather than the <select>) is considered the click target
   }
 
   function ingredientInputIds(prefix) {
