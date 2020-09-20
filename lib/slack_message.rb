@@ -2,7 +2,7 @@ class SlackMessage
   class IncorrectSlackRoomError < StandardError; end
 
   def self.post_to_slack(message, channels: ['general'], nature: nil)
-    return unless message.present? && message.is_a?(String)
+    return unless message.present? && message.is_a?(String) && channels && channels.is_a?(Array)
     raise SlackMessage::IncorrectSlackRoomError if channels.map{ |channel| webhook_url(channel)}.include?(nil)
 
     channels.each do |channel|
@@ -24,23 +24,25 @@ class SlackMessage
   end
 
   def self.message_emoji(nature)
-    @emoji ||= case nature
-               when 'celebrate'
-                 '🎉'
-               when 'congratulate'
-                 '👍'
-               when 'inform'
-                 '📂'
-               when 'setback'
-                 '🤮'
-               when 'chastise'
-                 '🖕'
-               when 'disaster'
-                 '🥺🔫'
-               when 'surprise'
-                 '🙉'
-               else
-                 '🤷‍♂️'
-               end
+    case nature
+    when 'celebrate'
+      '🎉'
+    when 'congratulate'
+      '👍'
+    when 'inform'
+      '📂'
+    when 'setback'
+      '🤮'
+    when 'chastise'
+      '🖕'
+    when 'disaster'
+      '🥺🔫'
+    when 'shock'
+      '🙉'
+    when 'surprise'
+      '😮'
+    else
+      '🤨'
+    end
   end
 end
