@@ -262,6 +262,7 @@ GEM
     simple_form (5.0.2)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
+    slack-notifier (2.3.2)
     spring (2.1.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -343,6 +344,7 @@ DEPENDENCIES
   sassc-rails
   shoulda-matchers
   simple_form
+  slack-notifier
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
