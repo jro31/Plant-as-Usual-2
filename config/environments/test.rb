@@ -45,4 +45,9 @@ Rails.application.configure do
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
+
+  # Duplicated with dummy urls from application.yml to allow specs to run on Github
+  ENV['SLACK_GENERAL_WEBHOOK_URL'] = 'https://hooks.slack.com/services/12345'
+  ENV['SLACK_TEST_WEBHOOK_URL'] = 'https://hooks.slack.com/services/67890'
+  ENV['SLACK_JETHRO_WEBHOOK_URL'] = 'https://hooks.slack.com/services/54321'
 end
