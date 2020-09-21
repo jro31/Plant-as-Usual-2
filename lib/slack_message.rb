@@ -1,13 +1,16 @@
 class SlackMessage
   class IncorrectSlackRoomError < StandardError; end
 
-  def self.post_to_slack(message, channels: ['general'], nature: nil)
-    return unless message.present? && message.is_a?(String) && channels && channels.is_a?(Array)
-    raise SlackMessage::IncorrectSlackRoomError if channels.map{ |channel| webhook_url(channel)}.include?(nil)
+  def self.post_to_slack(message, channels: nil, nature: nil)
+    @channels = channels.present? && channels.is_a?(Array) ? channels : ['general']
+    @nature = nature
 
-    channels.each do |channel|
+    return unless message.present? && message.is_a?(String)
+    raise SlackMessage::IncorrectSlackRoomError if @channels.map{ |channel| webhook_url(channel)}.include?(nil)
+
+    @channels.each do |channel|
       notifier = Slack::Notifier.new(webhook_url(channel))
-      notifier.ping(formatted_message(message, nature))
+      notifier.ping(formatted_message(message))
     end
   end
 
@@ -17,14 +20,14 @@ class SlackMessage
     ENV["SLACK_#{channel.upcase}_WEBHOOK_URL"]
   end
 
-  def self.formatted_message(message, nature)
-    emoji = message_emoji(nature).length >= 2 ? message_emoji(nature) : "#{message_emoji(nature)}#{message_emoji(nature)}"
+  def self.formatted_message(message)
+    emoji = message_emoji.length >= 2 ? message_emoji : "#{message_emoji}#{message_emoji}"
 
     "#{emoji} #{message} #{emoji}"
   end
 
-  def self.message_emoji(nature)
-    case nature
+  def self.message_emoji
+    case @nature
     when 'celebrate'
       '🎉'
     when 'congratulate'
