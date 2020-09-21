@@ -160,18 +160,18 @@ describe SlackMessage do
       context 'channels do not exist' do
         context 'channels are empty array' do
           let(:channels) { [] }
-          it 'does not find any webhooks or send any messages' do
-            expect(Slack::Notifier).to receive(:new).with(/https:\/\/hooks.slack.com\/services\//).never
-            expect_any_instance_of(Slack::Notifier).to receive(:ping).never
+          it 'finds a webhook url and sends the correct message' do
+            expect(Slack::Notifier).to receive(:new).with(/https:\/\/hooks.slack.com\/services\//).once.and_call_original
+            expect_any_instance_of(Slack::Notifier).to receive(:ping).with('🎉🎉 Test message 🎉🎉').once
             subject
           end
         end
 
         context 'channels are nil' do
           let(:channels) { nil }
-          it 'does not find any webhooks or send any messages' do
-            expect(Slack::Notifier).to receive(:new).with(/https:\/\/hooks.slack.com\/services\//).never
-            expect_any_instance_of(Slack::Notifier).to receive(:ping).never
+          it 'finds a webhook url and sends the correct message' do
+            expect(Slack::Notifier).to receive(:new).with(/https:\/\/hooks.slack.com\/services\//).once.and_call_original
+            expect_any_instance_of(Slack::Notifier).to receive(:ping).with('🎉🎉 Test message 🎉🎉').once
             subject
           end
         end
@@ -197,9 +197,9 @@ describe SlackMessage do
 
       context 'channels are not given as an array' do
         let(:channels) { {general: 'general'} }
-        it 'does not find any webhooks or send any messages' do
-          expect(Slack::Notifier).to receive(:new).with(/https:\/\/hooks.slack.com\/services\//).never
-          expect_any_instance_of(Slack::Notifier).to receive(:ping).never
+        it 'finds a webhook url and sends the correct message' do
+          expect(Slack::Notifier).to receive(:new).with(/https:\/\/hooks.slack.com\/services\//).once.and_call_original
+          expect_any_instance_of(Slack::Notifier).to receive(:ping).with('🎉🎉 Test message 🎉🎉').once
           subject
         end
       end

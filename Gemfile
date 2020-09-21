@@ -27,6 +27,7 @@ gem 'figaro'
 gem 'state_machines-activerecord'
 gem 'numbers_in_words'
 gem "slack-notifier"
+gem 'delayed_job_active_record'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
