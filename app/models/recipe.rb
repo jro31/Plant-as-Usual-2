@@ -65,6 +65,10 @@ class Recipe < ApplicationRecord
       transition all => :hidden
     end
 
+    after_transition any => :awaiting_approval do |_|
+      send_awaiting_approval_slack_message
+    end
+
     after_transition [:currently_featured, :recipe_of_the_day_as_currently_featured] => any do |_|
       Recipe.set_next_featured_recipe
     end
@@ -143,7 +147,16 @@ class Recipe < ApplicationRecord
     photo.present?
   end
 
+  # def self.test
+  #   # Rails.application.routes.url_helpers.admin_url
+  #   Rails.application.routes.url_helpers.admin_url(only_path: false, host: "www.plantasusual.com", protocol: 'https')
+  # end
+
   private
+
+  def send_awaiting_approval_slack_message
+    SendSlackMessageJob.perform_later("#{name} is awaiting approval #{admin_url}", nature: 'surprise')
+  end
 
   def update_state_updated_at # PERHAPS REMOVE THIS IF THERE'S NO NEED FOR state_updated_at
     return unless saved_change_to_state?

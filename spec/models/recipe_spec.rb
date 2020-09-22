@@ -362,6 +362,10 @@ describe Recipe do
 
     describe 'state machine callbacks' do
       describe 'after_transition' do
+        describe 'any => :awaiting_approval' do
+          # COMPLETE THIS
+        end
+
         describe '[:currently_featured, :recipe_of_the_day_as_currently_featured] => any' do
           subject { recipe.revert_from_highlighted }
           context 'recipe is currently_featured' do
