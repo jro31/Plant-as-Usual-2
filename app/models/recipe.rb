@@ -10,8 +10,9 @@ class Recipe < ApplicationRecord
   validate :validate_number_of_featured_recipes
   validate :validate_number_of_recipes_of_the_day
 
+  after_save :set_next_featured_recipe, if: :saved_change_to_state?
   after_save :send_awaiting_approval_slack_message, if: :saved_change_to_state?
-  after_save :update_state_updated_at
+  after_save :update_state_updated_at, if: :saved_change_to_state?
 
   scope :approved, -> { where(state: [:approved, :approved_for_feature, :approved_for_recipe_of_the_day]) }
   scope :approved_for_feature, -> { where(state: [:approved_for_feature, :approved_for_recipe_of_the_day]) }
@@ -64,10 +65,6 @@ class Recipe < ApplicationRecord
 
     event :hide do
       transition all => :hidden
-    end
-
-    after_transition [:currently_featured, :recipe_of_the_day_as_currently_featured] => any do |_| # SHOULD BE AFTER_SAVE
-      Recipe.set_next_featured_recipe
     end
 
     after_transition :current_recipe_of_the_day => any do |_| # SHOULD BE AFTER_SAVE
@@ -146,16 +143,22 @@ class Recipe < ApplicationRecord
 
   private
 
-  def update_state_updated_at # PERHAPS REMOVE THIS IF THERE'S NO NEED FOR state_updated_at
-    return unless saved_change_to_state?
+  def set_next_featured_recipe
+    return unless %w(currently_featured recipe_of_the_day_as_currently_featured).include?(state_before_last_save)
 
-    touch(:state_updated_at)
+    self.class.set_next_featured_recipe
   end
 
   def send_awaiting_approval_slack_message
     return unless awaiting_approval?
 
     SendSlackMessageJob.perform_later("'#{name}' by #{user.username} is awaiting approval #{UrlMaker.new('admin').full_url}", nature: 'surprise')
+  end
+
+  def update_state_updated_at # PERHAPS REMOVE THIS IF THERE'S NO NEED FOR state_updated_at
+    return unless saved_change_to_state?
+
+    touch(:state_updated_at)
   end
 
   def validate_number_of_featured_recipes

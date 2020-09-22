@@ -111,24 +111,83 @@ describe Recipe do
 
   describe 'callbacks' do
     describe 'after_save' do
-      describe '#update_state_updated_at' do
-        before { Timecop.freeze }
-        after { Timecop.return }
-        subject { create(:recipe, state: :incomplete) }
-        before { subject.update(state_updated_at: 1.day.ago) }
-        context 'state is updated' do
-          it 'sets state_updated_at' do
-            expect(subject.state_updated_at).to eq(1.day.ago)
-            subject.complete
-            expect(subject.state_updated_at).to eq(Time.now)
+      describe '#set_next_featured_recipe' do
+        context 'state is changed from currently_featured' do
+          subject { create(:recipe, name: 'Bean Soup', state: :currently_featured) }
+          context 'state is changed by event' do
+            it 'calls the set_next_featured_recipe instance method' do
+              expect(subject).to receive(:set_next_featured_recipe).once
+              subject.revert_from_highlighted
+            end
+
+            it 'calls the set_next_featured_recipe class method' do
+              expect(Recipe).to receive(:set_next_featured_recipe).once
+              subject.revert_from_highlighted
+            end
+          end
+
+          context 'state is changed manually' do
+            it 'calls the set_next_featured_recipe instance method' do
+              expect(subject).to receive(:set_next_featured_recipe).once
+              subject.update(state: :awaiting_approval)
+            end
+
+            it 'calls the set_next_featured_recipe class method' do
+              expect(Recipe).to receive(:set_next_featured_recipe).once
+              subject.update(state: :awaiting_approval)
+            end
           end
         end
 
-        context 'state is not updated' do
-          it 'does not set state_updated_at' do
-            expect(subject.state_updated_at).to eq(1.day.ago)
-            subject.update(name: 'Big Pizza')
-            expect(subject.state_updated_at).to eq(1.day.ago)
+        context 'state is changed from recipe_of_the_day_as_currently_featured' do
+          subject { create(:recipe, state: :recipe_of_the_day_as_currently_featured) }
+          context 'state is changed by event' do
+            it 'calls the set_next_featured_recipe instance method' do
+              expect(subject).to receive(:set_next_featured_recipe).once
+              subject.revert_from_highlighted
+            end
+
+            it 'calls the set_next_featured_recipe class method' do
+              expect(Recipe).to receive(:set_next_featured_recipe).once
+              subject.revert_from_highlighted
+            end
+          end
+
+          context 'state is changed manually' do
+            it 'calls the set_next_featured_recipe instance method' do
+              expect(subject).to receive(:set_next_featured_recipe).once
+              subject.update(state: :currently_featured)
+            end
+
+            it 'calls the set_next_featured_recipe class method' do
+              expect(Recipe).to receive(:set_next_featured_recipe).once
+              subject.update(state: :currently_featured)
+            end
+          end
+        end
+
+        context 'state is changed from something else' do
+          subject { create(:recipe, state: :current_recipe_of_the_day) }
+          it 'calls the set_next_featured_recipe instance method' do
+            expect(subject).to receive(:set_next_featured_recipe).once
+            subject.update(state: :awaiting_approval)
+          end
+
+          it 'does not call the set_next_featured_recipe class method' do
+            expect(Recipe).to receive(:set_next_featured_recipe).never
+            subject.update(state: :awaiting_approval)
+          end
+        end
+
+        context 'state is not changed' do
+          it 'does not call the set_next_featured_recipe instance method' do
+            expect(subject).to receive(:set_next_featured_recipe).never
+            subject.update(name: 'Former soup')
+          end
+
+          it 'does not call the set_next_featured_recipe class method' do
+            expect(Recipe).to receive(:set_next_featured_recipe).never
+            subject.update(name: 'Former soup')
           end
         end
       end
@@ -150,14 +209,57 @@ describe Recipe do
 
         context 'manually updated' do
           subject { create(:recipe, user: user, name: 'Rasta Pasta', state: :current_recipe_of_the_day) }
-          it 'calls send_awaiting_approval_slack_message on the recipe' do
-            expect(subject).to receive(:send_awaiting_approval_slack_message).once
-            subject.update(state: :awaiting_approval)
+          context 'state is updated to awaiting_approval' do
+            it 'calls send_awaiting_approval_slack_message on the recipe' do
+              expect(subject).to receive(:send_awaiting_approval_slack_message).once
+              subject.update(state: :awaiting_approval)
+            end
+
+            it 'calls SendSlackMessageJob with the correct arguments' do
+              expect(SendSlackMessageJob).to receive(:perform_later).with("'Rasta Pasta' by big_jesus is awaiting approval https://www.plantasusual.com/admin", nature: 'surprise').once
+              subject.update(state: :awaiting_approval)
+            end
           end
 
-          it 'calls SendSlackMessageJob with the correct arguments' do
-            expect(SendSlackMessageJob).to receive(:perform_later).with("'Rasta Pasta' by big_jesus is awaiting approval https://www.plantasusual.com/admin", nature: 'surprise').once
-            subject.update(state: :awaiting_approval)
+          context 'state is updated to something else' do
+            it 'calls send_awaiting_approval_slack_message on the recipe' do
+              expect(subject).to receive(:send_awaiting_approval_slack_message).once
+              subject.update(state: :incomplete)
+            end
+
+            it 'does not call SendSlackMessageJob' do
+              expect(SendSlackMessageJob).to receive(:perform_later).never
+              subject.update(state: :incomplete)
+            end
+          end
+
+          context 'state is not updated' do
+            it 'does not call send_awaiting_approval_slack_message on the recipe' do
+              expect(subject).to receive(:send_awaiting_approval_slack_message).never
+              subject.update(name: 'Yeti Spaghetti')
+            end
+          end
+        end
+      end
+
+      describe '#update_state_updated_at' do
+        before { Timecop.freeze }
+        after { Timecop.return }
+        subject { create(:recipe, state: :incomplete) }
+        before { subject.update(state_updated_at: 1.day.ago) }
+        context 'state is updated' do
+          it 'sets state_updated_at' do
+            expect(subject.state_updated_at).to eq(1.day.ago)
+            subject.complete
+            expect(subject.state_updated_at).to eq(Time.now)
+          end
+        end
+
+        context 'state is not updated' do
+          it 'does not set state_updated_at' do
+            expect(subject.state_updated_at).to eq(1.day.ago)
+            subject.update(name: 'Big Pizza')
+            expect(subject.state_updated_at).to eq(1.day.ago)
           end
         end
       end
@@ -391,33 +493,6 @@ describe Recipe do
 
     describe 'state machine callbacks' do
       describe 'after_transition' do
-        describe '[:currently_featured, :recipe_of_the_day_as_currently_featured] => any' do
-          subject { recipe.revert_from_highlighted }
-          context 'recipe is currently_featured' do
-            let(:recipe) { create(:recipe, state: 'currently_featured') }
-            it 'calls set_next_featured_recipe' do
-              expect(Recipe).to receive(:set_next_featured_recipe).once.and_call_original
-              subject
-            end
-          end
-
-          context 'recipe is recipe_of_the_day_as_currently_featured' do
-            let(:recipe) { create(:recipe, state: 'recipe_of_the_day_as_currently_featured') }
-            it 'calls set_next_featured_recipe' do
-              expect(Recipe).to receive(:set_next_featured_recipe).once.and_call_original
-              subject
-            end
-          end
-
-          context 'recipe is something else' do
-            let(:recipe) { create(:recipe, state: 'current_recipe_of_the_day') }
-            it 'does not call set_next_featured_recipe' do
-              expect(Recipe).to receive(:set_next_featured_recipe).never
-              subject
-            end
-          end
-        end
-
         describe ':current_recipe_of_the_day => any' do
           subject { recipe.revert_from_highlighted }
           context 'recipe is current_recipe_of_the_day' do
