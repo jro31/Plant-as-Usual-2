@@ -10,6 +10,7 @@ class Recipe < ApplicationRecord
   validate :validate_number_of_featured_recipes
   validate :validate_number_of_recipes_of_the_day
 
+  after_save :send_awaiting_approval_slack_message, if: :saved_change_to_state?
   after_save :update_state_updated_at
 
   scope :approved, -> { where(state: [:approved, :approved_for_feature, :approved_for_recipe_of_the_day]) }
@@ -65,15 +66,11 @@ class Recipe < ApplicationRecord
       transition all => :hidden
     end
 
-    after_transition any => :awaiting_approval do |_|
-      send_awaiting_approval_slack_message
-    end
-
-    after_transition [:currently_featured, :recipe_of_the_day_as_currently_featured] => any do |_|
+    after_transition [:currently_featured, :recipe_of_the_day_as_currently_featured] => any do |_| # SHOULD BE AFTER_SAVE
       Recipe.set_next_featured_recipe
     end
 
-    after_transition :current_recipe_of_the_day => any do |_|
+    after_transition :current_recipe_of_the_day => any do |_| # SHOULD BE AFTER_SAVE
       Recipe.set_next_recipe_of_the_day
     end
   end
@@ -147,21 +144,18 @@ class Recipe < ApplicationRecord
     photo.present?
   end
 
-  # def self.test
-  #   # Rails.application.routes.url_helpers.admin_url
-  #   Rails.application.routes.url_helpers.admin_url(only_path: false, host: "www.plantasusual.com", protocol: 'https')
-  # end
-
   private
-
-  def send_awaiting_approval_slack_message
-    SendSlackMessageJob.perform_later("#{name} is awaiting approval #{admin_url}", nature: 'surprise')
-  end
 
   def update_state_updated_at # PERHAPS REMOVE THIS IF THERE'S NO NEED FOR state_updated_at
     return unless saved_change_to_state?
 
     touch(:state_updated_at)
+  end
+
+  def send_awaiting_approval_slack_message
+    return unless awaiting_approval?
+
+    SendSlackMessageJob.perform_later("'#{name}' by #{user.username} is awaiting approval #{UrlMaker.new('admin').full_url}", nature: 'surprise')
   end
 
   def validate_number_of_featured_recipes

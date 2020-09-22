@@ -132,6 +132,35 @@ describe Recipe do
           end
         end
       end
+
+      describe '#send_awaiting_approval_slack_message' do
+        let(:user) { create(:user, username: 'big_jesus') }
+        context 'complete event' do
+          subject { create(:recipe, user: user, name: 'Vegan Pizza', state: :incomplete) }
+          it 'calls send_awaiting_approval_slack_message on the recipe' do
+            expect(subject).to receive(:send_awaiting_approval_slack_message).once
+            subject.complete
+          end
+
+          it 'calls SendSlackMessageJob with the correct arguments' do
+            expect(SendSlackMessageJob).to receive(:perform_later).with("'Vegan Pizza' by big_jesus is awaiting approval https://www.plantasusual.com/admin", nature: 'surprise').once
+            subject.complete
+          end
+        end
+
+        context 'manually updated' do
+          subject { create(:recipe, user: user, name: 'Rasta Pasta', state: :current_recipe_of_the_day) }
+          it 'calls send_awaiting_approval_slack_message on the recipe' do
+            expect(subject).to receive(:send_awaiting_approval_slack_message).once
+            subject.update(state: :awaiting_approval)
+          end
+
+          it 'calls SendSlackMessageJob with the correct arguments' do
+            expect(SendSlackMessageJob).to receive(:perform_later).with("'Rasta Pasta' by big_jesus is awaiting approval https://www.plantasusual.com/admin", nature: 'surprise').once
+            subject.update(state: :awaiting_approval)
+          end
+        end
+      end
     end
   end
 
@@ -362,10 +391,6 @@ describe Recipe do
 
     describe 'state machine callbacks' do
       describe 'after_transition' do
-        describe 'any => :awaiting_approval' do
-          # COMPLETE THIS
-        end
-
         describe '[:currently_featured, :recipe_of_the_day_as_currently_featured] => any' do
           subject { recipe.revert_from_highlighted }
           context 'recipe is currently_featured' do
