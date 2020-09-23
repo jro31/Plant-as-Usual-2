@@ -198,4 +198,26 @@ describe User, type: :model do
       end
     end
   end
+
+  describe 'callbacks' do
+    describe 'after_create' do
+      describe '#send_sign_up_slack_message' do
+        context 'on create' do
+          subject { build(:user, email: 'tomriddle@hogwarts.edu', username: 'voldewho?') }
+          it 'calls SendSlackMessageJob with the correct message' do
+            expect(SendSlackMessageJob).to receive(:perform_later).with('A new user has signed-up, username: voldewho?, email: tomriddle@hogwarts.edu', nature: 'celebrate').once
+            subject.save
+          end
+        end
+
+        context 'on update' do
+          subject! { create(:user, dark_mode: false) }
+          it 'does not call SendSlackMessageJob' do
+            expect(SendSlackMessageJob).to receive(:perform_later).never
+            subject.update(dark_mode: true)
+          end
+        end
+      end
+    end
+  end
 end

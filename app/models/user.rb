@@ -9,4 +9,12 @@ class User < ApplicationRecord
   has_many :favourites, through: :user_favourite_recipes, class_name: 'Recipe', source: :recipe
 
   validates :username, uniqueness: { case_sensitive: false }, length: { minimum: 3, maximum: 16 }, format: { without: /\s/, message: 'cannot contain spaces' }
+
+  after_create :send_sign_up_slack_message
+
+  private
+
+  def send_sign_up_slack_message
+    SendSlackMessageJob.perform_later("A new user has signed-up, username: #{username}, email: #{email}", nature: 'celebrate')
+  end
 end
