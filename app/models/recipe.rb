@@ -11,6 +11,7 @@ class Recipe < ApplicationRecord
   validate :validate_number_of_recipes_of_the_day
 
   after_save :set_next_featured_recipe, if: :saved_change_to_state?
+  after_save :set_next_recipe_of_the_day, if: :saved_change_to_state?
   after_save :send_awaiting_approval_slack_message, if: :saved_change_to_state?
   after_save :update_state_updated_at, if: :saved_change_to_state?
 
@@ -65,10 +66,6 @@ class Recipe < ApplicationRecord
 
     event :hide do
       transition all => :hidden
-    end
-
-    after_transition :current_recipe_of_the_day => any do |_| # SHOULD BE AFTER_SAVE
-      Recipe.set_next_recipe_of_the_day
     end
   end
 
@@ -147,6 +144,12 @@ class Recipe < ApplicationRecord
     return unless %w(currently_featured recipe_of_the_day_as_currently_featured).include?(state_before_last_save)
 
     self.class.set_next_featured_recipe
+  end
+
+  def set_next_recipe_of_the_day
+    return unless state_before_last_save == 'current_recipe_of_the_day'
+
+    self.class.set_next_recipe_of_the_day
   end
 
   def send_awaiting_approval_slack_message
