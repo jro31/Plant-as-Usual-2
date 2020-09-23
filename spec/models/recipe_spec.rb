@@ -270,7 +270,7 @@ describe Recipe do
         end
 
         describe '#send_awaiting_approval_slack_message' do
-          let(:user) { create(:user, username: 'big_jesus') }
+          let!(:user) { create(:user, username: 'big_jesus') }
           context 'complete event' do
             subject { create(:recipe, user: user, name: 'Vegan Pizza', state: :incomplete) }
             it 'calls send_awaiting_approval_slack_message on the recipe' do
