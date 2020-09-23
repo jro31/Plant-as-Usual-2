@@ -10,7 +10,7 @@ class Recipe < ApplicationRecord
   validate :validate_number_of_featured_recipes
   validate :validate_number_of_recipes_of_the_day
 
-  after_save :update_state_updated_at
+  after_save :state_changed_methods, if: :saved_change_to_state?
 
   scope :approved, -> { where(state: [:approved, :approved_for_feature, :approved_for_recipe_of_the_day]) }
   scope :approved_for_feature, -> { where(state: [:approved_for_feature, :approved_for_recipe_of_the_day]) }
@@ -19,6 +19,7 @@ class Recipe < ApplicationRecord
   scope :current_recipes_of_the_day, -> { where(state: :current_recipe_of_the_day) }
   scope :currently_highlighted, -> { where(state: [:currently_featured, :recipe_of_the_day_as_currently_featured, :current_recipe_of_the_day]) }
   scope :awaiting_approval, -> { where(state: :awaiting_approval) }
+  scope :incomplete, -> { where(state: :incomplete) }
   scope :available_to_show, -> { where.not(state: [:incomplete, :declined, :hidden]) }
   scope :not_hidden, -> { where.not(state: :hidden) }
 
@@ -63,14 +64,6 @@ class Recipe < ApplicationRecord
 
     event :hide do
       transition all => :hidden
-    end
-
-    after_transition [:currently_featured, :recipe_of_the_day_as_currently_featured] => any do |_|
-      Recipe.set_next_featured_recipe
-    end
-
-    after_transition :current_recipe_of_the_day => any do |_|
-      Recipe.set_next_recipe_of_the_day
     end
   end
 
@@ -144,6 +137,31 @@ class Recipe < ApplicationRecord
   end
 
   private
+
+  def state_changed_methods
+    set_next_featured_recipe
+    set_next_recipe_of_the_day
+    send_awaiting_approval_slack_message
+    update_state_updated_at
+  end
+
+  def set_next_featured_recipe
+    return unless %w(currently_featured recipe_of_the_day_as_currently_featured).include?(state_before_last_save)
+
+    self.class.set_next_featured_recipe
+  end
+
+  def set_next_recipe_of_the_day
+    return unless state_before_last_save == 'current_recipe_of_the_day'
+
+    self.class.set_next_recipe_of_the_day
+  end
+
+  def send_awaiting_approval_slack_message
+    return unless awaiting_approval?
+
+    SendSlackMessageJob.perform_later("'#{name}' by #{user.username} is awaiting approval #{UrlMaker.new('admin').full_url}", nature: 'surprise')
+  end
 
   def update_state_updated_at # PERHAPS REMOVE THIS IF THERE'S NO NEED FOR state_updated_at
     return unless saved_change_to_state?
