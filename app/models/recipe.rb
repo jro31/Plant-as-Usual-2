@@ -19,6 +19,7 @@ class Recipe < ApplicationRecord
   scope :current_recipes_of_the_day, -> { where(state: :current_recipe_of_the_day) }
   scope :currently_highlighted, -> { where(state: [:currently_featured, :recipe_of_the_day_as_currently_featured, :current_recipe_of_the_day]) }
   scope :awaiting_approval, -> { where(state: :awaiting_approval) }
+  scope :incomplete, -> { where(state: :incomplete) }
   scope :available_to_show, -> { where.not(state: [:incomplete, :declined, :hidden]) }
   scope :not_hidden, -> { where.not(state: :hidden) }
 

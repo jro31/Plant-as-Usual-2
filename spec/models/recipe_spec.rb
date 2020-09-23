@@ -397,6 +397,12 @@ describe Recipe do
       it { expect(subject).not_to include(incomplete_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
     end
 
+    describe '.incomplete' do
+      subject { Recipe.incomplete }
+      it { expect(subject).to include(incomplete_recipe) }
+      it { expect(subject).not_to include(awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
+    end
+
     describe '.available_to_show' do
       subject { Recipe.available_to_show }
       it { expect(subject).to include(awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe, current_recipe_of_the_day_recipe) }

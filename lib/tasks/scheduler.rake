@@ -5,3 +5,9 @@ task :update_highlighted_recipes => :environment do
   UpdateHighlightedRecipesJob.perform_later
   puts "Done!"
 end
+
+task :send_recipe_summary => :environment do
+  puts "Calling send recipe summary slack message job..."
+  SendRecipeSummarySlackMessageJob.perform_later
+  puts "Done!"
+end
