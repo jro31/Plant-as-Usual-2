@@ -33,15 +33,15 @@ class Recipe < ApplicationRecord
     end
 
     event :approve do
-      transition awaiting_approval: :approved
+      transition [:incomplete, :awaiting_approval] => :approved
     end
 
     event :approve_for_feature do
-      transition awaiting_approval: :approved_for_feature
+      transition [:incomplete, :awaiting_approval] => :approved_for_feature
     end
 
     event :approve_for_recipe_of_the_day do
-      transition awaiting_approval: :approved_for_recipe_of_the_day
+      transition [:incomplete, :awaiting_approval] => :approved_for_recipe_of_the_day
     end
 
     event :feature do
@@ -59,7 +59,7 @@ class Recipe < ApplicationRecord
     end
 
     event :decline do
-      transition awaiting_approval: :declined
+      transition [:incomplete, :awaiting_approval] => :declined
     end
 
     event :hide do
