@@ -460,7 +460,7 @@ describe Recipe do
 
       describe '.approve' do
         let(:event) { 'approve' }
-        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(incomplete_recipe.state).to eq('approved') }
         it { expect(awaiting_approval_recipe.state).to eq('approved') }
         it { expect(approved_recipe.state).to eq('approved') }
         it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
@@ -474,7 +474,7 @@ describe Recipe do
 
       describe '.approve_for_feature' do
         let(:event) { 'approve_for_feature' }
-        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(incomplete_recipe.state).to eq('approved_for_feature') }
         it { expect(awaiting_approval_recipe.state).to eq('approved_for_feature') }
         it { expect(approved_recipe.state).to eq('approved') }
         it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
@@ -488,7 +488,7 @@ describe Recipe do
 
       describe '.approve_for_recipe_of_the_day' do
         let(:event) { 'approve_for_recipe_of_the_day' }
-        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(incomplete_recipe.state).to eq('approved_for_recipe_of_the_day') }
         it { expect(awaiting_approval_recipe.state).to eq('approved_for_recipe_of_the_day') }
         it { expect(approved_recipe.state).to eq('approved') }
         it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
@@ -548,7 +548,7 @@ describe Recipe do
 
       describe '.decline' do
         let(:event) { 'decline' }
-        it { expect(incomplete_recipe.state).to eq('incomplete') }
+        it { expect(incomplete_recipe.state).to eq('declined') }
         it { expect(awaiting_approval_recipe.state).to eq('declined') }
         it { expect(approved_recipe.state).to eq('approved') }
         it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }

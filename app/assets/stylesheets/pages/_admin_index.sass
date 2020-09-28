@@ -1,12 +1,16 @@
-.admin-page-recipe
-  .photo-container
-    height: 216px
-    img
-      max-height: 100%
-      object-fit: cover
+.admin-page
+  .admin-page-recipe
+    .photo-container
+      height: 216px
+      img
+        max-height: 100%
+        object-fit: cover
+  .admin-page-user
 
-.admin-page-recipe-light-mode
-  background-color: $light-mode-card-background-color
+.admin-page-light-mode
+  .admin-page-recipe, .admin-page-user
+    background-color: $light-mode-card-background-color
 
-.admin-page-recipe-dark-mode
-  background-color: $dark-mode-card-background-color
+.admin-page-dark-mode
+  .admin-page-recipe, .admin-page-user
+    background-color: $dark-mode-card-background-color

@@ -1,28 +1,42 @@
-- if @recipes.any?
-  - @recipes.each do |recipe|
-    .container.mb-0.p-4{ class: "#{@recipes.first === recipe ? 'mt-0' : 'mt-4'} #{component_classes(DarkMode::CLASSES[:admin_page_recipe])}" }
-      .row
-        = link_to recipe_path(recipe), target: "_blank", class: 'col-md-4 d-none d-md-block' do
-          - if recipe.has_photo?
-            .photo-container.text-center
-              = image_tag recipe.photo.url, class: 'recipe-photo'
-          - else
-            = render 'shared/site_placeholder'
-        = link_to recipe_path(recipe), target: "_blank", class: 'col-md-4 text-center mb-3 mb-md-0' do
+.container{ class: component_classes(DarkMode::CLASSES[:admin_page]) }
+  - @scopes_to_display.each do |recipe_scope|
+    .row
+      .col-12.text-center{ class: @scopes_to_display.first == recipe_scope ? '' : 'mt-5' }
+        %h1
+          = recipe_scope.humanize
+          recipes
+    - if instance_variable_get("@#{recipe_scope}_recipes").any?
+      - instance_variable_get("@#{recipe_scope}_recipes").each do |recipe|
+        .row.mb-0.p-4.admin-page-recipe{ class: instance_variable_get("@#{recipe_scope}_recipes").first === recipe ? 'mt-0' : 'mt-4' }
+          = link_to recipe_path(recipe), target: "_blank", class: 'col-md-4 d-none d-md-block' do
+            - if recipe.has_photo?
+              .photo-container.text-center
+                = image_tag recipe.photo.url, class: 'recipe-photo'
+            - else
+              = render 'shared/site_placeholder'
+          = link_to recipe_path(recipe), target: "_blank", class: 'col-md-4 text-center mb-3 mb-md-0' do
+            %h2
+              = recipe.name
+          .col-md-4
+            - @events.each do |event|
+              - if recipe.send("can_#{event}?")
+                .mb-3
+                  = link_to event.humanize, send("admin_recipe_#{event}_path", recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[event == 'decline' ? :btn_docile : :btn_keen])}"
+    - else
+      .row.mt-5
+        .col-12.text-center
           %h2
-            = recipe.name
-        .col-md-4
-          .mb-3
-            = link_to 'Approve for recipe of the day', admin_recipe_approve_for_recipe_of_the_day_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
-          .mb-3
-            = link_to 'Approve for feature', admin_recipe_approve_for_feature_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
-          .mb-3
-            = link_to 'Approve', admin_recipe_approve_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
-          .mb-3
-            = link_to 'Decline', admin_recipe_decline_path(recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[:btn_docile])}"
-- else
-  .container.screen-height-container-without-h1
-    .row.h-100.d-flex.align-items-center
-      .col-12.text-center
-        %h2
-          Nothing to see here 🤷‍♂️
+            Nothing to see here 🤷‍♂️
+
+  .row
+    .col-12.text-center.mt-5
+      %h1
+        = "Last #{@users_to_display.count} users to sign-up"
+  - @users_to_display.each do |user|
+    .row.admin-page-user.p-4{ class: @users_to_display.first == user ? '' : 'mt-3' }
+      .col-md-6
+        Username:
+        = user.username
+      .col-md-6
+        Email:
+        = user.email
