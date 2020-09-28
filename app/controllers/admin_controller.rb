@@ -5,9 +5,10 @@ class AdminController < ApplicationController
   def index
     authorize nil, policy_class: AdminPolicy
     @scopes_to_display = ['awaiting_approval', 'incomplete']
-    @scopes_to_display.each do |scope|
-      instance_variable_set("@#{scope}_recipes", Recipe.send(scope).order(updated_at: :asc))
+    @scopes_to_display.each do |recipe_scope|
+      instance_variable_set("@#{recipe_scope}_recipes", Recipe.send(recipe_scope).order(updated_at: :asc))
     end
+    @events = ['approve_for_recipe_of_the_day', 'approve_for_feature', 'approve', 'decline']
   end
 
   def recipe_approve
