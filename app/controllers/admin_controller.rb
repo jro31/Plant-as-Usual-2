@@ -9,6 +9,7 @@ class AdminController < ApplicationController
       instance_variable_set("@#{recipe_scope}_recipes", Recipe.send(recipe_scope).order(updated_at: :asc))
     end
     @events = ['approve_for_recipe_of_the_day', 'approve_for_feature', 'approve', 'decline']
+    @users_to_display = User.last(5)
   end
 
   def recipe_approve

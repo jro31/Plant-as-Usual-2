@@ -1,12 +1,13 @@
-.container
+.container{ class: component_classes(DarkMode::CLASSES[:admin_page]) }
   - @scopes_to_display.each do |recipe_scope|
     .row
       .col-12.text-center{ class: @scopes_to_display.first == recipe_scope ? '' : 'mt-5' }
         %h1
           = recipe_scope.humanize
+          recipes
     - if instance_variable_get("@#{recipe_scope}_recipes").any?
       - instance_variable_get("@#{recipe_scope}_recipes").each do |recipe|
-        .row.mb-0.p-4{ class: "#{instance_variable_get("@#{recipe_scope}_recipes").first === recipe ? 'mt-0' : 'mt-4'} #{component_classes(DarkMode::CLASSES[:admin_page_recipe])}" }
+        .row.mb-0.p-4.admin-page-recipe{ class: instance_variable_get("@#{recipe_scope}_recipes").first === recipe ? 'mt-0' : 'mt-4' }
           = link_to recipe_path(recipe), target: "_blank", class: 'col-md-4 d-none d-md-block' do
             - if recipe.has_photo?
               .photo-container.text-center
@@ -26,3 +27,16 @@
         .col-12.text-center
           %h2
             Nothing to see here 🤷‍♂️
+
+  .row
+    .col-12.text-center.mt-5
+      %h1
+        = "Last #{@users_to_display.count} users to sign-up"
+  - @users_to_display.each do |user|
+    .row.admin-page-user.p-4{ class: @users_to_display.first == user ? '' : 'mt-3' }
+      .col-md-6
+        Username:
+        = user.username
+      .col-md-6
+        Email:
+        = user.email

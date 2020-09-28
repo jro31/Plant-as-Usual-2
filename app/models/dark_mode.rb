@@ -1,6 +1,6 @@
 class DarkMode < ApplicationRecord
   CLASSES = {
-    admin_page_recipe: 'admin-page-recipe',
+    admin_page: 'admin-page',
     btn_docile: 'btn-docile',
     btn_keen: 'btn-keen',
     can_edit_input_display: 'can-edit-input-display',
