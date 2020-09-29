@@ -2,6 +2,8 @@ class Recipe < ApplicationRecord
   NUMBER_OF_RECIPES_OF_THE_DAY = 1.freeze
   NUMBER_OF_FEATURED_RECIPES = 12.freeze
 
+  extend Grammar
+
   belongs_to :user
   has_many :ingredients, dependent: :destroy
 
@@ -126,6 +128,18 @@ class Recipe < ApplicationRecord
     return never_featured_recipes.first if never_featured_recipes.any?
 
     self.approved_for_feature.order(last_featured_at: :asc).first
+  end
+
+  def self.recipe_summary_message
+    if awaiting_approval.count.zero? && incomplete.count.zero?
+      "There are no awaiting approval or incomplete recipes"
+    else
+      "There #{is_or_are(awaiting_approval.count)} #{no_or_number(awaiting_approval.count)} #{'recipe'.pluralize(awaiting_approval.count)} awaiting approval, and #{no_or_number(incomplete.count)} incomplete #{'recipe'.pluralize(incomplete.count)} #{UrlMaker.new('admin').full_url}"
+    end
+  end
+
+  def self.send_recipe_summary_message_to_slack
+    SlackMessage.post_to_slack(self.recipe_summary_message, nature: 'inform')
   end
 
   def awaiting_approval?

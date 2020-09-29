@@ -4,7 +4,7 @@ describe Recipe do
   it { should belong_to :user }
   it { should have_many :ingredients }
 
-  let(:recipe) { create(:recipe) }
+  let(:recipe) { create(:recipe, state: :approved) }
 
   describe 'NUMBER_OF_RECIPES_OF_THE_DAY' do
     it { expect(Recipe::NUMBER_OF_RECIPES_OF_THE_DAY).to eq(1) }
@@ -850,6 +850,88 @@ describe Recipe do
             expect(subject).to eq(approved_for_feature_recipe_1)
           end
         end
+      end
+    end
+
+    describe '#recipe_summary_message' do
+      subject { Recipe.recipe_summary_message }
+      context 'awaiting_approval_count is zero' do
+        context 'incomplete_count is zero' do
+          it 'returns the correct message' do
+            expect(subject).to eq('There are no awaiting approval or incomplete recipes')
+          end
+        end
+
+        context 'incomplete_count is one' do
+          let!(:incomplete_recipe) { create(:recipe, state: :incomplete) }
+          it 'returns the correct message' do
+            expect(subject).to eq('There are no recipes awaiting approval, and 1 incomplete recipe https://www.plantasusual.com/admin')
+          end
+        end
+
+        context 'incomplete_count is two' do
+          let!(:incomplete_recipe_1) { create(:recipe, state: :incomplete) }
+          let!(:incomplete_recipe_2) { create(:recipe, state: :incomplete) }
+          it 'returns the correct message' do
+            expect(subject).to eq('There are no recipes awaiting approval, and 2 incomplete recipes https://www.plantasusual.com/admin')
+          end
+        end
+      end
+
+      context 'awaiting_approval_count is one' do
+        let!(:awaiting_approval_recipe) { create(:recipe, state: :awaiting_approval) }
+        context 'incomplete_count is zero' do
+          it 'returns the correct message' do
+            expect(subject).to eq('There is 1 recipe awaiting approval, and no incomplete recipes https://www.plantasusual.com/admin')
+          end
+        end
+
+        context 'incomplete_count is one' do
+          let!(:incomplete_recipe) { create(:recipe, state: :incomplete) }
+          it 'returns the correct message' do
+            expect(subject).to eq('There is 1 recipe awaiting approval, and 1 incomplete recipe https://www.plantasusual.com/admin')
+          end
+        end
+
+        context 'incomplete_count is two' do
+          let!(:incomplete_recipe_1) { create(:recipe, state: :incomplete) }
+          let!(:incomplete_recipe_2) { create(:recipe, state: :incomplete) }
+          it 'returns the correct message' do
+            expect(subject).to eq('There is 1 recipe awaiting approval, and 2 incomplete recipes https://www.plantasusual.com/admin')
+          end
+        end
+      end
+
+      context 'awaiting_approval_count is two' do
+        let!(:awaiting_approval_recipe_1) { create(:recipe, state: :awaiting_approval) }
+        let!(:awaiting_approval_recipe_2) { create(:recipe, state: :awaiting_approval) }
+        context 'incomplete_count is zero' do
+          it 'returns the correct message' do
+            expect(subject).to eq('There are 2 recipes awaiting approval, and no incomplete recipes https://www.plantasusual.com/admin')
+          end
+        end
+
+        context 'incomplete_count is one' do
+          let!(:incomplete_recipe) { create(:recipe, state: :incomplete) }
+          it 'returns the correct message' do
+            expect(subject).to eq('There are 2 recipes awaiting approval, and 1 incomplete recipe https://www.plantasusual.com/admin')
+          end
+        end
+
+        context 'incomplete_count is two' do
+          let!(:incomplete_recipe_1) { create(:recipe, state: :incomplete) }
+          let!(:incomplete_recipe_2) { create(:recipe, state: :incomplete) }
+          it 'returns the correct message' do
+            expect(subject).to eq('There are 2 recipes awaiting approval, and 2 incomplete recipes https://www.plantasusual.com/admin')
+          end
+        end
+      end
+    end
+
+    describe '#send_recipe_summary_message_to_slack' do
+      it 'calls post_to_slack' do
+        expect(SlackMessage).to receive(:post_to_slack).with('There are no awaiting approval or incomplete recipes', nature: 'inform').once
+        Recipe.send_recipe_summary_message_to_slack
       end
     end
   end
