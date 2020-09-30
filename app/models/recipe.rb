@@ -2,8 +2,6 @@ class Recipe < ApplicationRecord
   NUMBER_OF_RECIPES_OF_THE_DAY = 1.freeze
   NUMBER_OF_FEATURED_RECIPES = 12.freeze
 
-  extend Grammar
-
   belongs_to :user
   has_many :ingredients, dependent: :destroy
 
@@ -195,5 +193,13 @@ class Recipe < ApplicationRecord
     return unless Recipe.current_recipes_of_the_day.count >= NUMBER_OF_RECIPES_OF_THE_DAY
 
     errors.add(:state, "There can only be one recipe of the day")
+  end
+
+  def self.is_or_are(amount)
+    ApplicationController.helpers.is_or_are(amount)
+  end
+
+  def self.no_or_number(amount)
+    ApplicationController.helpers.no_or_number(amount)
   end
 end

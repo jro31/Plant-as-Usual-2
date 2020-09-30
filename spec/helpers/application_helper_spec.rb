@@ -153,4 +153,47 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe '#is_or_are' do
+    context 'amount is an integer' do
+      it { expect(is_or_are(-1)).to eq('are') }
+      it { expect(is_or_are(0)).to eq('are') }
+      it { expect(is_or_are(1)).to eq('is') }
+      it { expect(is_or_are(2)).to eq('are') }
+    end
+
+    context 'amount is a float' do
+      it { expect(is_or_are(-1.0)).to eq('are') }
+      it { expect(is_or_are(0.1)).to eq('are') }
+      it { expect(is_or_are(1.0)).to eq('is') }
+      it { expect(is_or_are(1.1)).to eq('are') }
+      it { expect(is_or_are(2.0)).to eq('are') }
+    end
+
+    context 'amount is other data type' do
+      it { expect { is_or_are('1') }.to raise_error(ApplicationHelper::AmountIsNotNumber) }
+      it { expect { is_or_are([1]) }.to raise_error(ApplicationHelper::AmountIsNotNumber) }
+    end
+  end
+
+  describe '#no_or_number' do
+    context 'amount is an integer' do
+      it { expect(no_or_number(-1)).to eq(-1) }
+      it { expect(no_or_number(0)).to eq('no') }
+      it { expect(no_or_number(1)).to eq(1) }
+    end
+
+    context 'amount is a float' do
+      it { expect(no_or_number(-1.0)).to eq(-1) }
+      it { expect(no_or_number(-0.1)).to eq(-0.1) }
+      it { expect(no_or_number(0.0)).to eq('no') }
+      it { expect(no_or_number(0.1)).to eq(0.1) }
+      it { expect(no_or_number(1.0)).to eq(1) }
+    end
+
+    context 'amount is other data type' do
+      it { expect { no_or_number('1') }.to raise_error(ApplicationHelper::AmountIsNotNumber) }
+      it { expect { no_or_number([1]) }.to raise_error(ApplicationHelper::AmountIsNotNumber) }
+    end
+  end
 end
