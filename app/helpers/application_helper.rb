@@ -1,4 +1,6 @@
 module ApplicationHelper
+  class AmountIsNotNumber < StandardError; end
+
   def component_classes(component)
     "#{component} #{display_mode(component)}"
   end
@@ -24,6 +26,18 @@ module ApplicationHelper
                end
       "#{prefix << ' - ' if prefix}#{base_title}"
     end
+  end
+
+  def is_or_are(amount)
+    raise ApplicationHelper::AmountIsNotNumber unless amount.is_a?(Integer) || amount.is_a?(Float)
+
+    amount == 1 ? 'is' : 'are'
+  end
+
+  def no_or_number(amount)
+    raise ApplicationHelper::AmountIsNotNumber unless amount.is_a?(Integer) || amount.is_a?(Float)
+
+    amount.zero? ? 'no' : amount
   end
 
   private

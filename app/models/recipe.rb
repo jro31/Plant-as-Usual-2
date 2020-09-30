@@ -128,6 +128,18 @@ class Recipe < ApplicationRecord
     self.approved_for_feature.order(last_featured_at: :asc).first
   end
 
+  def self.recipe_summary_message
+    if awaiting_approval.count.zero? && incomplete.count.zero?
+      "There are no awaiting approval or incomplete recipes"
+    else
+      "There #{is_or_are(awaiting_approval.count)} #{no_or_number(awaiting_approval.count)} #{'recipe'.pluralize(awaiting_approval.count)} awaiting approval, and #{no_or_number(incomplete.count)} incomplete #{'recipe'.pluralize(incomplete.count)} #{UrlMaker.new('admin').full_url}"
+    end
+  end
+
+  def self.send_recipe_summary_message_to_slack
+    SlackMessage.post_to_slack(self.recipe_summary_message, nature: 'inform')
+  end
+
   def awaiting_approval?
     state == 'awaiting_approval'
   end
@@ -181,5 +193,13 @@ class Recipe < ApplicationRecord
     return unless Recipe.current_recipes_of_the_day.count >= NUMBER_OF_RECIPES_OF_THE_DAY
 
     errors.add(:state, "There can only be one recipe of the day")
+  end
+
+  def self.is_or_are(amount)
+    ApplicationController.helpers.is_or_are(amount)
+  end
+
+  def self.no_or_number(amount)
+    ApplicationController.helpers.no_or_number(amount)
   end
 end
