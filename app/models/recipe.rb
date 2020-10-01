@@ -15,7 +15,7 @@ class Recipe < ApplicationRecord
   scope :approved, -> { where(state: [:approved, :approved_for_feature, :approved_for_recipe_of_the_day]) }
   scope :approved_for_feature, -> { where(state: [:approved_for_feature, :approved_for_recipe_of_the_day]) }
   scope :approved_for_recipe_of_the_day, -> { where(state: :approved_for_recipe_of_the_day) }
-  scope :currently_featured, -> { where(state: [:currently_featured, :recipe_of_the_day_as_currently_featured]) }
+  scope :currently_featured, -> { where(state: [:currently_featured, :recipe_of_the_day_as_currently_featured]).order(last_featured_at: :asc) }
   scope :current_recipes_of_the_day, -> { where(state: :current_recipe_of_the_day) }
   scope :currently_highlighted, -> { where(state: [:currently_featured, :recipe_of_the_day_as_currently_featured, :current_recipe_of_the_day]) }
   scope :awaiting_approval, -> { where(state: :awaiting_approval) }

@@ -351,7 +351,7 @@ describe Recipe do
     let!(:approved_for_feature_recipe) { create(:recipe, state: :approved_for_feature) }
     let!(:approved_for_recipe_of_the_day_recipe) { create(:recipe, state: :approved_for_recipe_of_the_day) }
     let!(:currently_featured_recipe) { create(:recipe, state: :currently_featured, last_featured_at: 2.hours.ago) }
-    let!(:recipe_of_the_day_as_currently_featured_recipe) { create(:recipe, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 1.hours.ago) }
+    let!(:recipe_of_the_day_as_currently_featured_recipe) { create(:recipe, state: :recipe_of_the_day_as_currently_featured, last_featured_at: 1.hour.ago) }
     let!(:current_recipe_of_the_day_recipe) { create(:recipe, state: :current_recipe_of_the_day) }
     let!(:declined_recipe) { create(:recipe, state: :declined) }
     let!(:hidden_recipe) { create(:recipe, state: :hidden) }
@@ -375,8 +375,10 @@ describe Recipe do
     end
 
     describe '.currently_featured' do
+      let!(:currently_featured_recipe_2) { create(:recipe, state: :currently_featured, last_featured_at: 4.hours.ago) }
+      let!(:currently_featured_recipe_3) { create(:recipe, state: :currently_featured, last_featured_at: 3.hours.ago) }
       subject { Recipe.currently_featured }
-      it { expect(subject).to include(currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe) }
+      it { expect(subject).to eq([currently_featured_recipe_2, currently_featured_recipe_3, currently_featured_recipe, recipe_of_the_day_as_currently_featured_recipe]) }
       it { expect(subject).not_to include(incomplete_recipe, awaiting_approval_recipe, approved_recipe, approved_for_feature_recipe, approved_for_recipe_of_the_day_recipe, current_recipe_of_the_day_recipe, declined_recipe, hidden_recipe) }
     end
 
