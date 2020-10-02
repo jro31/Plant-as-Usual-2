@@ -118,18 +118,6 @@ describe User, type: :model do
             expect(user).not_to be_valid
             expect(user.errors.messages[:username]).to include('cannot contain spaces')
           end
-
-          it 'is not valid' do
-            user.username = ' fleurdelacour'
-            expect(user).not_to be_valid
-            expect(user.errors.messages[:username]).to include('cannot contain spaces')
-          end
-
-          it 'is not valid' do
-            user.username = 'wormtail '
-            expect(user).not_to be_valid
-            expect(user.errors.messages[:username]).to include('cannot contain spaces')
-          end
         end
       end
     end
@@ -197,9 +185,212 @@ describe User, type: :model do
         end
       end
     end
+
+    describe 'twitter_handle' do
+      it 'is valid' do
+        user.twitter_handle = 'padfoot'
+        expect(user).to be_valid
+      end
+
+      context 'it contains spaces' do
+        it 'is not valid' do
+          user.twitter_handle = 'pad foot'
+          expect(user).not_to be_valid
+          expect(user.errors.messages[:twitter_handle]).to include('cannot contain spaces')
+        end
+      end
+    end
+
+    describe 'instagram_handle' do
+      it 'is valid' do
+        user.instagram_handle = 'Prongs'
+        expect(user).to be_valid
+      end
+
+      context 'it contains spaces' do
+        it 'is not valid' do
+          user.instagram_handle = 'P rongs'
+          expect(user).not_to be_valid
+          expect(user.errors.messages[:instagram_handle]).to include('cannot contain spaces')
+        end
+      end
+    end
+
+    describe 'website_url' do
+      it 'is valid' do
+        user.website_url = 'www.dumbledoresarmy.org'
+        expect(user).to be_valid
+      end
+
+      context 'it contains spaces' do
+        it 'is not valid' do
+          user.website_url = 'www.dumbledores army.org'
+          expect(user).not_to be_valid
+          expect(user.errors.messages[:website_url]).to include('cannot contain spaces')
+        end
+      end
+    end
   end
 
   describe 'callbacks' do
+    describe 'before_validation' do
+      describe '#strip_whitespace' do
+        describe 'on create' do
+          describe 'username' do
+            subject { build(:user, username: ' dobby-sir ') }
+            it 'removes leading and trailing spaces' do
+              subject.save
+              expect(subject.username).to eq('dobby-sir')
+            end
+          end
+
+          describe 'email' do
+            subject { build(:user, email: ' dobby@elflivesmatter.org ') }
+            it 'removes leading and trailing spaces' do
+              subject.save
+              expect(subject.email).to eq('dobby@elflivesmatter.org')
+            end
+          end
+
+          describe 'twitter_handle' do
+            subject { build(:user, twitter_handle: '  dobbysir ') }
+            it 'removes leading and trailing spaces' do
+              subject.save
+              expect(subject.twitter_handle).to eq('dobbysir')
+            end
+          end
+
+          describe 'instagram_handle' do
+            subject { build(:user, instagram_handle: '  elftravels  ') }
+            it 'removes leading and trailing spaces' do
+              subject.save
+              expect(subject.instagram_handle).to eq('elftravels')
+            end
+          end
+
+          describe 'website_url' do
+            subject { build(:user, website_url: '  www.freeatlast.elf  ') }
+            it 'removes leading and trailing spaces' do
+              subject.save
+              expect(subject.website_url).to eq('www.freeatlast.elf')
+            end
+          end
+        end
+
+        describe 'on update' do
+          describe 'username' do
+            it 'removes leading and trailing spaces' do
+              user.update(username: '  Winky  ')
+              expect(user.username).to eq('Winky')
+            end
+          end
+
+          describe 'email' do
+            it 'removes leading and trailing spaces' do
+              user.update(email: '  winky@malfoyresidence.com   ')
+              expect(user.email).to eq('winky@malfoyresidence.com')
+            end
+          end
+
+          describe 'twitter_handle' do
+            it 'removes leading and trailing spaces' do
+              user.update(twitter_handle: '  @goodelf   ')
+              expect(user.twitter_handle).to eq('goodelf')
+            end
+          end
+
+          describe 'instagram_handle' do
+            it 'removes leading and trailing spaces' do
+              user.update(instagram_handle: '  @cleaning-pics   ')
+              expect(user.instagram_handle).to eq('cleaning-pics')
+            end
+          end
+
+          describe 'website_url' do
+            it 'removes leading and trailing spaces' do
+              user.update(website_url: '    www.elvendiaries.com   ')
+              expect(user.website_url).to eq('www.elvendiaries.com')
+            end
+          end
+        end
+      end
+
+      describe '#sanitize_social_media_handles' do
+        describe 'on create' do
+          describe 'twitter handle' do
+            context 'starts with @' do
+              subject { build(:user, twitter_handle: '@chosen_one') }
+              it 'removes the @' do
+                subject.save
+                expect(subject.twitter_handle).to eq('chosen_one')
+              end
+            end
+
+            context 'does not start with @' do
+              subject { build(:user, twitter_handle: 'chosen_one') }
+              it 'does not change anything' do
+                subject.save
+                expect(subject.twitter_handle).to eq('chosen_one')
+              end
+            end
+          end
+
+          describe 'instagram handle' do
+            context 'starts with @' do
+              subject { build(:user, instagram_handle: '@potter_pix') }
+              it 'removes the @' do
+                subject.save
+                expect(subject.instagram_handle).to eq('potter_pix')
+              end
+            end
+
+            context 'does not start with @' do
+              subject { build(:user, instagram_handle: 'potter_pix') }
+              it 'does not change anything' do
+                subject.save
+                expect(subject.instagram_handle).to eq('potter_pix')
+              end
+            end
+          end
+        end
+
+        describe 'on update' do
+          subject { create(:user, twitter_handle: nil, instagram_handle: nil) }
+          describe 'twitter handle' do
+            context 'starts with @' do
+              it 'removes the @' do
+                subject.update(twitter_handle: '@boy_who_lived')
+                expect(subject.twitter_handle).to eq('boy_who_lived')
+              end
+            end
+
+            context 'does not start with @' do
+              it 'does not change anything' do
+                subject.update(twitter_handle: 'boy_who_lived')
+                expect(subject.twitter_handle).to eq('boy_who_lived')
+              end
+            end
+          end
+
+          describe 'instagram handle' do
+            context 'starts with @' do
+              it 'removes the @' do
+                subject.update(instagram_handle: '@dumbledores_army')
+                expect(subject.instagram_handle).to eq('dumbledores_army')
+              end
+            end
+
+            context 'does not start with @' do
+              it 'does not change anything' do
+                subject.update(instagram_handle: 'dumbledores_army')
+                expect(subject.instagram_handle).to eq('dumbledores_army')
+              end
+            end
+          end
+        end
+      end
+    end
+
     describe 'after_create' do
       describe '#send_sign_up_slack_message' do
         context 'on create' do
