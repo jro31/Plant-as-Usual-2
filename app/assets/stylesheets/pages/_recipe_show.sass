@@ -70,8 +70,19 @@
   .can-edit-input-display
     cursor: pointer
 
-  #name-display
-    min-height: 1.55em
+  .name-row
+    #name-display
+      min-height: 1.55em
+    .user-details-row
+      @media (min-width: $grid-lg)
+        height: calc(#{$default-handwriting-font-size} + 10px)
+      .by-user
+        @media (min-width: $grid-lg)
+          position: absolute
+          left: 50%
+          transform: translateX(-50%)
+      .user-social-media-links a
+        color: inherit
 
   .recipe-content-row
     #process-display

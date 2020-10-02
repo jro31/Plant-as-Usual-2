@@ -50,16 +50,29 @@
             #photo-placeholder.cursor-pointer.d-flex.justify-content-center.align-items-center
               Add photo
 
-  .row
+  .row.name-row
     .col-12.text-center
       %h1#name-display.input-display.mb-0{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
       = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
         -# This doesn't wrap when multiple lines (like on mobile). Perhaps update to text area rather than input.
         = f.input :name, label: false, placeholder: @name_placeholder, wrapper_html: { class: 'mb-0' }, input_html: { id: 'name-input', class: "d-none text-center #{component_classes(DarkMode::CLASSES[:input_edit])}" }
 
-      .handwriting
+    .col-12.text-center.d-lg-flex.justify-content-lg-start.user-details-row
+      .handwriting.by-user
         by
-        = @recipe.user.username
+        = @recipe.user.username # SHOULD LINK TO USER PROFILE
+      - if @recipe.user.twitter_handle || @recipe.user.instagram_handle
+        .ml-lg-auto.user-social-media-links
+          - if @recipe.user.twitter_handle
+            %span{ class: @recipe.user.instagram_handle ? 'mr-1' : '' }
+              = link_to "https://twitter.com/#{@recipe.user.twitter_handle}", target: '_blank' do
+                %i.fab.fa-twitter
+                = @recipe.user.twitter_handle
+          - if @recipe.user.instagram_handle
+            %span{ class: @recipe.user.twitter_handle ? 'ml-1' : '' }
+              = link_to "https://www.instagram.com/#{@recipe.user.instagram_handle}", target: '_blank' do
+                %i.fab.fa-instagram
+                = @recipe.user.instagram_handle
 
   .row{ class: component_classes(DarkMode::CLASSES[:recipe_content_row]) }
     .col-md-5.col-lg-4
