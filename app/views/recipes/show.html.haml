@@ -52,10 +52,15 @@
 
   .row
     .col-12.text-center
-      %h1#name-display.input-display{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
+      %h1#name-display.input-display.mb-0{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
       = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
         -# This doesn't wrap when multiple lines (like on mobile). Perhaps update to text area rather than input.
-        = f.input :name, label: false, placeholder: @name_placeholder, input_html: { id: 'name-input', class: "d-none text-center #{component_classes(DarkMode::CLASSES[:input_edit])}" }
+        = f.input :name, label: false, placeholder: @name_placeholder, wrapper_html: { class: 'mb-0' }, input_html: { id: 'name-input', class: "d-none text-center #{component_classes(DarkMode::CLASSES[:input_edit])}" }
+
+      .handwriting
+        by
+        = @recipe.user.username
+
   .row{ class: component_classes(DarkMode::CLASSES[:recipe_content_row]) }
     .col-md-5.col-lg-4
       #ingredients-container
