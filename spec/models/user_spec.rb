@@ -5,6 +5,15 @@ describe User, type: :model do
   it { should have_many :user_favourite_recipes }
   it { should have_many :favourites }
 
+  describe 'EDITABLE_COLUMNS' do
+    it 'returns a hash of editable columns' do
+      expect(User::EDITABLE_COLUMNS).to eq({
+        username: 'username',
+        email: 'email'
+      })
+    end
+  end
+
   let(:user) { create(:user) }
 
   describe 'User.favourites' do
@@ -461,6 +470,17 @@ describe User, type: :model do
           end
         end
       end
+    end
+  end
+
+  describe 'editable_column_labels' do
+    it 'returns the editable column labels' do
+      expect(User.editable_column_labels).to eq(
+        {
+          'username' => 'Username',
+          'email' => 'Email address'
+        }
+      )
     end
   end
 end

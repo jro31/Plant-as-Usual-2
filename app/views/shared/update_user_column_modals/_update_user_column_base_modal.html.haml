@@ -1,0 +1,12 @@
+.modal.fade{id: "update-#{column}-modal", class: component_classes(DarkMode::CLASSES[:keen_modal]), 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => "update-#{column}-modal-label", 'aria-hidden' => 'true'}
+  .modal-dialog.modal-lg{'role' => 'document'}
+    .modal-content
+      .modal-header
+        %h5.modal-title{ id: "update-#{column}-modal-label" }
+          Update
+          = column
+        %button.close-cross{ type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close' }
+          %span{'aria-hidden' => "true"}
+            &times;
+
+=# link_to "Change #{column[1].downcase}", send("account_update_#{column[0]}_path"), class: "btn #{component_classes(DarkMode::CLASSES[:btn_docile])}", method: :patch

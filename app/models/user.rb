@@ -1,4 +1,9 @@
 class User < ApplicationRecord
+  EDITABLE_COLUMNS = {
+    username: 'username',
+    email: 'email'
+  }.freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -13,6 +18,13 @@ class User < ApplicationRecord
 
   before_validation :strip_whitespace, :replace_empty_strings_with_nil, :sanitize_social_media_handles
   after_create :send_sign_up_slack_message
+
+  def self.editable_column_labels
+    {
+      self::EDITABLE_COLUMNS[:username] => 'Username',
+      self::EDITABLE_COLUMNS[:email] => 'Email address'
+    }
+  end
 
   private
 

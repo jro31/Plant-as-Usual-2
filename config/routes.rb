@@ -2,6 +2,15 @@ Rails.application.routes.draw do
   devise_for :users
   root to: 'pages#home'
 
+  get 'account', to: 'accounts#show'
+  scope "/account" do
+    patch 'update_username', to: 'accounts#update_username', as: 'account_update_username'
+    patch 'update_email', to: 'accounts#update_email', as: 'account_update_email'
+  end
+
+  get 'current_user_data', to: "users#current_user_data"
+  patch 'users/toggle_dark_mode', to: 'users#toggle_dark_mode'
+
   resources :recipes, except: [:new, :edit] do
     patch 'upload_photo', on: :member
     patch 'mark_as_complete', on: :member
@@ -9,9 +18,6 @@ Rails.application.routes.draw do
     resources :ingredients, only: [:create, :update, :destroy]
     resources :user_favourite_recipes, only: [:create]
   end
-
-  get 'current_user_data', to: "users#current_user_data"
-  patch 'users/toggle_dark_mode', to: 'users#toggle_dark_mode'
 
   get 'admin', to: 'admin#index'
   patch 'admin/recipe_approve/:recipe_id', to: 'admin#recipe_approve', as: 'admin_recipe_approve'
