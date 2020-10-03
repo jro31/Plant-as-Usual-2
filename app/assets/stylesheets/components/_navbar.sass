@@ -18,7 +18,7 @@
   #menu-items-desktop-container
     padding: 0 $menu-items-desktop-container-right-padding 0 $menu-items-desktop-container-left-padding
 
-  #navbarSearchDropdown, #navbarMenuDropdown
+  #navbarSearchDropdown, #navbarMenuMobileDropdown, #navbarMenuDesktopDropdown
     &:before, &:after
       content: none
 
@@ -31,7 +31,7 @@
     margin-left: $navbar-menu-item-icon-left-margin
     margin-right: $navbar-menu-item-icon-right-margin
 
-  #navbarMenuDropdown
+  #navbarMenuMobileDropdown, #navbarMenuDesktopDropdown
     background-color: transparent
     border: none
     &:focus
@@ -91,7 +91,7 @@
 
 .custom-navbar-light-mode
   background: $light-mode-navbar-background-color
-  .fa-bars
+  .fa-bars, .fa-ellipsis-v
     color: $light-mode-paragraph-text-color
   a, .dropdown-item
     color: $light-mode-paragraph-text-color
@@ -110,7 +110,7 @@
 
 .custom-navbar-dark-mode
   background: $dark-mode-navbar-background-color
-  .fa-bars
+  .fa-bars, .fa-ellipsis-h
     color: $dark-mode-paragraph-text-color
   a, .dropdown-item
     color: $dark-mode-paragraph-text-color
