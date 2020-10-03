@@ -10,6 +10,7 @@
       .cursor-pointer
         %i.fas.fa-heart.interaction-icon#full-heart{ class: @recipe_is_favourite ? '' : 'd-none' }
         %i.far.fa-heart.interaction-icon#empty-heart{ class: @recipe_is_favourite ? 'd-none' : '' }
+    -# ONCE IT EXISTS, UPDATE THIS LINK TO LINK TO THE USER PROFILE, RATHER THAN THEIR RECIPES
     = link_to recipes_path(recipe_filter: 'user_recipes', user_id: @recipe.user.id), class: current_user ? 'non-initial-icon' : '' do
       %i.far.fa-user.interaction-icon
     .non-initial-icon.d-flex.flex-column.flex-md-row
@@ -59,16 +60,15 @@
 
     .col-12.text-center.d-lg-flex.justify-content-lg-start.user-details-row
       .handwriting.by-user
-        by
-        = @recipe.user.username # SHOULD LINK TO USER PROFILE
-      - if @recipe.user.twitter_handle || @recipe.user.instagram_handle
+        = link_to "by #{@recipe.user.username}", recipes_path(recipe_filter: 'user_recipes', user_id: @recipe.user.id)
+      - if @recipe.user.twitter_handle.present? || @recipe.user.instagram_handle.present?
         .ml-lg-auto.user-social-media-links
-          - if @recipe.user.twitter_handle
+          - if @recipe.user.twitter_handle.present?
             %span{ class: @recipe.user.instagram_handle ? 'mr-1' : '' }
               = link_to "https://twitter.com/#{@recipe.user.twitter_handle}", target: '_blank' do
                 %i.fab.fa-twitter
                 = @recipe.user.twitter_handle
-          - if @recipe.user.instagram_handle
+          - if @recipe.user.instagram_handle.present?
             %span{ class: @recipe.user.twitter_handle ? 'ml-1' : '' }
               = link_to "https://www.instagram.com/#{@recipe.user.instagram_handle}", target: '_blank' do
                 %i.fab.fa-instagram

@@ -315,6 +315,58 @@ describe User, type: :model do
         end
       end
 
+      describe '#replace_empty_strings_with_nil' do
+        describe 'on create' do
+          describe 'twitter handle' do
+            subject { build(:user, twitter_handle: '') }
+            it 'saves as nil' do
+              subject.save
+              expect(subject.twitter_handle).to eq(nil)
+            end
+          end
+
+          describe 'instagram handle' do
+            subject { build(:user, instagram_handle: '') }
+            it 'saves as nil' do
+              subject.save
+              expect(subject.instagram_handle).to eq(nil)
+            end
+          end
+
+          describe 'website url' do
+            subject { build(:user, website_url: '') }
+            it 'saves as nil' do
+              subject.save
+              expect(subject.website_url).to eq(nil)
+            end
+          end
+        end
+
+        describe 'on update' do
+          subject { create(:user) }
+          describe 'twitter handle' do
+            it 'saves as nil' do
+              subject.update(twitter_handle: '')
+              expect(subject.twitter_handle).to eq(nil)
+            end
+          end
+
+          describe 'instagram handle' do
+            it 'saves as nil' do
+              subject.update(instagram_handle: '')
+              expect(subject.instagram_handle).to eq(nil)
+            end
+          end
+
+          describe 'website url' do
+            it 'saves as nil' do
+              subject.update(website_url: '')
+              expect(subject.website_url).to eq(nil)
+            end
+          end
+        end
+      end
+
       describe '#sanitize_social_media_handles' do
         describe 'on create' do
           describe 'twitter handle' do
