@@ -4,8 +4,7 @@ Rails.application.routes.draw do
 
   get 'account', to: 'accounts#show'
   scope "/account" do
-    patch 'update_username', to: 'accounts#update_username', as: 'account_update_username'
-    patch 'update_email', to: 'accounts#update_email', as: 'account_update_email'
+    patch 'update_user', to: 'accounts#update_user', as: 'account_update_user'
   end
 
   get 'current_user_data', to: "users#current_user_data"

@@ -5,17 +5,11 @@ class AccountsController < ApplicationController
     @updatable_columns = User::EDITABLE_COLUMNS
   end
 
-  def update_username
-    if @user.update(account_params)
-      redirect_to account_path
-    else
-      flash[:notice] = @user.errors.any? ? "Fail. #{@user.errors.full_messages.to_sentence}." : "Something went wrong."
-      redirect_to account_path
+  def update_user
+    unless @user.update(account_params)
+      flash[:alert] = @user.errors.any? ? "Fail. #{@user.errors.full_messages.to_sentence}." : "Something went wrong."
     end
-  end
-
-  def update_email
-    raise
+    redirect_to account_path
   end
 
   private
