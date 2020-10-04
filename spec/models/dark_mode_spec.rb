@@ -6,6 +6,8 @@ describe DarkMode do
       expect(DarkMode::CLASSES).to eq(
         {
           admin_page: 'admin-page',
+          alert_docile: 'alert-docile',
+          alert_keen: 'alert-keen',
           btn_docile: 'btn-docile',
           btn_keen: 'btn-keen',
           can_edit_input_display: 'can-edit-input-display',
@@ -32,6 +34,8 @@ describe DarkMode do
     it 'returns an array of classes' do
       expect(DarkMode.css_classes).to eq([
         'admin-page',
+        'alert-docile',
+        'alert-keen',
         'btn-docile',
         'btn-keen',
         'can-edit-input-display',

@@ -1,12 +1,17 @@
 .modal.fade{id: "update-#{column}-modal", class: component_classes(DarkMode::CLASSES[:keen_modal]), 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => "update-#{column}-modal-label", 'aria-hidden' => 'true'}
   .modal-dialog.modal-lg{'role' => 'document'}
     .modal-content
-      .modal-header
-        %h5.modal-title{ id: "update-#{column}-modal-label" }
-          Update
-          = column
-        %button.close-cross{ type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close' }
-          %span{'aria-hidden' => "true"}
-            &times;
-
-=# link_to "Change #{column[1].downcase}", send("account_update_#{column[0]}_path"), class: "btn #{component_classes(DarkMode::CLASSES[:btn_docile])}", method: :patch
+      = simple_form_for current_user, url: send("account_update_#{column}_path"), method: :patch do |f|
+        .modal-header
+          %h5.modal-title{ id: "update-#{column}-modal-label" }
+            Update
+            = column
+          %button.close-cross{ type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close' }
+            %span{'aria-hidden' => "true"}
+              &times;
+        .modal-body
+          = f.input column.to_sym, label: false
+        .modal-footer
+          %button.btn{ type: :button, 'data-dismiss' => 'modal', class: component_classes(DarkMode::CLASSES[:btn_docile]) }
+            Cancel
+          = f.button :submit, class: "btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
