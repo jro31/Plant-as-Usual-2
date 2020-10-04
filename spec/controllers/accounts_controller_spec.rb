@@ -108,5 +108,17 @@ describe AccountsController, type: :controller do
         end
       end
     end
+
+    describe 'twitter handle' do
+      # COMPLETE THIS
+    end
+
+    describe 'instagram handle' do
+      # COMPLETE THIS
+    end
+
+    describe 'website url' do
+      # COMPLETE THIS
+    end
   end
 end

@@ -9,7 +9,10 @@ describe User, type: :model do
     it 'returns a hash of editable columns' do
       expect(User::EDITABLE_COLUMNS).to eq({
         username: 'username',
-        email: 'email'
+        email: 'email',
+        twitter_handle: 'twitter_handle',
+        instagram_handle: 'instagram_handle',
+        website_url: 'website_url'
       })
     end
   end
@@ -477,8 +480,39 @@ describe User, type: :model do
     it 'returns the editable column labels' do
       expect(User.editable_column_labels).to eq(
         {
-          'username' => 'Username',
-          'email' => 'Email address'
+          'username' => 'username',
+          'email' => 'email',
+          'twitter_handle' => 'Twitter handle',
+          'instagram_handle' => 'Instagram username',
+          'website_url' => 'personal website'
+        }
+      )
+    end
+  end
+
+  describe 'editable_column_hints' do
+    it 'returns the editable column hints' do
+      expect(User.editable_column_hints).to eq(
+        {
+          'username' => 'This will be visible to other users.',
+          'email' => nil,
+          'twitter_handle' => 'Optional. This will be visible to other users.',
+          'instagram_handle' => 'Optional. This will be visible to other users.',
+          'website_url' => 'Optional. This will be visible to other users.'
+        }
+      )
+    end
+  end
+
+  describe '#editable_column_placeholders' do
+    it 'returns the editable column placeholders' do
+      expect(User.editable_column_placeholders).to eq(
+        {
+          'username' => nil,
+          'email' => nil,
+          'twitter_handle' => '@plantasusual',
+          'instagram_handle' => 'plantasusual',
+          'website_url' => 'https://www.plantasusual.com/'
         }
       )
     end

@@ -6,12 +6,12 @@
       .col-12.col-md-6.offset-md-3.d-flex.justify-content-between
         %div
           .font-weight-bold
-            = User.editable_column_labels[column]
+            = User.editable_column_labels[column].capitalize
           %div
-            = current_user.send(column)
+            = current_user.send(column).present? ? current_user.send(column) : '🤷‍♂️'
         %div
           %button.btn{type: :button, class: component_classes(DarkMode::CLASSES[:btn_docile]), 'data-toggle' => 'modal', 'data-target' => "#update-#{column}-modal" }
-            = "Change #{User.editable_column_labels[column].downcase}"
+            = "Change #{User.editable_column_labels[column]}"
 
 - User::EDITABLE_COLUMNS.each_value do |column|
   = render "shared/update_user_column_modals/update_#{column}_modal"

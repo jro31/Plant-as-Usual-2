@@ -6,13 +6,13 @@
 
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
         .form-inputs
-          = f.input :username, required: true, autofocus: true, label: 'Display name', hint: 'This will be visible to other users.', input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) }
-          = f.input :email, required: true, autofocus: true, input_html: { autocomplete: "email", class: component_classes(DarkMode::CLASSES[:input_edit]) }
+          = f.input :username, required: true, autofocus: true, label: User.editable_column_labels['username'].capitalize, placeholder: User.editable_column_placeholders['username'], hint: User.editable_column_hints['username'], input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) }
+          = f.input :email, required: true, autofocus: true, label: User.editable_column_labels['email'].capitalize, placeholder: User.editable_column_placeholders['email'], hint: User.editable_column_hints['email'], input_html: { autocomplete: "email", class: component_classes(DarkMode::CLASSES[:input_edit]) }
           = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length), input_html: { autocomplete: "new-password", class: component_classes(DarkMode::CLASSES[:input_edit]) }
           = f.input :password_confirmation, required: true, input_html: { autocomplete: "new-password", class: component_classes(DarkMode::CLASSES[:input_edit]) }
-          = f.input :twitter_handle, required: false, placeholder: '@plantasusual', hint: 'Optional. This will be visible to other users.', input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) }
-          = f.input :instagram_handle, required: false, label: 'Instagram username', placeholder: 'plantasusual', hint: 'Optional. This will be visible to other users.', input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) }
-          = f.input :website_url, required: false, label: 'Personal website', placeholder: 'https://www.plantasusual.com/', hint: 'Optional. This will be visible to other users.', input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) }
+          = f.input :twitter_handle, required: false, label: User.editable_column_labels['twitter_handle'].capitalize, placeholder: User.editable_column_placeholders['twitter_handle'], hint: User.editable_column_hints['twitter_handle'], input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) }
+          = f.input :instagram_handle, required: false, label: User.editable_column_labels['instagram_handle'].capitalize, placeholder: User.editable_column_placeholders['instagram_handle'], hint: User.editable_column_hints['instagram_handle'], input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) }
+          = f.input :website_url, required: false, label: User.editable_column_labels['website_url'].capitalize, placeholder: User.editable_column_placeholders['website_url'], hint: User.editable_column_hints['website_url'], input_html: { class: component_classes(DarkMode::CLASSES[:input_edit]) }
 
         .form-actions
           = f.button :submit, "Sign up", class: "btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"

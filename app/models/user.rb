@@ -1,7 +1,10 @@
 class User < ApplicationRecord
   EDITABLE_COLUMNS = {
     username: 'username',
-    email: 'email'
+    email: 'email',
+    twitter_handle: 'twitter_handle',
+    instagram_handle: 'instagram_handle',
+    website_url: 'website_url'
   }.freeze
 
   # Include default devise modules. Others available are:
@@ -21,8 +24,31 @@ class User < ApplicationRecord
 
   def self.editable_column_labels
     {
-      self::EDITABLE_COLUMNS[:username] => 'Username',
-      self::EDITABLE_COLUMNS[:email] => 'Email address'
+      self::EDITABLE_COLUMNS[:username] => 'username',
+      self::EDITABLE_COLUMNS[:email] => 'email',
+      self::EDITABLE_COLUMNS[:twitter_handle] => 'Twitter handle',
+      self::EDITABLE_COLUMNS[:instagram_handle] => 'Instagram username',
+      self::EDITABLE_COLUMNS[:website_url] => 'personal website'
+    }
+  end
+
+  def self.editable_column_hints
+    {
+      self::EDITABLE_COLUMNS[:username] => 'This will be visible to other users.',
+      self::EDITABLE_COLUMNS[:email] => nil,
+      self::EDITABLE_COLUMNS[:twitter_handle] => 'Optional. This will be visible to other users.',
+      self::EDITABLE_COLUMNS[:instagram_handle] => 'Optional. This will be visible to other users.',
+      self::EDITABLE_COLUMNS[:website_url] => 'Optional. This will be visible to other users.'
+    }
+  end
+
+  def self.editable_column_placeholders
+    {
+      self::EDITABLE_COLUMNS[:username] => nil,
+      self::EDITABLE_COLUMNS[:email] => nil,
+      self::EDITABLE_COLUMNS[:twitter_handle] => '@plantasusual',
+      self::EDITABLE_COLUMNS[:instagram_handle] => 'plantasusual',
+      self::EDITABLE_COLUMNS[:website_url] => 'https://www.plantasusual.com/'
     }
   end
 

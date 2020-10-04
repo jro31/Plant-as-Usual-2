@@ -5,12 +5,12 @@
         .modal-header
           %h5.modal-title{ id: "update-#{column}-modal-label" }
             Update
-            = column
+            = User.editable_column_labels[column]
           %button.close-cross{ type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close' }
             %span{'aria-hidden' => "true"}
               &times;
         .modal-body
-          = f.input column.to_sym, label: false
+          = f.input column.to_sym, label: false, placeholder: User.editable_column_placeholders[column]
         .modal-footer
           %button.btn{ type: :button, 'data-dismiss' => 'modal', class: component_classes(DarkMode::CLASSES[:btn_docile]) }
             Cancel
