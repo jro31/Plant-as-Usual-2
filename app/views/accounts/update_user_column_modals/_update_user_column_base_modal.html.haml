@@ -14,4 +14,4 @@
         .modal-footer
           %button.btn{ type: :button, 'data-dismiss' => 'modal', class: component_classes(DarkMode::CLASSES[:btn_docile]) }
             Cancel
-          = f.button :submit, class: "btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
+          = f.button :submit, "Update #{User.editable_column_labels[column]}", class: "btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
