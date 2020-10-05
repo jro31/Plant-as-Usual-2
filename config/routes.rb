@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'account', to: 'accounts#show'
   scope "/account" do
     patch 'update_user', to: 'accounts#update_user', as: 'account_update_user'
+    patch 'update_password', to: 'accounts#update_password', as: 'account_update_password'
   end
 
   get 'current_user_data', to: "users#current_user_data"

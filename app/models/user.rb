@@ -2,6 +2,7 @@ class User < ApplicationRecord
   EDITABLE_COLUMNS = {
     username: 'username',
     email: 'email',
+    password: 'password',
     twitter_handle: 'twitter_handle',
     instagram_handle: 'instagram_handle',
     website_url: 'website_url'
@@ -26,6 +27,7 @@ class User < ApplicationRecord
     {
       self::EDITABLE_COLUMNS[:username] => 'username',
       self::EDITABLE_COLUMNS[:email] => 'email',
+      self::EDITABLE_COLUMNS[:password] => 'password',
       self::EDITABLE_COLUMNS[:twitter_handle] => 'Twitter handle',
       self::EDITABLE_COLUMNS[:instagram_handle] => 'Instagram username',
       self::EDITABLE_COLUMNS[:website_url] => 'personal website'

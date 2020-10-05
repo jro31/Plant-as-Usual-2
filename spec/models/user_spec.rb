@@ -10,6 +10,7 @@ describe User, type: :model do
       expect(User::EDITABLE_COLUMNS).to eq({
         username: 'username',
         email: 'email',
+        password: 'password',
         twitter_handle: 'twitter_handle',
         instagram_handle: 'instagram_handle',
         website_url: 'website_url'
@@ -162,7 +163,7 @@ describe User, type: :model do
           end
 
           context 'is does not contain .' do
-            # Not sure why this is passing
+            # Not sure why this is passing - See line ~174 of config/initializers/devise.rb
             xit 'is not valid' do
               user.email = 'hermione@hogwarts'
               expect(user).not_to be_valid
@@ -482,6 +483,7 @@ describe User, type: :model do
         {
           'username' => 'username',
           'email' => 'email',
+          'password' => 'password',
           'twitter_handle' => 'Twitter handle',
           'instagram_handle' => 'Instagram username',
           'website_url' => 'personal website'
