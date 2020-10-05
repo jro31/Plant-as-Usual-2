@@ -5,6 +5,19 @@ describe User, type: :model do
   it { should have_many :user_favourite_recipes }
   it { should have_many :favourites }
 
+  describe 'EDITABLE_COLUMNS' do
+    it 'returns a hash of editable columns' do
+      expect(User::EDITABLE_COLUMNS).to eq({
+        username: 'username',
+        email: 'email',
+        password: 'password',
+        twitter_handle: 'twitter_handle',
+        instagram_handle: 'instagram_handle',
+        website_url: 'website_url'
+      })
+    end
+  end
+
   let(:user) { create(:user) }
 
   describe 'User.favourites' do
@@ -150,7 +163,7 @@ describe User, type: :model do
           end
 
           context 'is does not contain .' do
-            # Not sure why this is passing
+            # Not sure why this is passing - See line ~174 of config/initializers/devise.rb
             xit 'is not valid' do
               user.email = 'hermione@hogwarts'
               expect(user).not_to be_valid
@@ -461,6 +474,49 @@ describe User, type: :model do
           end
         end
       end
+    end
+  end
+
+  describe 'editable_column_labels' do
+    it 'returns the editable column labels' do
+      expect(User.editable_column_labels).to eq(
+        {
+          'username' => 'username',
+          'email' => 'email',
+          'password' => 'password',
+          'twitter_handle' => 'Twitter handle',
+          'instagram_handle' => 'Instagram username',
+          'website_url' => 'personal website'
+        }
+      )
+    end
+  end
+
+  describe 'editable_column_hints' do
+    it 'returns the editable column hints' do
+      expect(User.editable_column_hints).to eq(
+        {
+          'username' => 'This will be visible to other users.',
+          'email' => nil,
+          'twitter_handle' => 'Optional. This will be visible to other users.',
+          'instagram_handle' => 'Optional. This will be visible to other users.',
+          'website_url' => 'Optional. This will be visible to other users.'
+        }
+      )
+    end
+  end
+
+  describe '#editable_column_placeholders' do
+    it 'returns the editable column placeholders' do
+      expect(User.editable_column_placeholders).to eq(
+        {
+          'username' => nil,
+          'email' => nil,
+          'twitter_handle' => '@plantasusual',
+          'instagram_handle' => 'plantasusual',
+          'website_url' => 'https://www.plantasusual.com/'
+        }
+      )
     end
   end
 end

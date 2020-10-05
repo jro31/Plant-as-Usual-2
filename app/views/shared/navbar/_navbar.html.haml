@@ -15,9 +15,9 @@
 
     .w-100.h-100
       .dropdown.d-flex.d-md-none.justify-content-center.w-100.h-100
-        %button.dropdown-toggle#navbarMenuDropdown{type: :button, 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false'}
+        %button.dropdown-toggle#navbarMenuMobileDropdown{type: :button, 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false'}
           %i.fas.fa-bars
-        .dropdown-menu.w-100#dropdown-item-container{'aria-labelledby' => 'navbarMenuDropdown'}
+        .dropdown-menu.w-100#mobile-dropdown-item-container{'aria-labelledby' => 'navbarMenuMobileDropdown'}
           = render 'shared/navbar/menu_items', mobile: true
       .d-none.d-md-flex.justify-content-around.align-items-center.h-100.w-100#menu-items-desktop-container
         = render 'shared/navbar/menu_items', mobile: false

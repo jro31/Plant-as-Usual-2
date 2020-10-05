@@ -1,4 +1,13 @@
 class User < ApplicationRecord
+  EDITABLE_COLUMNS = {
+    username: 'username',
+    email: 'email',
+    password: 'password',
+    twitter_handle: 'twitter_handle',
+    instagram_handle: 'instagram_handle',
+    website_url: 'website_url'
+  }.freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -13,6 +22,37 @@ class User < ApplicationRecord
 
   before_validation :strip_whitespace, :replace_empty_strings_with_nil, :sanitize_social_media_handles
   after_create :send_sign_up_slack_message
+
+  def self.editable_column_labels
+    {
+      self::EDITABLE_COLUMNS[:username] => 'username',
+      self::EDITABLE_COLUMNS[:email] => 'email',
+      self::EDITABLE_COLUMNS[:password] => 'password',
+      self::EDITABLE_COLUMNS[:twitter_handle] => 'Twitter handle',
+      self::EDITABLE_COLUMNS[:instagram_handle] => 'Instagram username',
+      self::EDITABLE_COLUMNS[:website_url] => 'personal website'
+    }
+  end
+
+  def self.editable_column_hints
+    {
+      self::EDITABLE_COLUMNS[:username] => 'This will be visible to other users.',
+      self::EDITABLE_COLUMNS[:email] => nil,
+      self::EDITABLE_COLUMNS[:twitter_handle] => 'Optional. This will be visible to other users.',
+      self::EDITABLE_COLUMNS[:instagram_handle] => 'Optional. This will be visible to other users.',
+      self::EDITABLE_COLUMNS[:website_url] => 'Optional. This will be visible to other users.'
+    }
+  end
+
+  def self.editable_column_placeholders
+    {
+      self::EDITABLE_COLUMNS[:username] => nil,
+      self::EDITABLE_COLUMNS[:email] => nil,
+      self::EDITABLE_COLUMNS[:twitter_handle] => '@plantasusual',
+      self::EDITABLE_COLUMNS[:instagram_handle] => 'plantasusual',
+      self::EDITABLE_COLUMNS[:website_url] => 'https://www.plantasusual.com/'
+    }
+  end
 
   private
 

@@ -1,0 +1,23 @@
+#account-show-page
+  padding-bottom: $standard-page-bottom-padding
+  .account-item
+    border-width: $account-item-border-width
+    border-style: solid
+    border-radius: $rounded-corners-border-radius
+    .change-button-container
+      @media (min-width: $grid-sm)
+        flex-basis: 60%
+      @media (min-width: $grid-xl)
+        flex-basis: 50%
+      @media (min-width: $grid-xxl)
+        flex-basis: 40%
+
+  .account-item-light-mode
+    border-color: $light-mode-account-item-border-color
+    .faded-text
+      color: $light-mode-faded-text-color
+
+  .account-item-dark-mode
+    border-color: $dark-mode-account-item-border-color
+    .faded-text
+      color: $dark-mode-faded-text-color

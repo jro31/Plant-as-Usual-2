@@ -1,0 +1,22 @@
+.modal.fade{id: "update-#{column}-modal", class: component_classes(DarkMode::CLASSES[:keen_modal]), 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => "update-#{column}-modal-label", 'aria-hidden' => 'true'}
+  .modal-dialog.modal-lg{'role' => 'document'}
+    .modal-content
+      = simple_form_for current_user, url: column == User::EDITABLE_COLUMNS[:password] ? account_update_password_path : account_update_user_path, html: { id: "update_#{column}" }, method: :patch do |f|
+        .modal-header
+          %h5.modal-title{ id: "update-#{column}-modal-label" }
+            Update
+            = User.editable_column_labels[column]
+          %button.close-cross{ type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close' }
+            %span{'aria-hidden' => "true"}
+              &times;
+        .modal-body
+          - if column == User::EDITABLE_COLUMNS[:password]
+            = f.input :current_password, label: 'Existing password'
+            = f.input :password, label: 'New password', hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length)
+            = f.input :password_confirmation, label: 'Confirm new password'
+          - else
+            = f.input column.to_sym, label: false, placeholder: User.editable_column_placeholders[column]
+        .modal-footer
+          %button.btn{ type: :button, 'data-dismiss' => 'modal', class: component_classes(DarkMode::CLASSES[:btn_docile]) }
+            Cancel
+          = f.button :submit, "Update #{User.editable_column_labels[column]}", class: "btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"

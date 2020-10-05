@@ -12,10 +12,16 @@
     %span
       Add recipe
   = render 'shared/navbar/dark_mode_switch', mobile: mobile
-  = link_to destroy_user_session_path, class: mobile ? 'dropdown-item' : '', method: :delete do
-    %i.fas.fa-sign-out-alt.navbar-menu-item-icon.d-inline-block.d-md-none.d-lg-inline-block
-    %span
-      Sign out
+
+  - if mobile
+    = render 'shared/navbar/secondary_menu_items'
+  - else
+    .dropdown
+      %button.dropdown-toggle#navbarMenuDesktopDropdown{type: :button, 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false'}
+        %i.fas.fa-ellipsis-h
+      .dropdown-menu#desktop-dropdown-item-container{'aria-labelledby' => 'navbarMenuDesktopDropdown'}
+        = render 'shared/navbar/secondary_menu_items'
+
 - else
   =  link_to new_user_session_path, class: mobile ? 'dropdown-item' : '' do
     %i.fas.fa-sign-in-alt.navbar-menu-item-icon
