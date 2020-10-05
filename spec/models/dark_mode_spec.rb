@@ -5,6 +5,7 @@ describe DarkMode do
     it 'returns a hash of classes' do
       expect(DarkMode::CLASSES).to eq(
         {
+          account_item: 'account-item',
           admin_page: 'admin-page',
           alert_docile: 'alert-docile',
           alert_keen: 'alert-keen',
@@ -33,6 +34,7 @@ describe DarkMode do
   describe '#css_classes' do
     it 'returns an array of classes' do
       expect(DarkMode.css_classes).to eq([
+        'account-item',
         'admin-page',
         'alert-docile',
         'alert-keen',
