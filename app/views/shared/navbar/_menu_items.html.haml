@@ -19,7 +19,7 @@
     .dropdown
       %button.dropdown-toggle#navbarMenuDesktopDropdown{type: :button, 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false'}
         %i.fas.fa-ellipsis-h
-      .dropdown-menu{'aria-labelledby' => 'navbarMenuDesktopDropdown'}
+      .dropdown-menu#desktop-dropdown-item-container{'aria-labelledby' => 'navbarMenuDesktopDropdown'}
         = render 'shared/navbar/secondary_menu_items'
 
 - else

@@ -37,10 +37,7 @@
     &:focus
       outline: none
 
-  #dropdown-item-container
-    transform: translate3d(0, calc(#{$navbar-height} - 2px), 0) !important
-    border: none
-    border-radius: 0
+  #mobile-dropdown-item-container, #desktop-dropdown-item-container
     z-index: $navbar-dropdown-menu-z-index
     font-size: $default-font-size
 
@@ -48,6 +45,18 @@
       padding-left: $dropdown-item-left-padding
       &:hover
         background: transparent
+
+  #mobile-dropdown-item-container
+    transform: translate3d(0, calc(#{$navbar-height} - 2px), 0) !important
+    border: none
+    border-radius: 0
+
+  #desktop-dropdown-item-container
+    transform: translate3d(0, calc(((#{$navbar-height} / 2) + #{$navbar-menu-item-icon-width}) - 4px), 0) !important
+    right: 0 !important
+    left: auto !important
+    min-width: 230px
+    border-radius: $rounded-corners-border-radius
 
   #dark-mode-switch-container
     &:active
@@ -97,6 +106,8 @@
     color: $light-mode-paragraph-text-color
   .dropdown-menu
     background: $light-mode-default-background-color
+  #desktop-dropdown-item-container
+    border-color: $light-mode-navbar-desktop-dropdown-border-color
   #search-logo
     .search-icon
       box-shadow: $light-mode-imposing-icon-box-shadow
@@ -116,6 +127,8 @@
     color: $dark-mode-paragraph-text-color
   .dropdown-menu
     background: $dark-mode-default-background-color
+  #desktop-dropdown-item-container
+    border-color: $dark-mode-navbar-desktop-dropdown-border-color
   #search-logo
     .search-icon
       box-shadow: $dark-mode-imposing-icon-box-shadow
