@@ -21,7 +21,7 @@ class User < ApplicationRecord
   validates :twitter_handle, :instagram_handle, :website_url, format: { without: /\s/, message: 'cannot contain spaces' }
 
   before_validation :strip_whitespace, :replace_empty_strings_with_nil, :sanitize_social_media_handles
-  after_create :send_sign_up_slack_message
+  after_create :send_sign_up_slack_message, :send_welcome_email
 
   def self.editable_column_labels
     {
@@ -75,5 +75,9 @@ class User < ApplicationRecord
 
   def send_sign_up_slack_message
     SendSlackMessageJob.perform_later("A new user has signed-up, username: #{username}, email: #{email}", nature: 'celebrate')
+  end
+
+  def send_welcome_email
+    UserMailer.with(user: self).welcome_email.deliver_later
   end
 end
