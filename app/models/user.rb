@@ -21,7 +21,7 @@ class User < ApplicationRecord
   validates :twitter_handle, :instagram_handle, :website_url, format: { without: /\s/, message: 'cannot contain spaces' }
 
   before_validation :strip_whitespace, :replace_empty_strings_with_nil, :sanitize_social_media_handles
-  after_create :send_sign_up_slack_message, :send_welcome_email
+  after_create :send_sign_up_slack_message#, :send_welcome_email
 
   def self.editable_column_labels
     {
