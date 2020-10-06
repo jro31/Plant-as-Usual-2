@@ -14,7 +14,7 @@
               = current_user.send(column).present? ? current_user.send(column) : 'None entered'
         .change-button-container
           %button.btn.w-100{type: :button, class: component_classes(DarkMode::CLASSES[:btn_docile]), 'data-toggle' => 'modal', 'data-target' => "#update-#{column}-modal" }
-            = "Change #{User.editable_column_labels[column]}"
+            Change
 
 - User::EDITABLE_COLUMNS.each_value do |column|
   = render "accounts/update_user_column_modals/update_#{column}_modal"
