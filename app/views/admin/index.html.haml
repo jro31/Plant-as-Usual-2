@@ -1,4 +1,4 @@
-.container{ class: component_classes(DarkMode::CLASSES[:admin_page]) }
+.container.admin-page
   - @scopes_to_display.each do |recipe_scope|
     .row
       .col-12.text-center{ class: @scopes_to_display.first == recipe_scope ? '' : 'mt-5' }
@@ -21,7 +21,7 @@
             - @events.each do |event|
               - if recipe.send("can_#{event}?")
                 .mb-3
-                  = link_to event.humanize, send("admin_recipe_#{event}_path", recipe), method: :patch, class: "w-100 btn #{component_classes(DarkMode::CLASSES[event == 'decline' ? :btn_docile : :btn_keen])}"
+                  = link_to event.humanize, send("admin_recipe_#{event}_path", recipe), method: :patch, class: "w-100 btn #{event == 'decline' ? 'btn-docile' : 'btn-keen'}"
     - else
       .row.mt-5
         .col-12.text-center

@@ -1,4 +1,4 @@
-.modal.fade#add-recipe-modal{class: component_classes(DarkMode::CLASSES[:keen_modal]), 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => 'add-recipe-modal-label', 'aria-hidden' => 'true'}
+.modal.fade.keen-modal#add-recipe-modal{ 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => 'add-recipe-modal-label', 'aria-hidden' => 'true'}
   .modal-dialog.modal-lg{'role' => 'document'}
     .modal-content
       = simple_form_for Recipe.new do |f|
@@ -11,6 +11,6 @@
         .modal-body
           = f.input :name, label: false
         .modal-footer
-          %button.btn{ type: :button, 'data-dismiss' => 'modal', class: component_classes(DarkMode::CLASSES[:btn_docile]) }
+          %button.btn.btn-docile{ type: :button, 'data-dismiss' => 'modal' }
             Close
-          = f.button :submit, class: "btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
+          = f.button :submit, class: "btn btn-keen"

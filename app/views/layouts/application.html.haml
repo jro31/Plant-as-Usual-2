@@ -10,12 +10,10 @@
     = stylesheet_link_tag 'application', media: 'all'
     =# stylesheet_pack_tag 'application', media: 'all' <!-- Uncomment if you import CSS in app/javascript/packs/application.js -->
     = favicon_link_tag
-  %body{ data: { params_id: params.has_key?(:id) ? params[:id] : nil } }
-    %div{class: component_classes(DarkMode::CLASSES[:page_container])}
+  %body{ class: display_mode, data: { params_id: params.has_key?(:id) ? params[:id] : nil } }
+    .page-container
       = render 'shared/navbar/navbar'
       = render 'shared/flashes'
       = yield
-      :javascript
-        const darkModeClasses = #{raw @dark_mode_css_classes}
     = javascript_include_tag 'application'
     = javascript_pack_tag 'application'
