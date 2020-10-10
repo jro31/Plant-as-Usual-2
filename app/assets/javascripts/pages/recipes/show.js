@@ -36,7 +36,6 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
             noInputWasEnabled = false
             saveInput(prefix)
             resetInitialInputValue()
-            displayMarkAsCompleteButton()
           }
         })
       }
@@ -213,6 +212,7 @@ if(typeof isRecipeShow !== 'undefined' && isRecipeShow) {
       success: function() {
         if (displaySuccess) displayHiddenFlash(`${component.charAt(0).toUpperCase() + component.slice(1)} ${verb}d`, 'success')
         if (showMarkAsCompleteButton) recipeHasBeenEdited = true
+        displayMarkAsCompleteButton()
       },
       error: function() {
         if (displayFail) displayHiddenFlash(`Unable to ${verb} ${component}`, 'fail')
