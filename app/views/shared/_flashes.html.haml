@@ -1,11 +1,11 @@
 - if notice.present?
-  .alert.alert-dismissible.fade.show.my-1{ class: component_classes(DarkMode::CLASSES[:alert_docile]), role: "alert" }
+  .alert.alert-dismissible.fade.show.my-1.alert-docile{ role: "alert" }
     = notice
     %button.close{ type: "button", 'data-dismiss' => "alert", 'aria-label' => "Close" }
       %span{ 'aria-hidden' => "true" }
         &times;
 - if alert.present?
-  .alert.alert-dismissible.fade.show.my-1{ class: component_classes(DarkMode::CLASSES[:alert_keen]), role: "alert" }
+  .alert.alert-dismissible.fade.show.my-1.alert-keen{ role: "alert" }
     = alert
     %button.close{ type: "button", 'data-dismiss' => "alert", 'aria-label' => "Close" }
       %span{ 'aria-hidden' => "true" }

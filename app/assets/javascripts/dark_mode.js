@@ -22,13 +22,11 @@ function toggleDarkMode(darkModeOn) {
 }
 
 function toggleClasses(darkModeOn) {
-  $(darkModeClasses).each(function() {
-    if(darkModeOn) {
-      $(`.${this}`).addClass(`${this}-dark-mode`).removeClass(`${this}-light-mode`)
-    } else {
-      $(`.${this}`).addClass(`${this}-light-mode`).removeClass(`${this}-dark-mode`)
-    }
-  });
+  if(darkModeOn) {
+    $('body').addClass(`dark-mode`).removeClass(`light-mode`)
+  } else {
+    $('body').addClass(`light-mode`).removeClass(`dark-mode`)
+  }
 }
 
 

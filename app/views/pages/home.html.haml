@@ -1,20 +1,20 @@
 .container-fluid
-  .row{class: component_classes(DarkMode::CLASSES[:welcome_banner])}
+  .row.welcome-banner
     .col-md-6.p-0
       .d-flex.justify-content-center.align-items-center.h-100.text-box-container
-        .d-flex.flex-column.justify-content-around.align-items-center.h-100{class: component_classes(DarkMode::CLASSES[:text_box])}
+        .d-flex.flex-column.justify-content-around.align-items-center.h-100.text-box
           = render 'shared/site_logo'
           %h1.text-center
             Welcome to Plant as Usual
           .text-center.my-4.my-md-2
             Plant as Usual is the place to share your favourite vegan recipes. Whether an experienced plant-based chef, or just starting-out, you're sure to find something to whet your appetite.
           .text-center
-            = link_to 'Browse recipes', recipes_path, class: "btn mb-1 mb-sm-0 #{component_classes(DarkMode::CLASSES[:btn_keen])}"
+            = link_to 'Browse recipes', recipes_path, class: "btn mb-1 mb-sm-0 btn-keen"
             - if current_user
-              .btn.mt-1.mt-sm-0{ class: component_classes(DarkMode::CLASSES[:btn_docile]), 'data-toggle' => 'modal', 'data-target' => '#add-recipe-modal' }
+              .btn.mt-1.mt-sm-0.btn-docile{ 'data-toggle' => 'modal', 'data-target' => '#add-recipe-modal' }
                 Add your own
             - else
-              = link_to 'Login to add your own', new_user_session_path, class: "btn mt-1 mt-sm-0 #{component_classes(DarkMode::CLASSES[:btn_docile])}"
+              = link_to 'Login to add your own', new_user_session_path, class: "btn mt-1 mt-sm-0 btn-docile"
 
     .col-md-6.p-0.d-none.d-md-block
       .h-100.photo-container

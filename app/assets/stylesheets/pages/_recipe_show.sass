@@ -23,20 +23,6 @@
           margin-top: 0
           margin-left: $social-media-icons-container-desktop-margin-left
 
-  .interaction-icons-light-mode
-    a
-      color: $light-mode-paragraph-text-color
-    .interaction-icon, .social-media-icon
-      box-shadow: $light-mode-imposing-icon-box-shadow
-      background-color: $light-mode-imposing-icon-background-color
-
-  .interaction-icons-dark-mode
-    a
-      color: $dark-mode-paragraph-text-color
-    .interaction-icon, .social-media-icon
-      box-shadow: $dark-mode-imposing-icon-box-shadow
-      background-color: $dark-mode-imposing-icon-background-color
-
   .photo-uploader
     #photo-container
       max-height: $recipe-show-page-photo-container-max-height
@@ -50,22 +36,6 @@
         #photo-placeholder
           width: 75vw
           height: 100%
-
-  .photo-uploader-light-mode
-    #spinner
-      color: $light-mode-spinner-color
-    #photo-container
-      #photo-placeholder-container
-        #photo-placeholder
-          background-color: $light-mode-photo-uploader-background-color
-
-  .photo-uploader-dark-mode
-    #spinner
-      color: $dark-mode-spinner-color
-    #photo-container
-      #photo-placeholder-container
-        #photo-placeholder
-          background-color: $dark-mode-photo-uploader-background-color
 
   .can-edit-input-display
     cursor: pointer
@@ -107,20 +77,6 @@
       a
         color: inherit
 
-  .recipe-content-row-light-mode
-    #ingredients-container
-      background-color: $light-mode-input-background-color
-
-    #process-display
-      background-color: $light-mode-input-background-color
-
-  .recipe-content-row-dark-mode
-    #ingredients-container
-      background-color: $dark-mode-input-background-color
-
-    #process-display
-      background-color: $dark-mode-input-background-color
-
 #url-dummy-input
   position: fixed
   bottom: -38px
@@ -131,3 +87,49 @@
   width: 100%
   @media (min-width: $grid-md)
     width: auto
+
+.light-mode
+  #recipe-show-page
+    .interaction-icons
+      a
+        color: $light-mode-paragraph-text-color
+      .interaction-icon, .social-media-icon
+        box-shadow: $light-mode-imposing-icon-box-shadow
+        background-color: $light-mode-imposing-icon-background-color
+
+    .photo-uploader
+      #spinner
+        color: $light-mode-spinner-color
+      #photo-container
+        #photo-placeholder-container
+          #photo-placeholder
+            background-color: $light-mode-photo-uploader-background-color
+
+    .recipe-content-row
+      #ingredients-container
+        background-color: $light-mode-input-background-color
+      #process-display
+        background-color: $light-mode-input-background-color
+
+.dark-mode
+  #recipe-show-page
+    .interaction-icons
+      a
+        color: $dark-mode-paragraph-text-color
+      .interaction-icon, .social-media-icon
+        box-shadow: $dark-mode-imposing-icon-box-shadow
+        background-color: $dark-mode-imposing-icon-background-color
+
+    .photo-uploader
+      #spinner
+        color: $dark-mode-spinner-color
+      #photo-container
+        #photo-placeholder-container
+          #photo-placeholder
+            background-color: $dark-mode-photo-uploader-background-color
+
+    .recipe-content-row
+      #ingredients-container
+        background-color: $dark-mode-input-background-color
+      #process-display
+        background-color: $dark-mode-input-background-color
