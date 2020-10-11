@@ -55,7 +55,7 @@ class User < ApplicationRecord
   end
 
   def send_welcome_email
-    UserMailer.with(user: self).welcome_email.deliver_later
+    UserMailer.welcome_email(self).deliver_later
   end
 
   private
