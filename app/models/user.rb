@@ -54,6 +54,10 @@ class User < ApplicationRecord
     }
   end
 
+  def send_welcome_email
+    UserMailer.with(user: self).welcome_email.deliver_later
+  end
+
   private
 
   def strip_whitespace
@@ -75,9 +79,5 @@ class User < ApplicationRecord
 
   def send_sign_up_slack_message
     SendSlackMessageJob.perform_later("A new user has signed-up, username: #{username}, email: #{email}", nature: 'celebrate')
-  end
-
-  def send_welcome_email
-    UserMailer.with(user: self).welcome_email.deliver_later
   end
 end
