@@ -4,7 +4,7 @@
 = render 'shared/hidden_flash', text: ''
 
 .container#recipe-show-page
-  .position-fixed.d-flex.flex-md-column.justify-content-around{ class: component_classes(DarkMode::CLASSES[:interaction_icons]) }
+  .position-fixed.d-flex.flex-md-column.justify-content-around.interaction-icons
     - if current_user
       .cursor-pointer
         %i.fas.fa-heart.interaction-icon#full-heart{ class: @recipe_is_favourite ? '' : 'd-none' }
@@ -38,7 +38,7 @@
         = f.file_field :photo, id: 'photo-uploader', class: 'd-none'
         = f.submit id: 'submit-photo', class: 'd-none'
 
-  .row.justify-content-center{ class: component_classes(DarkMode::CLASSES[:photo_uploader]) }
+  .row.justify-content-center.photo-uploader
     #spinner.spinner-grow.position-absolute.d-none{ style: 'z-index: 100' }
 
     #photo-container.col-12.text-center
@@ -52,10 +52,10 @@
 
   .row.name-row
     .col-12.text-center
-      %h1#name-display.input-display.mb-0{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
+      %h1#name-display.input-display.mb-0{ class: @user_can_edit ? 'can-edit-input-display' : '' }
       = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
         -# This doesn't wrap when multiple lines (like on mobile). Perhaps update to text area rather than input.
-        = f.input :name, label: false, placeholder: @name_placeholder, wrapper_html: { class: 'mb-0' }, input_html: { id: 'name-input', class: "d-none text-center #{component_classes(DarkMode::CLASSES[:input_edit])}" }
+        = f.input :name, label: false, placeholder: @name_placeholder, wrapper_html: { class: 'mb-0' }, input_html: { id: 'name-input', class: 'd-none text-center input-edit' }
 
     .col-12.text-center.d-lg-flex.justify-content-lg-start.user-details-row
       .handwriting.by-user
@@ -73,7 +73,7 @@
                 %i.fab.fa-instagram
                 = @recipe.user.instagram_handle
 
-  .row{ class: component_classes(DarkMode::CLASSES[:recipe_content_row]) }
+  .row.recipe-content-row
     .col-md-5.col-lg-4
       #ingredients-container
         %h4
@@ -89,12 +89,12 @@
           Add ingredient
     .col-md-7.col-lg-8.order-md-first.mt-5.mt-md-0
       // If not the user's recipe, do not add #process-display. Make sure that pundit works for this. Also spec that the classes only exist when the user is the current user.
-      #process-display.input-display{ class: @user_can_edit ? component_classes(DarkMode::CLASSES[:can_edit_input_display]) : '' }
+      #process-display.input-display{ class: @user_can_edit ? 'can-edit-input-display' : '' }
       = simple_form_for @recipe, remote: true, html: { id: nil } do |f|
-        = f.input :process, label: false, placeholder: @process_placeholder, input_html: { id: 'process-input', class: "d-none #{component_classes(DarkMode::CLASSES[:input_edit])}" }
+        = f.input :process, label: false, placeholder: @process_placeholder, input_html: { id: 'process-input', class: 'd-none input-edit' }
 
 - if @user_can_edit
-  = link_to 'Click here to submit your changes', mark_as_complete_recipe_path(@recipe), method: :patch, class: "btn fixed-bottom-left #{@recipe.incomplete? ? '' : 'd-none'} #{component_classes(DarkMode::CLASSES[:btn_keen])}", id: 'mark-as-complete-button'
+  = link_to 'Click here to submit your changes', mark_as_complete_recipe_path(@recipe), method: :patch, class: "btn fixed-bottom-left btn-keen #{@recipe.incomplete? ? '' : 'd-none'}", id: 'mark-as-complete-button'
 
 %input#url-dummy-input{ value: request.original_url }
 

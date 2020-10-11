@@ -18,10 +18,6 @@
         width: 100%
         @media (min-width: $grid-sm)
           width: auto
-    .text-box-light-mode
-      background-color: $light-mode-welcome-banner-text-box-background-color
-    .text-box-dark-mode
-      background-color: $dark-mode-welcome-banner-text-box-background-color
 
   .photo-container
     img
@@ -30,8 +26,16 @@
       max-height: 100%
       object-fit: cover
 
-.welcome-banner-light-mode
-  background-color: $light-mode-welcome-banner-background-color
+.light-mode
+  .welcome-banner
+    background-color: $light-mode-welcome-banner-background-color
+    .text-box-container
+      .text-box
+        background-color: $light-mode-welcome-banner-text-box-background-color
 
-.welcome-banner-dark-mode
-  background-color: $dark-mode-welcome-banner-background-color
+.dark-mode
+  .welcome-banner
+    background-color: $dark-mode-welcome-banner-background-color
+    .text-box-container
+      .text-box
+        background-color: $dark-mode-welcome-banner-text-box-background-color

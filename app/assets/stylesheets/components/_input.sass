@@ -2,16 +2,6 @@
   border: 1px solid transparent
   padding: $input-y-padding $input-x-padding
 
-.can-edit-input-display
-
-.can-edit-input-display-light-mode
-  // &:hover
-  //   border: 1px solid $light-mode-editable-element-hover-border
-
-.can-edit-input-display-dark-mode
-  // &:hover
-  //   border: 1px solid $dark-mode-editable-element-hover-border
-
 #process-display
   white-space: pre-wrap
 
@@ -25,24 +15,26 @@
   font-size: $h1-font-size
   font-weight: $h1-font-weight
 
-.input-edit-light-mode
-  color: $light-mode-paragraph-text-color
-  background-color: $light-mode-input-background-color
-  border-color: $light-mode-input-border-color !important
-  &:focus
+.light-mode
+  .input-edit
     color: $light-mode-paragraph-text-color
     background-color: $light-mode-input-background-color
+    border-color: $light-mode-input-border-color !important
+    &:focus
+      color: $light-mode-paragraph-text-color
+      background-color: $light-mode-input-background-color
 
-.input-edit-light-mode#name-input
-  color: $light-mode-h1-text-color
+  .input-edit#name-input
+    color: $light-mode-h1-text-color
 
-.input-edit-dark-mode
-  color: $dark-mode-paragraph-text-color
-  background-color: $dark-mode-input-background-color
-  border-color: $dark-mode-input-border-color !important
-  &:focus
+.dark-mode
+  .input-edit
     color: $dark-mode-paragraph-text-color
     background-color: $dark-mode-input-background-color
+    border-color: $dark-mode-input-border-color !important
+    &:focus
+      color: $dark-mode-paragraph-text-color
+      background-color: $dark-mode-input-background-color
 
-.input-edit-dark-mode#name-input
-  color: $dark-mode-h1-text-color
+  .input-edit#name-input
+    color: $dark-mode-h1-text-color

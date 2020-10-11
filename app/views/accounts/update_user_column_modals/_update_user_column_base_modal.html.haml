@@ -1,4 +1,4 @@
-.modal.fade{id: "update-#{column}-modal", class: component_classes(DarkMode::CLASSES[:keen_modal]), 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => "update-#{column}-modal-label", 'aria-hidden' => 'true'}
+.modal.fade.keen-modal{id: "update-#{column}-modal", 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => "update-#{column}-modal-label", 'aria-hidden' => 'true'}
   .modal-dialog.modal-lg{'role' => 'document'}
     .modal-content
       = simple_form_for current_user, url: column == User::EDITABLE_COLUMNS[:password] ? account_update_password_path : account_update_user_path, html: { id: "update_#{column}" }, method: :patch do |f|
@@ -17,6 +17,6 @@
           - else
             = f.input column.to_sym, label: false, placeholder: User.editable_column_placeholders[column]
         .modal-footer
-          %button.btn{ type: :button, 'data-dismiss' => 'modal', class: component_classes(DarkMode::CLASSES[:btn_docile]) }
+          %button.btn.btn-docile{ type: :button, 'data-dismiss' => 'modal' }
             Cancel
-          = f.button :submit, "Update #{User.editable_column_labels[column]}", class: "btn #{component_classes(DarkMode::CLASSES[:btn_keen])}"
+          = f.button :submit, "Update #{User.editable_column_labels[column]}", class: "btn btn-keen"

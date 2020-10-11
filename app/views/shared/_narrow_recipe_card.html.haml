@@ -1,5 +1,5 @@
 = link_to recipe_path(recipe) do
-  .row.h-100{class: component_classes(DarkMode::CLASSES[:narrow_recipe_card])}
+  .row.h-100.narrow-recipe-card
     .col-12.content-container
       .image-container
         - if recipe.photo.max_height_500.file&.exists?

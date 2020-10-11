@@ -5,22 +5,18 @@
   margin-left: $flash-alert-position
   z-index: 1000
 
-.alert-keen
+.light-mode
+  .alert-keen
+    color: $light-mode-paragraph-text-color
+    background-color: $light-mode-flash-alert-keen-background-color
+  .alert-docile
+    color: $light-mode-paragraph-text-color
+    background-color: $light-mode-flash-alert-docile-background-color
 
-.alert-keen-light-mode
-  color: $light-mode-paragraph-text-color
-  background-color: $light-mode-flash-alert-keen-background-color
-
-.alert-keen-dark-mode
-  color: $dark-mode-paragraph-text-color
-  background-color: $dark-mode-flash-alert-keen-background-color
-
-.alert-docile
-
-.alert-docile-light-mode
-  color: $light-mode-paragraph-text-color
-  background-color: $light-mode-flash-alert-docile-background-color
-
-.alert-docile-dark-mode
-  color: $dark-mode-paragraph-text-color
-  background-color: $dark-mode-flash-alert-docile-background-color
+.dark-mode
+  .alert-keen
+    color: $dark-mode-paragraph-text-color
+    background-color: $dark-mode-flash-alert-keen-background-color
+  .alert-docile
+    color: $dark-mode-paragraph-text-color
+    background-color: $dark-mode-flash-alert-docile-background-color

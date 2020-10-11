@@ -1,14 +1,10 @@
 module ApplicationHelper
   class AmountIsNotNumber < StandardError; end
 
-  def component_classes(component)
-    "#{component} #{display_mode(component)}"
-  end
+  def display_mode
+    return 'light-mode' unless user_signed_in?
 
-  def display_mode(element)
-    return "#{element}-light-mode" unless user_signed_in?
-
-    current_user.dark_mode ? "#{element}-dark-mode" : "#{element}-light-mode"
+    current_user.dark_mode ? 'dark-mode' : 'light-mode'
   end
 
   def page_title
