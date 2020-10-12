@@ -6,10 +6,54 @@ describe RecipesController, type: :controller do
   before { sign_in user }
 
   describe 'GET #index' do
+    render_views
     context 'user is signed-in' do
-      it 'returns http success' do
-        get :index
-        expect(response).to be_successful
+      context '@recipes contains recipes' do
+        let!(:recipe) { create(:recipe) }
+        it 'returns http success' do
+          get :index
+          expect(response).to be_successful
+        end
+      end
+
+      context '@recipes does not contain any recipes' do
+        context 'recipe filter is user_recipes' do
+          context 'searched for user is current user' do
+            it 'returns http success' do
+              get :index, params: { recipe_filter: 'user_recipes', user_id: user.id }
+              expect(response).to be_successful
+            end
+          end
+
+          context 'searched for user is not current user' do
+            let(:searched_for_user) { create(:user) }
+            it 'returns http success' do
+              get :index, params: { recipe_filter: 'user_recipes', user_id: searched_for_user.id }
+              expect(response).to be_successful
+            end
+          end
+        end
+
+        context 'recipe filter is user_favourites' do
+          it 'returns http success' do
+            get :index, params: { recipe_filter: 'user_favourites' }
+            expect(response).to be_successful
+          end
+        end
+
+        context 'recipe filter is search' do
+          it 'returns http success' do
+            get :index, params: { recipe_filter: 'search', query: 'areallylongandcomplicatedquerythatwontreturnanyresults' }
+            expect(response).to be_successful
+          end
+        end
+
+        context 'recipe filter does not exist' do
+          it 'returns http success' do
+            get :index
+            expect(response).to be_successful
+          end
+        end
       end
     end
 
