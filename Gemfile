@@ -37,6 +37,7 @@ group :test do
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'database_cleaner-active_record'
+  gem 'rails-controller-testing'
 end
 
 group :development, :test do
