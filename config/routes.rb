@@ -24,4 +24,10 @@ Rails.application.routes.draw do
   patch 'admin/recipe_approve_for_feature/:recipe_id', to: 'admin#recipe_approve_for_feature', as: 'admin_recipe_approve_for_feature'
   patch 'admin/recipe_approve_for_recipe_of_the_day/:recipe_id', to: 'admin#recipe_approve_for_recipe_of_the_day', as: 'admin_recipe_approve_for_recipe_of_the_day'
   patch 'admin/recipe_decline/:recipe_id', to: 'admin#recipe_decline', as: 'admin_recipe_decline'
+
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resources :recipes, only: [ :index ]
+    end
+  end
 end

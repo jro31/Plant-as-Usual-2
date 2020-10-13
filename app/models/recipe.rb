@@ -144,6 +144,10 @@ class Recipe < ApplicationRecord
     state == 'awaiting_approval'
   end
 
+  def available_to_show?
+    !['incomplete', 'declined', 'hidden'].include?(state)
+  end
+
   def has_photo?
     photo.present?
   end

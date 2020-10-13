@@ -951,6 +951,28 @@ describe Recipe do
       end
     end
 
+    describe '#available_to_show?' do
+      context 'state is incomplete' do
+        before { recipe.update(state: :incomplete) }
+        it { expect(recipe.available_to_show?).to eq(false) }
+      end
+
+      context 'state is declined' do
+        before { recipe.update(state: :declined) }
+        it { expect(recipe.available_to_show?).to eq(false) }
+      end
+
+      context 'state is hidden' do
+        before { recipe.update(state: :hidden) }
+        it { expect(recipe.available_to_show?).to eq(false) }
+      end
+
+      context 'state is something else' do
+        before { recipe.update(state: :approved) }
+        it { expect(recipe.available_to_show?).to eq(true) }
+      end
+    end
+
     describe '#has_photo?' do
       let(:test_photo) { fixture_file_upload(Rails.root.join('public', 'test-photo.jpg'), 'image/jpg') }
       context 'recipe has a photo' do
