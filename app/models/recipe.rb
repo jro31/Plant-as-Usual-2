@@ -11,6 +11,8 @@ class Recipe < ApplicationRecord
   validate :validate_number_of_featured_recipes
   validate :validate_number_of_recipes_of_the_day
 
+  accepts_nested_attributes_for :ingredients # SPEC THIS
+
   after_save :state_changed_methods, if: :saved_change_to_state?
 
   scope :approved, -> { where(state: [:approved, :approved_for_feature, :approved_for_recipe_of_the_day]) }

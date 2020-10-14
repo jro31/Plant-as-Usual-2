@@ -5,6 +5,10 @@ class RecipePolicy < ApplicationPolicy
     end
   end
 
+  def create?
+    !user.nil?
+  end
+
   def show?
     true
   end

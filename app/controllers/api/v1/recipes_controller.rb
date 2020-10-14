@@ -1,6 +1,17 @@
 class Api::V1::RecipesController < Api::V1::BaseController
-  acts_as_token_authentication_handler_for User, except: [ :index, :show ]
-  before_action :set_and_authorise_recipe, except: :index
+  acts_as_token_authentication_handler_for User, except: %i(index show)
+  before_action :set_and_authorise_recipe, except: %i(create index)
+
+  def create
+    @recipe = Recipe.new(recipe_params)
+    @recipe.user = current_user
+    authorize @recipe
+    if @recipe.save
+      render :show
+    else
+      render_error
+    end
+  end
 
   def index
     @recipes = policy_scope(Recipe)
@@ -19,7 +30,7 @@ class Api::V1::RecipesController < Api::V1::BaseController
   private
 
   def recipe_params
-    params.require(:recipe).permit(:name, :process)
+    params.require(:recipe).permit(:name, :process, ingredients_attributes: %i(amount unit food preparation optional))
   end
 
   def render_error
