@@ -5,6 +5,8 @@ describe User, type: :model do
   it { should have_many :user_favourite_recipes }
   it { should have_many :favourites }
 
+  let(:user) { create(:user) }
+
   describe 'EDITABLE_COLUMNS' do
     it 'returns a hash of editable columns' do
       expect(User::EDITABLE_COLUMNS).to eq({
@@ -18,7 +20,26 @@ describe User, type: :model do
     end
   end
 
-  let(:user) { create(:user) }
+  describe 'acts_as_token_authenticatable' do
+    context 'on create' do
+      subject { build(:user) }
+      it 'gives the user an authentication token' do
+        expect(subject.authentication_token).to eq(nil)
+        subject.save
+        expect(subject.authentication_token).not_to eq(nil)
+      end
+    end
+
+    context 'on save' do
+      subject { create(:user) }
+      it 'gives the user an authentication token' do
+        subject.authentication_token = nil
+        expect(subject.authentication_token).to eq(nil)
+        subject.save
+        expect(subject.authentication_token).not_to eq(nil)
+      end
+    end
+  end
 
   describe 'User.favourites' do
     let(:recipe_1) { create(:recipe) }

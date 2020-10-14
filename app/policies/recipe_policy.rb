@@ -14,14 +14,14 @@ class RecipePolicy < ApplicationPolicy
   end
 
   def upload_photo?
-    user_is_owner_or_admin?
+    update?
   end
 
   def mark_as_complete?
-    user_is_owner_or_admin?
+    update?
   end
 
   def destroy?
-    user_is_owner_or_admin?
+    update?
   end
 end

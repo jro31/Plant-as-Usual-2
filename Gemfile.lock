@@ -271,6 +271,10 @@ GEM
     simple_form (5.0.2)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
+    simple_token_authentication (1.17.0)
+      actionmailer (>= 3.2.6, < 7)
+      actionpack (>= 3.2.6, < 7)
+      devise (>= 3.2, < 6)
     slack-notifier (2.3.2)
     spring (2.1.0)
     spring-commands-rspec (1.0.4)
@@ -355,6 +359,7 @@ DEPENDENCIES
   sassc-rails
   shoulda-matchers
   simple_form
+  simple_token_authentication
   slack-notifier
   spring
   spring-commands-rspec
