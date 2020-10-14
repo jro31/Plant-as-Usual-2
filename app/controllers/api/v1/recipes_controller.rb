@@ -27,6 +27,11 @@ class Api::V1::RecipesController < Api::V1::BaseController
     end
   end
 
+  def destroy
+    @recipe.destroy
+    head :no_content
+  end
+
   private
 
   def recipe_params
