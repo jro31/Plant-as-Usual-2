@@ -18,10 +18,10 @@
             %h2
               = recipe.name
           .col-md-4
-            - @actions.each do |action|
+            - @events.each do |event|
               .mb-3
-                - if action == 'decline'
-                  = link_to action.humanize, '#', class: "w-100 btn btn-docile", data: { toggle: 'modal', target: "#recipe-#{recipe.id}-decline-reason-modal" }
+                - if event == 'decline'
+                  = link_to event.humanize, '#', class: "w-100 btn btn-docile", data: { toggle: 'modal', target: "#recipe-#{recipe.id}-decline-reason-modal" }
 
                   .modal.fade.keen-modal{ id: "recipe-#{recipe.id}-decline-reason-modal", 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => "recipe-#{recipe.id}-decline-reason-modal", 'aria-hidden' => 'true' }
                     .modal-dialog{ 'role' => 'document' }
@@ -40,8 +40,8 @@
                               Close
                             = f.button :submit, 'Decline recipe', class: "btn btn-keen"
                 - else
-                  - if recipe.send("can_#{action}?")
-                    = link_to action.humanize, send("admin_recipe_#{action}_path", recipe), method: :patch, class: "w-100 btn btn-keen"
+                  - if recipe.send("can_#{event}?")
+                    = link_to event.humanize, send("admin_recipe_#{event}_path", recipe), method: :patch, class: "w-100 btn btn-keen"
     - else
       .row.mt-5
         .col-12.text-center

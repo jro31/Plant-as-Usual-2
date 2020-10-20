@@ -8,7 +8,7 @@ class AdminController < ApplicationController
     @scopes_to_display.each do |recipe_scope|
       instance_variable_set("@#{recipe_scope}_recipes", Recipe.send(recipe_scope).order(updated_at: :asc))
     end
-    @actions = ['approve_for_recipe_of_the_day', 'approve_for_feature', 'approve', 'decline']
+    @events = ['approve_for_recipe_of_the_day', 'approve_for_feature', 'approve', 'decline']
     @users_to_display = User.last(5).reverse
   end
 
