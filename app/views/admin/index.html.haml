@@ -21,7 +21,28 @@
             - @events.each do |event|
               - if recipe.send("can_#{event}?")
                 .mb-3
-                  = link_to event.humanize, send("admin_recipe_#{event}_path", recipe), method: :patch, class: "w-100 btn #{event == 'decline' ? 'btn-docile' : 'btn-keen'}"
+                  =# link_to event.humanize, send("admin_recipe_#{event}_path", recipe), method: :patch, class: "w-100 btn #{event == 'decline' ? 'btn-docile' : 'btn-keen'}"
+                  - if event == 'decline'
+                    = link_to event.humanize, '#', class: "w-100 btn btn-docile", data: { toggle: 'modal', target: "#recipe-#{recipe.id}-decline-reason-modal" }
+
+                    .modal.fade{ id: "recipe-#{recipe.id}-decline-reason-modal", 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => "recipe-#{recipe.id}-decline-reason-modal", 'aria-hidden' => 'true' }
+                      .modal-dialog{ 'role' => 'document' }
+                        .modal-content
+                          .modal-header
+                            %h5.modal-title{ id: "recipe-#{recipe.id}-decline-reason-modal" }
+                              Modal title
+                            %button.close{ type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close' }
+                              %span{ 'aria-hidden' => 'true' }
+                                &times;
+                          .modal-body
+                            test
+                          .modal-footer
+                            %button.btn.btn-secondary{ type: :button, 'data-dismiss' => 'modal' }
+                              Close
+                            %button.btn.btn-primary{ type: :button }
+                              Save changes
+                  - else
+                    = link_to event.humanize, send("admin_recipe_#{event}_path", recipe), method: :patch, class: "w-100 btn btn-keen"
     - else
       .row.mt-5
         .col-12.text-center
