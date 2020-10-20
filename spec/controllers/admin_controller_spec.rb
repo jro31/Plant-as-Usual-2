@@ -139,6 +139,7 @@ describe AdminController, type: :controller do
   end
 
   describe 'PATCH #recipe_decline' do
+    # UPDATE THIS
     let(:params) { { recipe_id: recipe.id } }
     context 'user is admin' do
       it 'updates the recipe state to declined' do

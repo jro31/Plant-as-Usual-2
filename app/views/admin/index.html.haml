@@ -18,31 +18,30 @@
             %h2
               = recipe.name
           .col-md-4
-            - @events.each do |event|
-              - if recipe.send("can_#{event}?")
-                .mb-3
-                  =# link_to event.humanize, send("admin_recipe_#{event}_path", recipe), method: :patch, class: "w-100 btn #{event == 'decline' ? 'btn-docile' : 'btn-keen'}"
-                  - if event == 'decline'
-                    = link_to event.humanize, '#', class: "w-100 btn btn-docile", data: { toggle: 'modal', target: "#recipe-#{recipe.id}-decline-reason-modal" }
+            - @actions.each do |action|
+              .mb-3
+                - if action == 'decline'
+                  = link_to action.humanize, '#', class: "w-100 btn btn-docile", data: { toggle: 'modal', target: "#recipe-#{recipe.id}-decline-reason-modal" }
 
-                    .modal.fade{ id: "recipe-#{recipe.id}-decline-reason-modal", 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => "recipe-#{recipe.id}-decline-reason-modal", 'aria-hidden' => 'true' }
-                      .modal-dialog{ 'role' => 'document' }
-                        .modal-content
+                  .modal.fade.keen-modal{ id: "recipe-#{recipe.id}-decline-reason-modal", 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => "recipe-#{recipe.id}-decline-reason-modal", 'aria-hidden' => 'true' }
+                    .modal-dialog{ 'role' => 'document' }
+                      .modal-content
+                        = simple_form_for recipe, url: admin_recipe_decline_path(recipe) do |f|
                           .modal-header
                             %h5.modal-title{ id: "recipe-#{recipe.id}-decline-reason-modal" }
-                              Modal title
-                            %button.close{ type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close' }
+                              Decline reason
+                            %button.close-cross{ type: :button, 'data-dismiss' => 'modal', 'aria-label' => 'Close' }
                               %span{ 'aria-hidden' => 'true' }
                                 &times;
                           .modal-body
-                            test
+                            = f.input :declined_reason, label: false, input_html: { id: "recipe_#{recipe.id}_declined_reason" }
                           .modal-footer
-                            %button.btn.btn-secondary{ type: :button, 'data-dismiss' => 'modal' }
+                            %button.btn.btn-docile{ type: :button, 'data-dismiss' => 'modal' }
                               Close
-                            %button.btn.btn-primary{ type: :button }
-                              Save changes
-                  - else
-                    = link_to event.humanize, send("admin_recipe_#{event}_path", recipe), method: :patch, class: "w-100 btn btn-keen"
+                            = f.button :submit, 'Decline recipe', class: "btn btn-keen"
+                - else
+                  - if recipe.send("can_#{action}?")
+                    = link_to action.humanize, send("admin_recipe_#{action}_path", recipe), method: :patch, class: "w-100 btn btn-keen"
     - else
       .row.mt-5
         .col-12.text-center

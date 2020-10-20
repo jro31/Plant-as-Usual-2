@@ -9,7 +9,9 @@ class Recipe < ApplicationRecord
 
   validate :validate_number_of_featured_recipes
   validate :validate_number_of_recipes_of_the_day
+  validate :validate_decline_reason
 
+  before_validation :remove_declined_reason, if: :will_save_change_to_state?
   after_save :state_changed_methods, if: :saved_change_to_state?
 
   scope :approved, -> { where(state: [:approved, :approved_for_feature, :approved_for_recipe_of_the_day]) }
@@ -58,7 +60,7 @@ class Recipe < ApplicationRecord
       transition [:recipe_of_the_day_as_currently_featured, :current_recipe_of_the_day] => :approved_for_recipe_of_the_day
     end
 
-    event :decline do
+    event :decline do # REQUIRES declined_reason TO BE ASSIGNED BEFORE CALLING
       transition [:incomplete, :awaiting_approval] => :declined
     end
 
@@ -150,6 +152,12 @@ class Recipe < ApplicationRecord
 
   private
 
+  def remove_declined_reason
+    return if declined?
+
+    self.declined_reason = nil
+  end
+
   def state_changed_methods
     set_next_featured_recipe
     set_next_recipe_of_the_day
@@ -193,6 +201,14 @@ class Recipe < ApplicationRecord
     return unless Recipe.current_recipes_of_the_day.count >= NUMBER_OF_RECIPES_OF_THE_DAY
 
     errors.add(:state, "There can only be one recipe of the day")
+  end
+
+  def validate_decline_reason
+    if declined_reason.present? && !declined?
+      errors.add(:declined_reason, "A not-declined recipe should not have a declined reason")
+    elsif declined_reason.blank? && declined?
+      errors.add(:declined_reason, "A declined recipe should have a declined reason")
+    end
   end
 
   def self.is_or_are(amount)

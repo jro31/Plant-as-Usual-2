@@ -8,7 +8,7 @@ class AdminController < ApplicationController
     @scopes_to_display.each do |recipe_scope|
       instance_variable_set("@#{recipe_scope}_recipes", Recipe.send(recipe_scope).order(updated_at: :asc))
     end
-    @events = ['approve_for_recipe_of_the_day', 'approve_for_feature', 'approve', 'decline']
+    @actions = ['approve_for_recipe_of_the_day', 'approve_for_feature', 'approve', 'decline']
     @users_to_display = User.last(5).reverse
   end
 
@@ -32,11 +32,18 @@ class AdminController < ApplicationController
 
   def recipe_decline
     authorize nil, policy_class: AdminPolicy
-    @recipe.decline
+    @recipe.assign_attributes(recipe_params)
+    unless @recipe.decline
+      flash[:alert] = @recipe.errors.any? ? "Fail. #{@recipe.errors.full_messages.to_sentence}." : "Something went wrong."
+    end
     redirect_to admin_path
   end
 
   private
+
+  def recipe_params
+    params.require(:recipe).permit(:declined_reason)
+  end
 
   def set_recipe
     @recipe = Recipe.find(params[:recipe_id])
