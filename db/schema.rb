@@ -67,10 +67,10 @@ ActiveRecord::Schema.define(version: 2020_10_02_100515) do
   create_table "recipes", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "name"
+    t.string "photo"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "process"
-    t.string "photo"
     t.string "state"
     t.datetime "state_updated_at"
     t.string "declined_reason"

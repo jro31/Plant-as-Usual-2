@@ -646,18 +646,42 @@ describe Recipe do
       end
 
       describe '.decline' do
-        # UPDATE THIS
         let(:event) { 'decline' }
-        it { expect(incomplete_recipe.state).to eq('declined') }
-        it { expect(awaiting_approval_recipe.state).to eq('declined') }
-        it { expect(approved_recipe.state).to eq('approved') }
-        it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
-        it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
-        it { expect(currently_featured_recipe.state).to eq('currently_featured') }
-        it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
-        it { expect(current_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
-        it { expect(declined_recipe.state).to eq('declined') }
-        it { expect(hidden_recipe.state).to eq('hidden') }
+        context 'recipe has declined reason' do
+          let(:incomplete_recipe_with_declined_reason) { build(:recipe, state: :incomplete, declined_reason: 'Wizard food') }
+          let(:awaiting_approval_recipe_with_declined_reason) { build(:recipe, state: :awaiting_approval, declined_reason: 'Not human food') }
+          let(:approved_recipe_with_declined_reason) { build(:recipe, state: :approved, declined_reason: 'Contains hair') }
+          let(:approved_for_feature_recipe_with_declined_reason) { build(:recipe, state: :approved_for_feature, declined_reason: 'Has links') }
+          let(:approved_for_recipe_of_the_day_recipe_with_declined_reason) { build(:recipe, state: :approved_for_recipe_of_the_day, declined_reason: 'Just water') }
+          let(:currently_featured_recipe_with_declined_reason) { build(:recipe, state: :currently_featured, declined_reason: 'Pot noodle is not cooking') }
+          let(:recipe_of_the_day_as_currently_featured_recipe_with_declined_reason) { build(:recipe, state: :recipe_of_the_day_as_currently_featured, declined_reason: 'Chemicals are not food') }
+          let(:current_recipe_of_the_day_recipe_with_declined_reason) { build(:recipe, state: :current_recipe_of_the_day, declined_reason: 'Plants have feelings too') }
+          let(:hidden_recipe_with_declined_reason) { build(:recipe, state: :hidden, declined_reason: 'No elecronics') }
+          let(:all_recipes_with_declined_reasons) { [incomplete_recipe_with_declined_reason, awaiting_approval_recipe_with_declined_reason, approved_recipe_with_declined_reason, approved_for_feature_recipe_with_declined_reason, approved_for_recipe_of_the_day_recipe_with_declined_reason, currently_featured_recipe_with_declined_reason, recipe_of_the_day_as_currently_featured_recipe_with_declined_reason, current_recipe_of_the_day_recipe_with_declined_reason, declined_recipe, hidden_recipe_with_declined_reason] }
+          before { all_recipes_with_declined_reasons.each { |recipe| recipe&.send(event) } }
+          it { expect(incomplete_recipe_with_declined_reason.state).to eq('declined') }
+          it { expect(awaiting_approval_recipe_with_declined_reason.state).to eq('declined') }
+          it { expect(approved_recipe_with_declined_reason.state).to eq('approved') }
+          it { expect(approved_for_feature_recipe_with_declined_reason.state).to eq('approved_for_feature') }
+          it { expect(approved_for_recipe_of_the_day_recipe_with_declined_reason.state).to eq('approved_for_recipe_of_the_day') }
+          it { expect(currently_featured_recipe_with_declined_reason.state).to eq('currently_featured') }
+          it { expect(recipe_of_the_day_as_currently_featured_recipe_with_declined_reason.state).to eq('recipe_of_the_day_as_currently_featured') }
+          it { expect(current_recipe_of_the_day_recipe_with_declined_reason.state).to eq('current_recipe_of_the_day') }
+          it { expect(declined_recipe.state).to eq('declined') }
+          it { expect(hidden_recipe_with_declined_reason.state).to eq('hidden') }
+        end
+
+        context 'recipe does not have a declined reason' do
+          it { expect(incomplete_recipe.state).to eq('incomplete') }
+          it { expect(awaiting_approval_recipe.state).to eq('awaiting_approval') }
+          it { expect(approved_recipe.state).to eq('approved') }
+          it { expect(approved_for_feature_recipe.state).to eq('approved_for_feature') }
+          it { expect(approved_for_recipe_of_the_day_recipe.state).to eq('approved_for_recipe_of_the_day') }
+          it { expect(currently_featured_recipe.state).to eq('currently_featured') }
+          it { expect(recipe_of_the_day_as_currently_featured_recipe.state).to eq('recipe_of_the_day_as_currently_featured') }
+          it { expect(current_recipe_of_the_day_recipe.state).to eq('current_recipe_of_the_day') }
+          it { expect(hidden_recipe.state).to eq('hidden') }
+        end
       end
 
       describe '.hide' do

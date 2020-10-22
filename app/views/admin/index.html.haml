@@ -24,7 +24,7 @@
                   = link_to event.humanize, '#', class: "w-100 btn btn-docile", data: { toggle: 'modal', target: "#recipe-#{recipe.id}-decline-reason-modal" }
 
                   .modal.fade.keen-modal{ id: "recipe-#{recipe.id}-decline-reason-modal", 'tabindex' => '-1', 'role' => 'dialog', 'aria-labelledby' => "recipe-#{recipe.id}-decline-reason-modal", 'aria-hidden' => 'true' }
-                    .modal-dialog{ 'role' => 'document' }
+                    .modal-dialog.modal-lg{ 'role' => 'document' }
                       .modal-content
                         = simple_form_for recipe, url: admin_recipe_decline_path(recipe) do |f|
                           .modal-header
