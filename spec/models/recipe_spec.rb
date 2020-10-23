@@ -128,7 +128,7 @@ describe Recipe do
           before { subject.declined_reason = '' }
           it 'is not valid' do
             expect(subject).not_to be_valid
-            expect(subject.errors.messages[:declined_reason]).to include('A declined recipe should have a declined reason')
+            expect(subject.errors.messages[:declined_reason]).to include('should be present')
           end
         end
 
@@ -136,7 +136,7 @@ describe Recipe do
           before { subject.declined_reason = nil }
           it 'is not valid' do
             expect(subject).not_to be_valid
-            expect(subject.errors.messages[:declined_reason]).to include('A declined recipe should have a declined reason')
+            expect(subject.errors.messages[:declined_reason]).to include('should be present')
           end
         end
       end
@@ -147,7 +147,7 @@ describe Recipe do
           before { subject.declined_reason = 'This recipe contains meat' }
           it 'is not valid' do
             expect(subject).not_to be_valid
-            expect(subject.errors.messages[:declined_reason]).to include('A not-declined recipe should not have a declined reason')
+            expect(subject.errors.messages[:declined_reason]).to include('should not be present')
           end
         end
 

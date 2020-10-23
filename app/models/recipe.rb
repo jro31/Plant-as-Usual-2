@@ -200,14 +200,14 @@ class Recipe < ApplicationRecord
     return unless will_save_change_to_state? && current_recipe_of_the_day?
     return unless Recipe.current_recipes_of_the_day.count >= NUMBER_OF_RECIPES_OF_THE_DAY
 
-    errors.add(:state, "There can only be one recipe of the day")
+    errors.add(:state, 'There can only be one recipe of the day')
   end
 
   def validate_decline_reason
     if declined_reason.present? && !declined?
-      errors.add(:declined_reason, "A not-declined recipe should not have a declined reason")
+      errors.add(:declined_reason, 'should not be present')
     elsif declined_reason.blank? && declined?
-      errors.add(:declined_reason, "A declined recipe should have a declined reason")
+      errors.add(:declined_reason, 'should be present')
     end
   end
 
