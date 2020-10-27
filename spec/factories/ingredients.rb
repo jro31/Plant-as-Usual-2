@@ -6,6 +6,5 @@ FactoryBot.define do
     preparation { 'chopped' }
     optional { false }
     unit { 'cup' }
-    amount_as_float { nil }
   end
 end
