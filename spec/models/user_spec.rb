@@ -159,15 +159,31 @@ describe User, type: :model do
               user.email = 'dumbledore.com'
               expect(user).not_to be_valid
               expect(user.errors.messages[:email]).to include('is invalid')
+              expect(user.errors.messages[:email]).to include("must contain exactly one '@'")
+            end
+          end
+
+          context 'it contains two @ symbols' do
+            it 'is not valid' do
+              user.email = 'remus@@wolflife.com'
+              expect(user).not_to be_valid
+              expect(user.errors.messages[:email]).to include('is invalid')
+              expect(user.errors.messages[:email]).to include("must contain exactly one '@'")
+            end
+
+            it 'is not valid' do
+              user.email = 'cho@chang@influencer.love'
+              expect(user).not_to be_valid
+              expect(user.errors.messages[:email]).to include('is invalid')
+              expect(user.errors.messages[:email]).to include("must contain exactly one '@'")
             end
           end
 
           context 'is does not contain .' do
-            # Not sure why this is passing - See line ~174 of config/initializers/devise.rb
-            xit 'is not valid' do
+            it 'is not valid' do
               user.email = 'hermione@hogwarts'
               expect(user).not_to be_valid
-              expect(user.errors.messages[:email]).to include('is invalid')
+              expect(user.errors.messages[:email]).to include('must contain a full stop')
             end
           end
         end
