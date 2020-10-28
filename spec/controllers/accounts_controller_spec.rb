@@ -98,7 +98,8 @@ describe AccountsController, type: :controller do
 
           it 'displays a flash message' do
             patch :update_user, params: params
-            expect(flash[:alert]).to eq('Fail. Email is invalid.')
+            expect(flash[:alert]).to include('Email is invalid')
+            expect(flash[:alert]).to include("Email must contain exactly one '@'")
           end
 
           it 'redirects to the account page' do
