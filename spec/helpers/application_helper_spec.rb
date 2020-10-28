@@ -174,4 +174,36 @@ describe ApplicationHelper do
       it { expect { no_or_number([1]) }.to raise_error(ApplicationHelper::AmountIsNotNumber) }
     end
   end
+
+  describe '#number_of_at_symbols' do
+    context 'argument is a string' do
+      it { expect(number_of_at_symbols('khargatyewbell.com')).to eq(0) }
+      it { expect(number_of_at_symbols('Lady Nafia')).to eq(0) }
+      it { expect(number_of_at_symbols('darc@savethedeimos.com')).to eq(1) }
+      it { expect(number_of_at_symbols('lilia@@lightstone.com')).to eq(2) }
+      it { expect(number_of_at_symbols(' @   @      @ Bebedora @  ')).to eq(4) }
+    end
+
+    context 'argument is not a string' do
+      it { expect { number_of_at_symbols(1234) }.to raise_error(ApplicationHelper::ArgumentIsNotString) }
+      it { expect { number_of_at_symbols(5.67) }.to raise_error(ApplicationHelper::ArgumentIsNotString) }
+      it { expect { number_of_at_symbols(['Maru']) }.to raise_error(ApplicationHelper::ArgumentIsNotString) }
+    end
+  end
+
+  describe '#number_of_full_stops' do
+    context 'argument is a string' do
+      it { expect(number_of_full_stops('deimos@dragonbonevalley')).to eq(0) }
+      it { expect(number_of_full_stops('Windalf 4 Nafia')).to eq(0) }
+      it { expect(number_of_full_stops('paulette@screwlilia.com')).to eq(1) }
+      it { expect(number_of_full_stops('densima@firbles..yum')).to eq(2) }
+      it { expect(number_of_full_stops(' ..   .      . Volk @ .  ')).to eq(5) }
+    end
+
+    context 'argument is not a string' do
+      it { expect { number_of_full_stops(1234) }.to raise_error(ApplicationHelper::ArgumentIsNotString) }
+      it { expect { number_of_full_stops(5.67) }.to raise_error(ApplicationHelper::ArgumentIsNotString) }
+      it { expect { number_of_full_stops(['Camellia']) }.to raise_error(ApplicationHelper::ArgumentIsNotString) }
+    end
+  end
 end
