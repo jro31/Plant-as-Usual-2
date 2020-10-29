@@ -53,9 +53,9 @@ describe AdminController, type: :controller do
 
     context 'user is not signed-in' do
       before { sign_out user }
-      xit 'does not call approve on the recipe' do
-        # FIX THIS
-        # expect(recipe).to receive(:approve).never
+      it 'does not call approve on the recipe' do
+        expect(recipe).to receive(:approve).never
+        patch :recipe_approve, params: params
       end
 
       it 'does not change the recipe state' do
@@ -90,8 +90,9 @@ describe AdminController, type: :controller do
 
     context 'user is not signed-in' do
       before { sign_out user }
-      xit 'does not call approve_for_feature on the recipe' do
-        # COMPLETE THIS
+      it 'does not call approve_for_feature on the recipe' do
+        expect(recipe).to receive(:approve_for_feature).never
+        patch :recipe_approve_for_feature, params: params
       end
 
       it 'does not change the recipe state' do
@@ -126,8 +127,9 @@ describe AdminController, type: :controller do
 
     context 'user is not signed-in' do
       before { sign_out user }
-      xit 'does not call approve_for_recipe_of_the_day on the recipe' do
-        # COMPLETE THIS
+      it 'does not call approve_for_recipe_of_the_day on the recipe' do
+        expect(recipe).to receive(:approve_for_recipe_of_the_day).never
+        patch :recipe_approve_for_recipe_of_the_day, params: params
       end
 
       it 'does not change the recipe state' do
@@ -221,8 +223,9 @@ describe AdminController, type: :controller do
 
     context 'user is not signed-in' do
       before { sign_out user }
-      xit 'does not call decline on the recipe' do
-        # COMPLETE THIS
+      it 'does not call decline on the recipe' do
+        expect(recipe).to receive(:decline).never
+        patch :recipe_decline, params: params
       end
 
       it 'does not change the recipe state' do
