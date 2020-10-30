@@ -26,5 +26,6 @@ module PlantAsUsual2
     # the framework and any gems in your application.
 
     config.action_mailer.preview_path = "#{Rails.root}/app/mailers/previews"
+    config.action_mailer.delivery_method :smtp
   end
 end

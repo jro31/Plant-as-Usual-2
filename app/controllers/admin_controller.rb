@@ -32,11 +32,18 @@ class AdminController < ApplicationController
 
   def recipe_decline
     authorize nil, policy_class: AdminPolicy
-    @recipe.decline
+    @recipe.assign_attributes(recipe_params)
+    unless @recipe.decline
+      flash[:alert] = @recipe.errors.any? ? "Fail. #{@recipe.errors.full_messages.to_sentence}." : "Something went wrong."
+    end
     redirect_to admin_path
   end
 
   private
+
+  def recipe_params
+    params.require(:recipe).permit(:declined_reason)
+  end
 
   def set_recipe
     @recipe = Recipe.find(params[:recipe_id])

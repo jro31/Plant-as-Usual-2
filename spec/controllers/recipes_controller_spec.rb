@@ -223,8 +223,7 @@ describe RecipesController, type: :controller do
 
     context 'current user is not signed-in' do
       before { sign_out user }
-      # Check that this one works
-      xit 'does not call update on recipe' do
+      it 'does not call update on recipe' do
         expect(recipe).to receive(:update).never
         patch :update, params: params
       end
@@ -300,8 +299,7 @@ describe RecipesController, type: :controller do
 
     context 'current user is not signed-in' do
       before { sign_out user }
-      # Check that this one works
-      xit 'does not call update on recipe' do
+      it 'does not call update on recipe' do
         expect(recipe).to receive(:update).never
         patch :upload_photo, params: params, format: :js
       end
@@ -357,8 +355,7 @@ describe RecipesController, type: :controller do
 
     context 'current user is not signed-in' do
       before { sign_out user }
-      # Check that this one works
-      xit 'does not call complete on recipe' do
+      it 'does not call complete on recipe' do
         expect(recipe).to receive(:complete).never
         patch :mark_as_complete, params: params
       end
@@ -430,8 +427,7 @@ describe RecipesController, type: :controller do
 
     context 'current user is not signed-in' do
       before { sign_out user }
-      # Check that this one works
-      xit 'does not call destroy on recipe' do
+      it 'does not call destroy on recipe' do
         expect(recipe).to receive(:destroy).never
         delete :destroy, params: params
       end

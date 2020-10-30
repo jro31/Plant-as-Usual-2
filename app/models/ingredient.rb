@@ -20,8 +20,6 @@ class Ingredient < ApplicationRecord
     '1', 'one', 'a', 'an', 'quarter', 'half', 'a quarter', 'a half'
   ].sort.freeze
 
-  before_save :set_amount_as_float
-
   validates_presence_of :food, on: :update
 
   def self.ordered_editable_column_keys
@@ -75,15 +73,5 @@ class Ingredient < ApplicationRecord
       inhuman_units[unit_key.to_sym] = unit_key
     end
     inhuman_units
-  end
-
-  private
-
-  def set_amount_as_float
-    self.amount_as_float = if amount && !NumbersInWords.in_numbers(amount).zero?
-                             NumbersInWords.in_numbers(amount).to_f
-                           else
-                             nil
-                           end
   end
 end

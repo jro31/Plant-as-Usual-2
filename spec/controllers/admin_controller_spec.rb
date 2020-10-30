@@ -53,9 +53,9 @@ describe AdminController, type: :controller do
 
     context 'user is not signed-in' do
       before { sign_out user }
-      xit 'does not call approve on the recipe' do
-        # FIX THIS
-        # expect(recipe).to receive(:approve).never
+      it 'does not call approve on the recipe' do
+        expect(recipe).to receive(:approve).never
+        patch :recipe_approve, params: params
       end
 
       it 'does not change the recipe state' do
@@ -90,8 +90,9 @@ describe AdminController, type: :controller do
 
     context 'user is not signed-in' do
       before { sign_out user }
-      xit 'does not call approve_for_feature on the recipe' do
-        # COMPLETE THIS
+      it 'does not call approve_for_feature on the recipe' do
+        expect(recipe).to receive(:approve_for_feature).never
+        patch :recipe_approve_for_feature, params: params
       end
 
       it 'does not change the recipe state' do
@@ -126,8 +127,9 @@ describe AdminController, type: :controller do
 
     context 'user is not signed-in' do
       before { sign_out user }
-      xit 'does not call approve_for_recipe_of_the_day on the recipe' do
-        # COMPLETE THIS
+      it 'does not call approve_for_recipe_of_the_day on the recipe' do
+        expect(recipe).to receive(:approve_for_recipe_of_the_day).never
+        patch :recipe_approve_for_recipe_of_the_day, params: params
       end
 
       it 'does not change the recipe state' do
@@ -139,17 +141,76 @@ describe AdminController, type: :controller do
   end
 
   describe 'PATCH #recipe_decline' do
-    let(:params) { { recipe_id: recipe.id } }
+    let(:params) { { recipe_id: recipe.id, recipe: { declined_reason: declined_reason } } }
+    let(:declined_reason) { nil }
     context 'user is admin' do
-      it 'updates the recipe state to declined' do
-        expect(recipe.state).to eq('awaiting_approval')
-        patch :recipe_decline, params: params
-        expect(recipe.reload.state).to eq('declined')
+      context 'declined reason is present' do
+        let(:declined_reason) { 'No ready meals' }
+        it 'updates the recipe state to declined' do
+          expect(recipe.state).to eq('awaiting_approval')
+          patch :recipe_decline, params: params
+          expect(recipe.reload.state).to eq('declined')
+        end
+
+        it 'adds the declined reason' do
+          expect(recipe.declined_reason).to eq(nil)
+          patch :recipe_decline, params: params
+          expect(recipe.reload.declined_reason).to eq('No ready meals')
+        end
+
+        it 'redirects to the admin index page' do
+          patch :recipe_decline, params: params
+          expect(response).to redirect_to admin_path
+        end
       end
 
-      it 'redirects to the admin index page' do
-        patch :recipe_decline, params: params
-        expect(response).to redirect_to admin_path
+      context 'declined reason is an empty string' do
+        let(:declined_reason) { '' }
+        it 'does not update the state' do
+          expect(recipe.state).to eq('awaiting_approval')
+          patch :recipe_decline, params: params
+          expect(recipe.reload.state).to eq('awaiting_approval')
+        end
+
+        it 'does not change the declined reason' do
+          expect(recipe.declined_reason).to eq(nil)
+          patch :recipe_decline, params: params
+          expect(recipe.reload.declined_reason).to eq(nil)
+        end
+
+        it 'displays a flash message' do
+          patch :recipe_decline, params: params
+          expect(flash[:alert]).to eq('Fail. Declined reason should be present.')
+        end
+
+        it 'redirects to the admin index page' do
+          patch :recipe_decline, params: params
+          expect(response).to redirect_to admin_path
+        end
+      end
+
+      context 'declined reason is nil' do
+        it 'does not update the state' do
+          expect(recipe.state).to eq('awaiting_approval')
+          patch :recipe_decline, params: params
+          expect(recipe.reload.state).to eq('awaiting_approval')
+        end
+
+        it 'does not change the declined reason' do
+          expect(recipe.declined_reason).to eq(nil)
+          patch :recipe_decline, params: params
+          expect(recipe.reload.declined_reason).to eq(nil)
+        end
+
+        it 'displays a flash message' do
+          patch :recipe_decline, params: params
+          expect(flash[:alert]).to eq('Fail. Declined reason should be present.')
+        end
+
+        it 'redirects to the admin index page' do
+          patch :recipe_decline, params: params
+          expect(response).to redirect_to admin_path
+        end
       end
     end
 
@@ -162,8 +223,9 @@ describe AdminController, type: :controller do
 
     context 'user is not signed-in' do
       before { sign_out user }
-      xit 'does not call decline on the recipe' do
-        # COMPLETE THIS
+      it 'does not call decline on the recipe' do
+        expect(recipe).to receive(:decline).never
+        patch :recipe_decline, params: params
       end
 
       it 'does not change the recipe state' do

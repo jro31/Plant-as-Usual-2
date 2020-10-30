@@ -1,5 +1,6 @@
 module ApplicationHelper
   class AmountIsNotNumber < StandardError; end
+  class ArgumentIsNotString < StandardError; end
 
   def display_mode
     return 'light-mode' unless user_signed_in?
@@ -34,6 +35,18 @@ module ApplicationHelper
     raise ApplicationHelper::AmountIsNotNumber unless amount.is_a?(Integer) || amount.is_a?(Float)
 
     amount.zero? ? 'no' : amount
+  end
+
+  def number_of_at_symbols(string)
+    raise ApplicationHelper::ArgumentIsNotString unless string.is_a?(String)
+
+    string.split('').count('@')
+  end
+
+  def number_of_full_stops(string)
+    raise ApplicationHelper::ArgumentIsNotString unless string.is_a?(String)
+
+    string.split('').count('.')
   end
 
   private

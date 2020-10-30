@@ -22,6 +22,8 @@ class User < ApplicationRecord
   validates :username, uniqueness: { case_sensitive: false }, length: { minimum: 3, maximum: 16 }, format: { without: /\s/, message: 'cannot contain spaces' }
   validates :twitter_handle, :instagram_handle, :website_url, format: { without: /\s/, message: 'cannot contain spaces' }
 
+  validate :validate_email
+
   before_validation :strip_whitespace, :replace_empty_strings_with_nil, :sanitize_social_media_handles
   after_create :send_sign_up_slack_message
 
@@ -58,6 +60,13 @@ class User < ApplicationRecord
 
   private
 
+  def validate_email
+    return unless will_save_change_to_email? && email
+
+    errors.add(:email, "must contain exactly one '@'") unless User.number_of_at_symbols(email) == 1
+    errors.add(:email, "must contain a full stop") unless User.number_of_full_stops(email) >= 1
+  end
+
   def strip_whitespace
     ['username', 'email', 'twitter_handle', 'instagram_handle', 'website_url'].each do |column|
       self.send(column).strip! if self.send(column)
@@ -77,5 +86,17 @@ class User < ApplicationRecord
 
   def send_sign_up_slack_message
     SendSlackMessageJob.perform_later("A new user has signed-up, username: #{username}, email: #{email}", nature: 'celebrate')
+  end
+
+  def self.no_or_number(amount)
+    ApplicationController.helpers.no_or_number(amount)
+  end
+
+  def self.number_of_at_symbols(string)
+    ApplicationController.helpers.number_of_at_symbols(string)
+  end
+
+  def self.number_of_full_stops(string)
+    ApplicationController.helpers.number_of_full_stops(string)
   end
 end
