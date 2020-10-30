@@ -350,6 +350,7 @@ DEPENDENCIES
   puma
   pundit
   rails (= 6.0.3.4)
+  rails-controller-testing
   redis
   rspec-rails (~> 4.0.0)
   sassc-rails
