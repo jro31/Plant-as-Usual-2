@@ -22,7 +22,7 @@ describe User, type: :model do
 
   describe 'acts_as_token_authenticatable' do
     context 'on create' do
-      subject { build(:user) }
+      subject { build(:user, authentication_token: nil) }
       it 'gives the user an authentication token' do
         expect(subject.authentication_token).to eq(nil)
         subject.save
