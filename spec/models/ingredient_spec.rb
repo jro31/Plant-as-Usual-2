@@ -68,6 +68,62 @@ describe Ingredient, type: :model do
     end
   end
 
+  describe 'callbacks' do
+    describe 'before_validation' do
+      describe '#replace_empty_strings_with_nil' do
+        describe 'on create' do
+          describe 'amount' do
+            subject { build(:ingredient, amount: '') }
+            it 'saves as nil' do
+              subject.save
+              expect(subject.amount).to eq(nil)
+            end
+          end
+
+          describe 'unit' do
+            subject { build(:ingredient, unit: '') }
+            it 'saves as nil' do
+              subject.save
+              expect(subject.unit).to eq(nil)
+            end
+          end
+
+          describe 'preparation' do
+            subject { build(:ingredient, preparation: '') }
+            it 'saves as nil' do
+              subject.save
+              expect(subject.preparation).to eq(nil)
+            end
+          end
+        end
+
+        describe 'on update' do
+          subject { create(:ingredient) }
+          describe 'amount' do
+            it 'saves as nil' do
+              subject.update(amount: '')
+              expect(subject.amount).to eq(nil)
+            end
+          end
+
+          describe 'unit' do
+            it 'saves as nil' do
+              subject.update(unit: '')
+              expect(subject.unit).to eq(nil)
+            end
+          end
+
+          describe 'preparation' do
+            it 'saves as nil' do
+              subject.update(preparation: '')
+              expect(subject.preparation).to eq(nil)
+            end
+          end
+        end
+      end
+    end
+  end
+
   describe '#ordered_editable_column_keys' do
     it 'returns the keys in the display order' do
       expect(Ingredient.ordered_editable_column_keys).to eq(%i(amount unit food preparation optional))

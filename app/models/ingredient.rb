@@ -22,6 +22,8 @@ class Ingredient < ApplicationRecord
 
   validates_presence_of :food, on: :update
 
+  before_validation :replace_empty_strings_with_nil
+
   def self.ordered_editable_column_keys
     self::USER_EDITABLE_COLUMNS.keys
   end
@@ -73,5 +75,13 @@ class Ingredient < ApplicationRecord
       inhuman_units[unit_key.to_sym] = unit_key
     end
     inhuman_units
+  end
+
+  private
+
+  def replace_empty_strings_with_nil
+    self.amount = nil unless self.amount.present?
+    self.unit = nil unless self.unit.present?
+    self.preparation = nil unless self.preparation.present?
   end
 end
