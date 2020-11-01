@@ -42,3 +42,4 @@ yarn-debug.log*
 
 # Ignore photos saved when running specs
 /public/uploads/spec
+/public/uploads/tmp

@@ -423,6 +423,92 @@ describe Api::V1::RecipesController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    # COMPLETE THIS
+    before { request.headers.merge!(headers) }
+    let(:headers) { { 'X-User-Email' => user.email, 'X-User-Token' => user.authentication_token } }
+    context 'recipe exists' do
+      context 'user is recipe owner' do
+        it 'destroys one recipe' do
+          expect { delete :destroy, params: { id: recipe.id } }.to change(Recipe, :count).by(-1)
+        end
+
+        it 'destroys the correct recipe' do
+          expect { recipe }.not_to raise_error
+          delete :destroy, params: { id: recipe.id }
+          expect { recipe.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it 'returns 204' do
+          delete :destroy, params: { id: recipe.id }
+          expect(response).to have_http_status(:no_content)
+        end
+      end
+
+      context 'user is admin' do
+        let(:admin) { create(:user, admin: true) }
+        let(:headers) { { 'X-User-Email' => admin.email, 'X-User-Token' => admin.authentication_token } }
+        it 'destroys one recipe' do
+          expect { delete :destroy, params: { id: recipe.id } }.to change(Recipe, :count).by(-1)
+        end
+
+        it 'destroys the correct recipe' do
+          expect { recipe }.not_to raise_error
+          delete :destroy, params: { id: recipe.id }
+          expect { recipe.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it 'returns 204' do
+          delete :destroy, params: { id: recipe.id }
+          expect(response).to have_http_status(:no_content)
+        end
+      end
+
+      context 'user is imposter' do
+        let(:imposter) { create(:user, admin: false) }
+        let(:headers) { { 'X-User-Email' => imposter.email, 'X-User-Token' => imposter.authentication_token } }
+        it 'does not destroy any recipes' do
+          expect { delete :destroy, params: { id: recipe.id } }.to change(Recipe, :count).by(0)
+        end
+
+        it 'does not rails a RecordNotFound error' do
+          expect { recipe }.not_to raise_error
+          delete :destroy, params: { id: recipe.id }
+          expect { recipe.reload }.not_to raise_error
+        end
+
+        it 'returns 401' do
+          delete :destroy, params: { id: recipe.id }
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context 'user does not exist' do
+        let(:headers) { { 'X-User-Email' => 'whodis@dooby.scoo', 'X-User-Token' => '654321' } }
+        it 'does not destroy any recipes' do
+          expect { delete :destroy, params: { id: recipe.id } }.to change(Recipe, :count).by(0)
+        end
+
+        it 'does not rails a RecordNotFound error' do
+          expect { recipe }.not_to raise_error
+          delete :destroy, params: { id: recipe.id }
+          expect { recipe.reload }.not_to raise_error
+        end
+
+        it 'returns 302' do
+          delete :destroy, params: { id: recipe.id }
+          expect(response).to have_http_status(:found)
+        end
+      end
+    end
+
+    context 'recipe does not exist' do
+      it 'does not destroy any recipes' do
+        expect { delete :destroy, params: { id: 9999 } }.to change(Recipe, :count).by(0)
+      end
+
+      it 'returns 404' do
+        delete :destroy, params: { id: 9999 }
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 end
