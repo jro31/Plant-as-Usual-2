@@ -256,6 +256,11 @@ describe Api::V1::RecipesController, type: :controller do
         post :create, params: params, format: :json
         expect(JSON.parse(response.body)).to eq('error' => '')
       end
+
+      it 'returns 401' do
+        post :create, params: params, format: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
   end
 
@@ -420,11 +425,11 @@ describe Api::V1::RecipesController, type: :controller do
 
   describe 'PATCH #update' do
     let(:test_photo_2) { fixture_file_upload(Rails.root.join('public', 'test-photo-2.jpg'), 'image/jpg') }
+    let(:headers) { { 'X-User-Email' => user.email, 'X-User-Token' => user.authentication_token } }
     render_views
     before { request.headers.merge!(headers) }
     context 'recipe exists' do
       context 'user is recipe owner' do
-        let(:headers) { { 'X-User-Email' => user.email, 'X-User-Token' => user.authentication_token } }
         context 'update is successful' do
           context 'ingredients are not amended' do
             let(:params) { { id: recipe.id, recipe: { name: 'Bone Apple Tea', process: 'Boil water and pour over apple bone', photo: test_photo_2 } } }
@@ -777,25 +782,100 @@ describe Api::V1::RecipesController, type: :controller do
         end
 
         context 'update is not successful' do
+          let(:params) { { id: recipe.id, recipe: { name: 'Case idea', process: 'Think hard about your current predicament', photo: test_photo_2 } } }
+          before { allow_any_instance_of(Recipe).to receive(:update).and_return(false) }
+          it 'does not update the recipe' do
+            expect(recipe.name).to eq('Food with food on top')
+            patch :update, params: params, format: :json
+            expect(recipe.reload.name).to eq('Food with food on top')
+          end
 
+          it 'returns errors' do
+            patch :update, params: params, format: :json
+            expect(JSON.parse(response.body)).to eq('errors' => [])
+          end
         end
       end
 
       context 'user is admin' do
+        let(:admin) { create(:user, admin: true) }
+        let(:headers) { { 'X-User-Email' => admin.email, 'X-User-Token' => admin.authentication_token } }
+        let(:params) { { id: recipe.id, recipe: { name: 'Flaming young', process: 'Mix juvenile with beelzebub', photo: test_photo_2 } } }
+        it 'updates the recipe' do
+          expect(recipe.name).to eq('Food with food on top')
+          expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+          expect(recipe.photo.url).to include('test-photo.jpg')
+          expect(recipe.state).to eq('approved')
+          patch :update, params: params, format: :json
+          expect(recipe.reload.name).to eq('Flaming young')
+          expect(recipe.process).to eq('Mix juvenile with beelzebub')
+          expect(recipe.photo.url).to include('test-photo-2.jpg')
+          expect(recipe.state).to eq('incomplete')
+        end
 
+        it 'returns the amended recipe' do
+          patch :update, params: params, format: :json
+          expect(JSON.parse(response.body)['name']).to eq('Flaming young')
+          expect(JSON.parse(response.body)['process']).to eq('Mix juvenile with beelzebub')
+          expect(JSON.parse(response.body)['photo']['url']).to include('test-photo-2.jpg')
+
+          expect(JSON.parse(response.body)['ingredients'].count).to eq(3)
+
+          expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
+          expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
+        end
       end
 
       context 'user is imposter' do
+        let(:imposter) { create(:user, admin: false) }
+        let(:headers) { { 'X-User-Email' => imposter.email, 'X-User-Token' => imposter.authentication_token } }
+        let(:params) { { id: recipe.id, recipe: { name: "Farmer John's cheese", process: "Break into John's house. Raid fridge", photo: test_photo_2 } } }
+        it 'does not update the recipe' do
+          expect(recipe.name).to eq('Food with food on top')
+          expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+          expect(recipe.photo.url).to include('test-photo.jpg')
+          expect(recipe.state).to eq('approved')
+          patch :update, params: params, format: :json
+          expect(recipe.reload.name).to eq('Food with food on top')
+          expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+          expect(recipe.photo.url).to include('test-photo.jpg')
+          expect(recipe.state).to eq('approved')
+        end
 
+        it 'returns 401' do
+          patch :update, params: params, format: :json
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
 
       context 'user does not exist' do
+        let(:headers) { { 'X-User-Email' => 'youcantseeme@wot.umm', 'X-User-Token' => '98765' } }
+        let(:params) { { id: recipe.id, recipe: { name: "Can't elope", process: 'Get caught by wife', photo: test_photo_2 } } }
+        it 'does not update the recipe' do
+          expect(recipe.name).to eq('Food with food on top')
+          expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+          expect(recipe.photo.url).to include('test-photo.jpg')
+          expect(recipe.state).to eq('approved')
+          patch :update, params: params, format: :json
+          expect(recipe.reload.name).to eq('Food with food on top')
+          expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+          expect(recipe.photo.url).to include('test-photo.jpg')
+          expect(recipe.state).to eq('approved')
+        end
 
+        it 'returns 401' do
+          patch :update, params: params, format: :json
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
 
     context 'recipe does not exist' do
-
+      let(:params) { { id: 9999, recipe: { name: 'Cow zone', process: 'Enter field', photo: test_photo_2 } } }
+      it 'returns 404' do
+        patch :update, params: params, format: :json
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 
@@ -846,7 +926,7 @@ describe Api::V1::RecipesController, type: :controller do
           expect { delete :destroy, params: { id: recipe.id } }.to change(Recipe, :count).by(0)
         end
 
-        it 'does not rails a RecordNotFound error' do
+        it 'does not raise a RecordNotFound error' do
           expect { recipe }.not_to raise_error
           delete :destroy, params: { id: recipe.id }
           expect { recipe.reload }.not_to raise_error
@@ -864,7 +944,7 @@ describe Api::V1::RecipesController, type: :controller do
           expect { delete :destroy, params: { id: recipe.id } }.to change(Recipe, :count).by(0)
         end
 
-        it 'does not rails a RecordNotFound error' do
+        it 'does not raise a RecordNotFound error' do
           expect { recipe }.not_to raise_error
           delete :destroy, params: { id: recipe.id }
           expect { recipe.reload }.not_to raise_error
