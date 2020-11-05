@@ -68,6 +68,73 @@ describe Api::V1::RecipesController, type: :controller do
               expect(JSON.parse(response.body)['author']['instagram_username']).to eq('coffeetableselfies')
               expect(JSON.parse(response.body)['author']['website']).to eq('www.dontsitonme.com')
             end
+
+            context 'mark_as_complete is passed-in' do
+              context 'mark_as_complete is true' do
+                let(:params) { { recipe: { name: 'Mushroom car banana', process: 'Scrape mould from yellow boat', photo: test_photo, mark_as_complete: true } } }
+                it 'updates the state to awaiting_approval' do
+                  post :create, params: params, format: :json
+                  expect(Recipe.last.name).to eq('Mushroom car banana')
+                  expect(Recipe.last.process).to eq('Scrape mould from yellow boat')
+                  expect(Recipe.last.photo.url).to include('test-photo.jpg')
+                  expect(Recipe.last.state).to eq('awaiting_approval')
+                end
+
+                it 'returns the new recipe' do
+                  post :create, params: params, format: :json
+                  expect(JSON.parse(response.body)['name']).to eq('Mushroom car banana')
+                  expect(JSON.parse(response.body)['process']).to eq('Scrape mould from yellow boat')
+                  expect(JSON.parse(response.body)['photo']['url']).to include('test-photo.jpg')
+                  expect(JSON.parse(response.body)['ingredients']).to eq([])
+                  expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
+                  expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
+                end
+              end
+
+              context 'mark_as_complete is truthy' do
+                let(:params) { { recipe: { name: 'Day jaw food', process: 'Chew lightly prior to sunset', photo: test_photo, mark_as_complete: 1 } } }
+                it 'updates the state to awaiting_approval' do
+                  post :create, params: params, format: :json
+                  expect(Recipe.last.name).to eq('Day jaw food')
+                  expect(Recipe.last.process).to eq('Chew lightly prior to sunset')
+                  expect(Recipe.last.photo.url).to include('test-photo.jpg')
+                  expect(Recipe.last.state).to eq('awaiting_approval')
+                end
+              end
+
+              context 'mark_as_complete is false' do
+                let(:params) { { recipe: { name: 'Chicken teacup my salad', process: 'Scare mug with cucumber', photo: test_photo, mark_as_complete: false } } }
+                it 'does not update the state from incomplete' do
+                  post :create, params: params, format: :json
+                  expect(Recipe.last.name).to eq('Chicken teacup my salad')
+                  expect(Recipe.last.process).to eq('Scare mug with cucumber')
+                  expect(Recipe.last.photo.url).to include('test-photo.jpg')
+                  expect(Recipe.last.state).to eq('incomplete')
+                end
+              end
+
+              context 'mark_as_complete is nil' do
+                let(:params) { { recipe: { name: 'Carry bean', process: 'Place pinto in bag', photo: test_photo, mark_as_complete: nil } } }
+                it 'does not update the state from incomplete' do
+                  post :create, params: params, format: :json
+                  expect(Recipe.last.name).to eq('Carry bean')
+                  expect(Recipe.last.process).to eq('Place pinto in bag')
+                  expect(Recipe.last.photo.url).to include('test-photo.jpg')
+                  expect(Recipe.last.state).to eq('incomplete')
+                end
+              end
+
+              context 'mark_as_complete is an empty string' do
+                let(:params) { { recipe: { name: 'Pure bread rottweiler', process: 'Place puppy in bread machine', photo: test_photo, mark_as_complete: '' } } }
+                it 'does not update the state from incomplete' do
+                  post :create, params: params, format: :json
+                  expect(Recipe.last.name).to eq('Pure bread rottweiler')
+                  expect(Recipe.last.process).to eq('Place puppy in bread machine')
+                  expect(Recipe.last.photo.url).to include('test-photo.jpg')
+                  expect(Recipe.last.state).to eq('incomplete')
+                end
+              end
+            end
           end
 
           context 'does not include photo' do
@@ -433,7 +500,6 @@ describe Api::V1::RecipesController, type: :controller do
         context 'update is successful' do
           context 'ingredients are not amended' do
             let(:params) { { id: recipe.id, recipe: { name: 'Bone Apple Tea', process: 'Boil water and pour over apple bone', photo: test_photo_2 } } }
-
             it 'updates the recipe' do
               expect(recipe.name).to eq('Food with food on top')
               expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
@@ -458,9 +524,92 @@ describe Api::V1::RecipesController, type: :controller do
               expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
             end
 
-            context 'mark as complete is passed-in' do
-              xit 'updates the state to awaiting_approval' do
-                # COMPLETE THIS
+            context 'mark_as_complete is passed-in' do
+              context 'mark_as_complete is true' do
+                let(:params) { { id: recipe.id, recipe: { name: 'Roman coke', process: 'Pour Coca-cola into glass with Cesar', photo: test_photo_2, mark_as_complete: true } } }
+                it 'updates the state to awaiting_approval' do
+                  expect(recipe.name).to eq('Food with food on top')
+                  expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+                  expect(recipe.photo.url).to include('test-photo.jpg')
+                  expect(recipe.state).to eq('approved')
+                  patch :update, params: params, format: :json
+                  expect(recipe.reload.name).to eq('Roman coke')
+                  expect(recipe.process).to eq('Pour Coca-cola into glass with Cesar')
+                  expect(recipe.photo.url).to include('test-photo-2.jpg')
+                  expect(recipe.state).to eq('awaiting_approval')
+                end
+
+                it 'returns the amended recipe' do
+                  patch :update, params: params, format: :json
+                  expect(JSON.parse(response.body)['name']).to eq('Roman coke')
+                  expect(JSON.parse(response.body)['process']).to eq('Pour Coca-cola into glass with Cesar')
+                  expect(JSON.parse(response.body)['photo']['url']).to include('test-photo-2.jpg')
+
+                  expect(JSON.parse(response.body)['ingredients'].count).to eq(3)
+
+                  expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
+                  expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
+                end
+              end
+
+              context 'mark_as_complete is truthy' do
+                let(:params) { { id: recipe.id, recipe: { name: 'Seizure salad', process: 'Mix lettuce with strobe lighting', photo: test_photo_2, mark_as_complete: 1 } } }
+                it 'updates the state to awaiting_approval' do
+                  expect(recipe.name).to eq('Food with food on top')
+                  expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+                  expect(recipe.photo.url).to include('test-photo.jpg')
+                  expect(recipe.state).to eq('approved')
+                  patch :update, params: params, format: :json
+                  expect(recipe.reload.name).to eq('Seizure salad')
+                  expect(recipe.process).to eq('Mix lettuce with strobe lighting')
+                  expect(recipe.photo.url).to include('test-photo-2.jpg')
+                  expect(recipe.state).to eq('awaiting_approval')
+                end
+              end
+
+              context 'mark_as_complete is false' do
+                let(:params) { { id: recipe.id, recipe: { name: 'Rigid Tony', process: 'Just touch Tony', photo: test_photo_2, mark_as_complete: false } } }
+                it 'updates the state to incomplete' do
+                  expect(recipe.name).to eq('Food with food on top')
+                  expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+                  expect(recipe.photo.url).to include('test-photo.jpg')
+                  expect(recipe.state).to eq('approved')
+                  patch :update, params: params, format: :json
+                  expect(recipe.reload.name).to eq('Rigid Tony')
+                  expect(recipe.process).to eq('Just touch Tony')
+                  expect(recipe.photo.url).to include('test-photo-2.jpg')
+                  expect(recipe.state).to eq('incomplete')
+                end
+              end
+
+              context 'mark_as_complete is nil' do
+                let(:params) { { id: recipe.id, recipe: { name: 'Chicken condom blue', process: 'Wrap chicken in navy rubber', photo: test_photo_2, mark_as_complete: nil } } }
+                it 'updates the state to incomplete' do
+                  expect(recipe.name).to eq('Food with food on top')
+                  expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+                  expect(recipe.photo.url).to include('test-photo.jpg')
+                  expect(recipe.state).to eq('approved')
+                  patch :update, params: params, format: :json
+                  expect(recipe.reload.name).to eq('Chicken condom blue')
+                  expect(recipe.process).to eq('Wrap chicken in navy rubber')
+                  expect(recipe.photo.url).to include('test-photo-2.jpg')
+                  expect(recipe.state).to eq('incomplete')
+                end
+              end
+
+              context 'mark_as_complete is an empty string' do
+                let(:params) { { id: recipe.id, recipe: { name: 'Eggs eye and tea', process: 'Pour boiling water over yolk', photo: test_photo_2, mark_as_complete: '' } } }
+                it 'updates the state to incomplete' do
+                  expect(recipe.name).to eq('Food with food on top')
+                  expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+                  expect(recipe.photo.url).to include('test-photo.jpg')
+                  expect(recipe.state).to eq('approved')
+                  patch :update, params: params, format: :json
+                  expect(recipe.reload.name).to eq('Eggs eye and tea')
+                  expect(recipe.process).to eq('Pour boiling water over yolk')
+                  expect(recipe.photo.url).to include('test-photo-2.jpg')
+                  expect(recipe.state).to eq('incomplete')
+                end
               end
             end
           end

@@ -6,6 +6,8 @@ class Recipe < ApplicationRecord
   has_many :ingredients, dependent: :destroy
   has_many :user_favourite_recipes, dependent: :destroy
 
+  attr_accessor :mark_as_complete
+
   mount_uploader :photo, PhotoUploader
 
   validate :validate_number_of_featured_recipes
