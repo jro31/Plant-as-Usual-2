@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Api::V1::RecipesController, type: :controller do
   let(:user) { create(:user, username: 'steve_the_sofa', twitter_handle: 'cushiondiaries', instagram_handle: 'coffeetableselfies', website_url: 'www.dontsitonme.com') }
-  let(:recipe) { create(:recipe, user: user, name: 'Food with food on top', process: 'Put all the food into a bowl of food, mix well, then top with food') }
+  let(:recipe) { create(:recipe, user: user, name: 'Food with food on top', process: 'Put all the food into a bowl of food, mix well, then top with food', photo: test_photo) }
   let!(:ingredient_1) { create(:ingredient, recipe: recipe, amount: 'Some', unit: nil, food: 'Green leaves', preparation: 'Shredded', optional: false) }
   let!(:ingredient_2) { create(:ingredient, recipe: recipe, amount: '100', unit: 'grams', food: 'Bountiful fruit', preparation: nil, optional: true) }
   let!(:ingredient_3) { create(:ingredient, recipe: recipe, amount: '', unit: '', food: 'Fanciful loot', preparation: '', optional: false) }
@@ -419,7 +419,208 @@ describe Api::V1::RecipesController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    # COMPLETE THIS
+    let(:test_photo_2) { fixture_file_upload(Rails.root.join('public', 'test-photo-2.jpg'), 'image/jpg') }
+    render_views
+    before { request.headers.merge!(headers) }
+    context 'recipe exists' do
+      context 'user is recipe owner' do
+        let(:headers) { { 'X-User-Email' => user.email, 'X-User-Token' => user.authentication_token } }
+        context 'update is successful' do
+          context 'ingredients are not amended' do
+            let(:params) { { id: recipe.id, recipe: { name: 'Bone Apple Tea', process: 'Boil water and pour over apple bone', photo: test_photo_2 } } }
+
+            it 'updates the recipe' do
+              expect(recipe.name).to eq('Food with food on top')
+              expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+              expect(recipe.photo.url).to include('test-photo.jpg')
+              expect(recipe.state).to eq('approved')
+              patch :update, params: params, format: :json
+              expect(recipe.reload.name).to eq('Bone Apple Tea')
+              expect(recipe.process).to eq('Boil water and pour over apple bone')
+              expect(recipe.photo.url).to include('test-photo-2.jpg')
+              expect(recipe.state).to eq('incomplete')
+            end
+
+            it 'returns the amended recipe' do
+              patch :update, params: params, format: :json
+              expect(JSON.parse(response.body)['name']).to eq('Bone Apple Tea')
+              expect(JSON.parse(response.body)['process']).to eq('Boil water and pour over apple bone')
+              expect(JSON.parse(response.body)['photo']['url']).to include('test-photo-2.jpg')
+
+              expect(JSON.parse(response.body)['ingredients'].count).to eq(3)
+
+              expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
+              expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
+            end
+
+            context 'mark as complete is passed-in' do
+              xit 'updates the state to awaiting_approval' do
+                # COMPLETE THIS
+              end
+            end
+          end
+
+          context 'new ingredients are added' do
+            context 'one ingredient is added' do
+              let(:params) { { id: recipe.id, recipe: { name: 'Cart Door', process: 'Remove door from cart', photo: test_photo_2, ingredients_attributes: [ ingredient_4_params ] } } }
+              let(:ingredient_4_params) { { amount: '10', unit: 'handful', food: 'Wood panels', preparation: 'Sanded', optional: false } }
+              it 'updates the recipe' do
+                expect(recipe.name).to eq('Food with food on top')
+                expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+                expect(recipe.photo.url).to include('test-photo.jpg')
+                expect(recipe.state).to eq('approved')
+                patch :update, params: params, format: :json
+                expect(recipe.reload.name).to eq('Cart Door')
+                expect(recipe.process).to eq('Remove door from cart')
+                expect(recipe.photo.url).to include('test-photo-2.jpg')
+                expect(recipe.state).to eq('incomplete')
+              end
+
+              it 'creates one ingredient' do
+                expect { patch :update, params: params, format: :json }.to change(Ingredient, :count).by(1)
+                expect(Ingredient.count).to eq(4)
+              end
+
+              it 'gives the new ingredient the correct details' do
+                patch :update, params: params, format: :json
+                expect(Ingredient.last.id).to be_present
+                expect(Ingredient.last.recipe).to eq(recipe)
+                expect(Ingredient.last.amount).to eq('10')
+                expect(Ingredient.last.unit).to eq('handful')
+                expect(Ingredient.last.food).to eq('Wood panels')
+                expect(Ingredient.last.preparation).to eq('Sanded')
+                expect(Ingredient.last.optional).to eq(false)
+              end
+
+              it 'returns the recipe and all four ingredients' do
+                patch :update, params: params, format: :json
+                expect(JSON.parse(response.body)['name']).to eq('Cart Door')
+                expect(JSON.parse(response.body)['process']).to eq('Remove door from cart')
+                expect(JSON.parse(response.body)['photo']['url']).to include('test-photo-2.jpg')
+
+                expect(JSON.parse(response.body)['ingredients'].count).to eq(4)
+
+                expect(JSON.parse(response.body)['ingredients'][0]['id']).to eq(ingredient_1.id).or(eq(ingredient_2.id)).or(eq(ingredient_3.id))
+                expect(JSON.parse(response.body)['ingredients'][0]['recipe_id']).to eq(recipe.id)
+                expect(JSON.parse(response.body)['ingredients'][0]['amount']).to eq('Some').or(eq('100')).or(eq(nil))
+                expect(JSON.parse(response.body)['ingredients'][0]['unit']).to eq(nil).or(eq('grams'))
+                expect(JSON.parse(response.body)['ingredients'][0]['food']).to eq('Green leaves').or(eq('Bountiful fruit')).or(eq('Fanciful loot'))
+                expect(JSON.parse(response.body)['ingredients'][0]['preparation']).to eq('Shredded').or(eq(nil))
+                expect(JSON.parse(response.body)['ingredients'][0]['optional']).to eq(false).or(eq(true))
+
+                expect(JSON.parse(response.body)['ingredients'][1]['id']).to eq(ingredient_1.id).or(eq(ingredient_2.id)).or(eq(ingredient_3.id))
+                expect(JSON.parse(response.body)['ingredients'][1]['recipe_id']).to eq(recipe.id)
+                expect(JSON.parse(response.body)['ingredients'][1]['amount']).to eq('Some').or(eq('100')).or(eq(nil))
+                expect(JSON.parse(response.body)['ingredients'][1]['unit']).to eq(nil).or(eq('grams'))
+                expect(JSON.parse(response.body)['ingredients'][1]['food']).to eq('Green leaves').or(eq('Bountiful fruit')).or(eq('Fanciful loot'))
+                expect(JSON.parse(response.body)['ingredients'][1]['preparation']).to eq('Shredded').or(eq(nil))
+                expect(JSON.parse(response.body)['ingredients'][1]['optional']).to eq(false).or(eq(true))
+
+                expect(JSON.parse(response.body)['ingredients'][2]['id']).to eq(ingredient_1.id).or(eq(ingredient_2.id)).or(eq(ingredient_3.id))
+                expect(JSON.parse(response.body)['ingredients'][2]['recipe_id']).to eq(recipe.id)
+                expect(JSON.parse(response.body)['ingredients'][2]['amount']).to eq('Some').or(eq('100')).or(eq(nil))
+                expect(JSON.parse(response.body)['ingredients'][2]['unit']).to eq(nil).or(eq('grams'))
+                expect(JSON.parse(response.body)['ingredients'][2]['food']).to eq('Green leaves').or(eq('Bountiful fruit')).or(eq('Fanciful loot'))
+                expect(JSON.parse(response.body)['ingredients'][2]['preparation']).to eq('Shredded').or(eq(nil))
+                expect(JSON.parse(response.body)['ingredients'][2]['optional']).to eq(false).or(eq(true))
+
+                expect(JSON.parse(response.body)['ingredients'][3]['id']).to eq(Ingredient.last.id)
+                expect(JSON.parse(response.body)['ingredients'][3]['recipe_id']).to eq(recipe.id)
+                expect(JSON.parse(response.body)['ingredients'][3]['amount']).to eq('10')
+                expect(JSON.parse(response.body)['ingredients'][3]['unit']).to eq('handful')
+                expect(JSON.parse(response.body)['ingredients'][3]['food']).to eq('Wood panels')
+                expect(JSON.parse(response.body)['ingredients'][3]['preparation']).to eq('Sanded')
+                expect(JSON.parse(response.body)['ingredients'][3]['optional']).to eq(false)
+
+                expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
+                expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
+              end
+            end
+
+            context 'multiple ingrdients are added' do
+              let(:params) { { id: recipe.id, recipe: { name: 'Carte Wheel', process: 'Mix cart with wheel', photo: test_photo_2, ingredients_attributes: [ ingredient_4_params, ingredient_5_params ] } } }
+              let(:ingredient_4_params) { { amount: '5', unit: 'clove', food: 'Cart', preparation: 'assembled', optional: false } }
+              let(:ingredient_5_params) { { amount: '4', unit: nil, food: 'Wheel', preparation: 'Rounded', optional: true } }
+              it 'updates the recipe' do
+                expect(recipe.name).to eq('Food with food on top')
+                expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+                expect(recipe.photo.url).to include('test-photo.jpg')
+                expect(recipe.state).to eq('approved')
+                patch :update, params: params, format: :json
+                expect(recipe.reload.name).to eq('Carte Wheel')
+                expect(recipe.process).to eq('Mix cart with wheel')
+                expect(recipe.photo.url).to include('test-photo-2.jpg')
+                expect(recipe.state).to eq('incomplete')
+              end
+
+              it 'creates two ingredients' do
+                expect { patch :update, params: params, format: :json }.to change(Ingredient, :count).by(2)
+                expect(Ingredient.count).to eq(5)
+              end
+
+              it 'gives the new ingredients the correct details' do
+                patch :update, params: params, format: :json
+                expect(Ingredient.last.id).to be_present
+                expect(Ingredient.second_to_last.id).to be_present
+                expect(Ingredient.last.recipe).to eq(recipe)
+                expect(Ingredient.second_to_last.recipe).to eq(recipe)
+                expect(Ingredient.last(2).map(&:amount)).to include('5', '4')
+                expect(Ingredient.last(2).map(&:unit)).to include('clove', nil)
+                expect(Ingredient.last(2).map(&:food)).to include('Cart', 'Wheel')
+                expect(Ingredient.last(2).map(&:preparation)).to include('assembled', 'Rounded')
+                expect(Ingredient.last(2).map(&:optional)).to include(false, true)
+              end
+
+              it 'returns the recipe and all five ingredients' do
+                patch :update, params: params, format: :json
+                expect(JSON.parse(response.body)['name']).to eq('Carte Wheel')
+                expect(JSON.parse(response.body)['process']).to eq('Mix cart with wheel')
+                expect(JSON.parse(response.body)['photo']['url']).to include('test-photo-2.jpg')
+
+                expect(JSON.parse(response.body)['ingredients'].count).to eq(5)
+
+                expect(JSON.parse(response.body)['ingredients'][0]['food']).to eq('Green leaves').or(eq('Bountiful fruit')).or(eq('Fanciful loot')).or (eq('Cart')).or (eq('Wheel'))
+                expect(JSON.parse(response.body)['ingredients'][1]['food']).to eq('Green leaves').or(eq('Bountiful fruit')).or(eq('Fanciful loot')).or (eq('Cart')).or (eq('Wheel'))
+                expect(JSON.parse(response.body)['ingredients'][2]['food']).to eq('Green leaves').or(eq('Bountiful fruit')).or(eq('Fanciful loot')).or (eq('Cart')).or (eq('Wheel'))
+                expect(JSON.parse(response.body)['ingredients'][3]['food']).to eq('Green leaves').or(eq('Bountiful fruit')).or(eq('Fanciful loot')).or (eq('Cart')).or (eq('Wheel'))
+                expect(JSON.parse(response.body)['ingredients'][4]['food']).to eq('Green leaves').or(eq('Bountiful fruit')).or(eq('Fanciful loot')).or (eq('Cart')).or (eq('Wheel'))
+
+                expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
+                expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
+              end
+            end
+          end
+
+          context 'existing ingredients are updated' do
+
+          end
+
+          context 'existing ingredients are deleted' do
+
+          end
+        end
+
+        context 'update is not successful' do
+
+        end
+      end
+
+      context 'user is admin' do
+
+      end
+
+      context 'user is imposter' do
+
+      end
+
+      context 'user does not exist' do
+
+      end
+    end
+
+    context 'recipe does not exist' do
+
+    end
   end
 
   describe 'DELETE #destroy' do

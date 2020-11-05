@@ -21,6 +21,9 @@ class Api::V1::RecipesController < Api::V1::BaseController
 
   def update
     if @recipe.update(recipe_params)
+      @recipe.revised
+
+      # If mark as complete is included, should then run @recipe.complete
       render :show
     else
       render_error
@@ -35,7 +38,7 @@ class Api::V1::RecipesController < Api::V1::BaseController
   private
 
   def recipe_params
-    params.require(:recipe).permit(:name, :process, :photo, ingredients_attributes: %i(amount unit food preparation optional))
+    params.require(:recipe).permit(:name, :process, :photo, ingredients_attributes: %i(id amount unit food preparation optional))
   end
 
   def render_error

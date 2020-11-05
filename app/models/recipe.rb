@@ -12,7 +12,7 @@ class Recipe < ApplicationRecord
   validate :validate_number_of_recipes_of_the_day
   validate :validate_decline_reason
 
-  accepts_nested_attributes_for :ingredients # SPEC THIS
+  accepts_nested_attributes_for :ingredients, allow_destroy: true # SPEC THIS
 
   before_validation :remove_declined_reason, if: :will_save_change_to_state?
   after_save :state_changed_methods, if: :saved_change_to_state?
