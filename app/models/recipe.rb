@@ -72,77 +72,79 @@ class Recipe < ApplicationRecord
     end
   end
 
-  def self.update_highlighted_recipes
-    update_recipes_of_the_day
-    update_featured_recipes
-  end
-
-  def self.update_recipes_of_the_day
-    self.current_recipes_of_the_day.each do |recipe|
-      recipe.revert_from_highlighted if recipe.last_recipe_of_the_day_at <= 23.hours.ago
+  class << self
+    def update_highlighted_recipes
+      update_recipes_of_the_day
+      update_featured_recipes
     end
 
-    (NUMBER_OF_RECIPES_OF_THE_DAY - Recipe.current_recipes_of_the_day.count).times { self.set_next_recipe_of_the_day }
-  end
+    def update_recipes_of_the_day
+      self.current_recipes_of_the_day.each do |recipe|
+        recipe.revert_from_highlighted if recipe.last_recipe_of_the_day_at <= 23.hours.ago
+      end
 
-  def self.set_next_recipe_of_the_day
-    return if self.current_recipes_of_the_day.count >= NUMBER_OF_RECIPES_OF_THE_DAY
-
-    new_recipe_of_the_day = self.next_recipe_of_the_day
-    return unless new_recipe_of_the_day
-
-    new_recipe_of_the_day.set_as_recipe_of_the_day
-    new_recipe_of_the_day.touch(:last_recipe_of_the_day_at)
-  end
-
-  def self.next_recipe_of_the_day
-    never_recipe_of_the_day_recipes = self.approved_for_recipe_of_the_day
-                                          .where(last_recipe_of_the_day_at: nil)
-                                          .order(created_at: :asc)
-    return never_recipe_of_the_day_recipes.first if never_recipe_of_the_day_recipes.any?
-
-    self.approved_for_recipe_of_the_day.order(last_recipe_of_the_day_at: :asc).first
-  end
-
-  def self.update_featured_recipes
-    self.currently_featured.each do |recipe|
-      recipe.revert_from_highlighted if recipe.last_featured_at <= 23.hours.ago
+      (NUMBER_OF_RECIPES_OF_THE_DAY - Recipe.current_recipes_of_the_day.count).times { self.set_next_recipe_of_the_day }
     end
 
-    (NUMBER_OF_FEATURED_RECIPES - Recipe.currently_featured.count).times { self.set_next_featured_recipe }
-  end
+    def set_next_recipe_of_the_day
+      return if self.current_recipes_of_the_day.count >= NUMBER_OF_RECIPES_OF_THE_DAY
 
-  def self.set_next_featured_recipe
-    return if self.currently_featured.count >= NUMBER_OF_FEATURED_RECIPES
+      new_recipe_of_the_day = self.next_recipe_of_the_day
+      return unless new_recipe_of_the_day
 
-    new_featured_recipe = self.next_recipe_to_feature
-    return unless new_featured_recipe
-
-    new_featured_recipe.feature
-    new_featured_recipe.touch(:last_featured_at)
-  end
-
-  def self.next_recipe_to_feature
-    return if self.approved_for_feature.count.zero?
-
-    never_featured_recipes = self.approved_for_feature
-                                 .where(last_featured_at: nil)
-                                 .order(created_at: :asc)
-    return never_featured_recipes.first if never_featured_recipes.any?
-
-    self.approved_for_feature.order(last_featured_at: :asc).first
-  end
-
-  def self.recipe_summary_message
-    if awaiting_approval.count.zero? && incomplete.count.zero?
-      "There are no awaiting approval or incomplete recipes"
-    else
-      "There #{is_or_are(awaiting_approval.count)} #{no_or_number(awaiting_approval.count)} #{'recipe'.pluralize(awaiting_approval.count)} awaiting approval, and #{no_or_number(incomplete.count)} incomplete #{'recipe'.pluralize(incomplete.count)} #{UrlMaker.new('admin').full_url}"
+      new_recipe_of_the_day.set_as_recipe_of_the_day
+      new_recipe_of_the_day.touch(:last_recipe_of_the_day_at)
     end
-  end
 
-  def self.send_recipe_summary_message_to_slack
-    SlackMessage.post_to_slack(self.recipe_summary_message, nature: 'inform')
+    def next_recipe_of_the_day
+      never_recipe_of_the_day_recipes = self.approved_for_recipe_of_the_day
+                                            .where(last_recipe_of_the_day_at: nil)
+                                            .order(created_at: :asc)
+      return never_recipe_of_the_day_recipes.first if never_recipe_of_the_day_recipes.any?
+
+      self.approved_for_recipe_of_the_day.order(last_recipe_of_the_day_at: :asc).first
+    end
+
+    def update_featured_recipes
+      self.currently_featured.each do |recipe|
+        recipe.revert_from_highlighted if recipe.last_featured_at <= 23.hours.ago
+      end
+
+      (NUMBER_OF_FEATURED_RECIPES - Recipe.currently_featured.count).times { self.set_next_featured_recipe }
+    end
+
+    def set_next_featured_recipe
+      return if self.currently_featured.count >= NUMBER_OF_FEATURED_RECIPES
+
+      new_featured_recipe = self.next_recipe_to_feature
+      return unless new_featured_recipe
+
+      new_featured_recipe.feature
+      new_featured_recipe.touch(:last_featured_at)
+    end
+
+    def next_recipe_to_feature
+      return if self.approved_for_feature.count.zero?
+
+      never_featured_recipes = self.approved_for_feature
+                                   .where(last_featured_at: nil)
+                                   .order(created_at: :asc)
+      return never_featured_recipes.first if never_featured_recipes.any?
+
+      self.approved_for_feature.order(last_featured_at: :asc).first
+    end
+
+    def recipe_summary_message
+      if awaiting_approval.count.zero? && incomplete.count.zero?
+        "There are no awaiting approval or incomplete recipes"
+      else
+        "There #{is_or_are(awaiting_approval.count)} #{no_or_number(awaiting_approval.count)} #{'recipe'.pluralize(awaiting_approval.count)} awaiting approval, and #{no_or_number(incomplete.count)} incomplete #{'recipe'.pluralize(incomplete.count)} #{UrlMaker.new('admin').full_url}"
+      end
+    end
+
+    def send_recipe_summary_message_to_slack
+      SlackMessage.post_to_slack(self.recipe_summary_message, nature: 'inform')
+    end
   end
 
   def awaiting_approval?
