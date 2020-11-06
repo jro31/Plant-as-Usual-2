@@ -11,6 +11,102 @@ describe RecipesController, type: :controller do
         get :index
         expect(response).to be_successful
       end
+
+      describe 'filtered_recipes' do
+        let!(:current_user_recipe) { create(:recipe, user: user) }
+        let(:other_user) { create(:user) }
+        let!(:other_user_recipe) { create(:recipe_with_ingredients, user: other_user, name: 'Pizza') }
+        context 'recipe filter is user_recipes' do
+          context 'searched for user is the current user' do
+            context 'the current user has recipes' do
+              it 'assigns the current user recipes to @recipes' do
+                get :index, params: { recipe_filter: 'user_recipes', user_id: user.id }
+                expect(assigns(:recipes)).to eq([current_user_recipe])
+              end
+            end
+
+            context 'the current user does not have any recipes' do
+              let!(:current_user_recipe) { nil }
+              it 'does not assign any recipes to @recipes' do
+                get :index, params: { recipe_filter: 'user_recipes', user_id: user.id }
+                expect(assigns(:recipes)).to eq([])
+              end
+            end
+          end
+
+          context 'searched for user is not the current user' do
+            context 'the searched for user has recipes' do
+              it 'assigns the searched for users recipes to @recipes' do
+                get :index, params: { recipe_filter: 'user_recipes', user_id: other_user.id }
+                expect(assigns(:recipes)).to eq([other_user_recipe])
+              end
+            end
+
+            context 'the searched for user does not have any recipes' do
+              let!(:other_user_recipe) { nil }
+              it 'does not assign any recipes to @recipes' do
+                get :index, params: { recipe_filter: 'user_recipes', user_id: other_user.id }
+                expect(assigns(:recipes)).to eq([])
+              end
+            end
+          end
+
+          context 'no user is searched for' do
+            it 'assigns nil to @recipes' do
+              get :index, params: { recipe_filter: 'user_recipes' }
+              expect(assigns(:recipes)).to eq(nil)
+            end
+          end
+        end
+
+        context 'recipe filter is user_favourites' do
+          context 'current user favourites exist' do
+            let!(:current_user_favourite_recipe) { create(:user_favourite_recipe, user: user, recipe: other_user_recipe) }
+            let!(:other_user_favourite_recipe) { create(:user_favourite_recipe, user: other_user, recipe: current_user_recipe) }
+            it 'assigns @recipes the current user favourited recipe' do
+              get :index, params: { recipe_filter: 'user_favourites' }
+              expect(assigns(:recipes)).to eq([other_user_recipe])
+            end
+          end
+
+          context 'user favourites do not exist' do
+            it 'does not assign any recipes to @recipes' do
+              get :index, params: { recipe_filter: 'user_favourites' }
+              expect(assigns(:recipes)).to eq([])
+            end
+          end
+        end
+
+        context 'recipe filter is search' do
+          context 'search returns recipes' do
+            it 'assigns the relevant recipes to @recipes' do
+              get :index, params: { recipe_filter: 'search', query: 'pizza' }
+              expect(assigns(:recipes)).to eq([other_user_recipe])
+            end
+          end
+
+          context 'search does not return any recipes' do
+            it 'does not assign any recipes to @recipes' do
+              get :index, params: { recipe_filter: 'search', query: 'areallylongandcomplicatedquerythatwontreturnanyresults' }
+              expect(assigns(:recipes)).to eq([])
+            end
+          end
+        end
+
+        context 'recipe filter is something else' do
+          it 'assigns all recipes to @recipes' do
+            get :index, params: { recipe_filter: 'wtf?' }
+            expect(assigns(:recipes)).to include(current_user_recipe, other_user_recipe)
+          end
+        end
+
+        context 'recipe filter does not exist' do
+          it 'assigns all recipes to @recipes' do
+            get :index
+            expect(assigns(:recipes)).to include(current_user_recipe, other_user_recipe)
+          end
+        end
+      end
     end
 
     context 'user is not signed-in' do

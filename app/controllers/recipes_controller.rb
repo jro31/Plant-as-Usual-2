@@ -2,12 +2,14 @@ class RecipesController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
   skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_recipe, except: %i(index create)
+  before_action :authorize_recipe, except: %i(index create remove_as_favourite)
   after_action :verify_authorized, except: [:index, :create, :show, :remove_as_favourite]
 
   def index
     @recipe_filter = params[:recipe_filter]
-    @searched_for_user_id = params[:user_id].to_i
+    @searched_for_user_id = params[:user_id].to_i if params[:user_id]
     @search_query = params[:query]
+    @all_recipes = policy_scope(Recipe)
     @recipes = filtered_recipes
     @recipe_iterator = 0
     @h1_text = h1_index_text
@@ -31,7 +33,6 @@ class RecipesController < ApplicationController
   end
 
   def update
-    authorize @recipe
     if @recipe.update(recipe_params)
       @recipe.revised
     else
@@ -40,7 +41,6 @@ class RecipesController < ApplicationController
   end
 
   def upload_photo
-    authorize @recipe
     @user_can_edit = user_is_owner_or_admin?
     if @recipe.update(recipe_params)
       @recipe.revised
@@ -57,7 +57,6 @@ class RecipesController < ApplicationController
   end
 
   def mark_as_complete
-    authorize @recipe
     @recipe.complete
     redirect_to recipe_path(@recipe)
   end
@@ -67,7 +66,6 @@ class RecipesController < ApplicationController
   end
 
   def destroy
-    authorize @recipe
     if @recipe.destroy
       redirect_to root_path
     else
@@ -81,22 +79,22 @@ class RecipesController < ApplicationController
     params.require(:recipe).permit(:name, :process, :photo)
   end
 
-  def filtered_recipes # SPEC THIS
+  def filtered_recipes
     case @recipe_filter
     when 'user_recipes'
       if @searched_for_user_id == current_user&.id
-        Recipe.not_hidden.where(user: current_user).order(updated_at: :desc)
+        @all_recipes.not_hidden.where(user: current_user).order(updated_at: :desc)
       elsif @searched_for_user_id
-        Recipe.available_to_show.where(user: User.find(@searched_for_user_id)).order(updated_at: :desc)
+        @all_recipes.available_to_show.where(user: User.find(@searched_for_user_id)).order(updated_at: :desc)
       else
         nil
       end
     when 'user_favourites'
-      current_user.favourites.available_to_show.order(name: :asc)
+      @all_recipes.joins(:user_favourite_recipes).where(user_favourite_recipes: { user_id: current_user.id }).available_to_show.order(name: :asc)
     when 'search'
-      ordered_recipes(Recipe.available_to_show.joins(:ingredients).where(search_sql_query, query: "%#{@search_query}%").distinct)
+      ordered_recipes(@all_recipes.available_to_show.joins(:ingredients).where(search_sql_query, query: "%#{@search_query}%").distinct)
     else
-      ordered_recipes(Recipe.available_to_show.distinct)
+      ordered_recipes(@all_recipes.available_to_show.distinct)
     end
   end
 
@@ -141,5 +139,9 @@ class RecipesController < ApplicationController
 
   def set_recipe
     @recipe = Recipe.find(params[:id])
+  end
+
+  def authorize_recipe
+    authorize @recipe
   end
 end

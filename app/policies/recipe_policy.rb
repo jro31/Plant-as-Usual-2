@@ -5,19 +5,27 @@ class RecipePolicy < ApplicationPolicy
     end
   end
 
+  def create?
+    !user.nil?
+  end
+
+  def show?
+    true
+  end
+
   def update?
     user_is_owner_or_admin?
   end
 
   def upload_photo?
-    user_is_owner_or_admin?
+    update?
   end
 
   def mark_as_complete?
-    user_is_owner_or_admin?
+    update?
   end
 
   def destroy?
-    user_is_owner_or_admin?
+    update?
   end
 end

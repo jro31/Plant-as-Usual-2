@@ -175,13 +175,17 @@ describe IngredientsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:ingredient) { create(:ingredient, recipe: recipe) }
+    let!(:ingredient) { create(:ingredient, recipe: recipe) }
     let(:params) { { id: ingredient.id, recipe_id: recipe.id } }
     context 'current user is recipe owner' do
       before { recipe.update(user: user) }
 
       context 'the recipe is the ingredient recipe' do
-        it 'destroys the ingredient' do
+        it 'destroys one ingredient' do
+          expect { delete :destroy, params: params }.to change(Ingredient, :count).by(-1)
+        end
+
+        it 'destroys the correct ingredient' do
           expect { ingredient }.not_to raise_error
           delete :destroy, params: params
           expect { ingredient.reload }.to raise_error(ActiveRecord::RecordNotFound)
@@ -201,6 +205,10 @@ describe IngredientsController, type: :controller do
       let(:recipe_owner) { create(:user) }
       before { user.update(admin: true) }
       before { recipe.update(user: recipe_owner) }
+      it 'destroys one ingredient' do
+        expect { delete :destroy, params: params }.to change(Ingredient, :count).by(-1)
+      end
+
       it 'destroys the ingredient' do
         expect { ingredient }.not_to raise_error
         delete :destroy, params: params

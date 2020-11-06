@@ -3,6 +3,7 @@ require 'rails_helper'
 describe Recipe do
   it { should belong_to :user }
   it { should have_many :ingredients }
+  it { should have_many :user_favourite_recipes }
 
   let(:recipe) { create(:recipe, state: :approved) }
 
@@ -20,6 +21,15 @@ describe Recipe do
       expect(Ingredient.find(999)).to eq(ingredient)
       recipe.destroy
       expect { Ingredient.find(999) }.to raise_exception(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe 'destroying a recipe destoys user_favourite_recipes' do
+    let!(:user_favourite_recipe) { create(:user_favourite_recipe, id: 666, recipe: recipe) }
+    it 'destroys the user_favourite_recipe' do
+      expect(UserFavouriteRecipe.find(666)).to eq(user_favourite_recipe)
+      recipe.destroy
+      expect { UserFavouriteRecipe.find(666) }.to raise_exception(ActiveRecord::RecordNotFound)
     end
   end
 
@@ -1070,6 +1080,28 @@ describe Recipe do
       context 'state is not awaiting_approval' do
         before { recipe.update(state: 'incomplete') }
         it { expect(recipe.awaiting_approval?).to eq(false) }
+      end
+    end
+
+    describe '#available_to_show?' do
+      context 'state is incomplete' do
+        before { recipe.update(state: :incomplete) }
+        it { expect(recipe.available_to_show?).to eq(false) }
+      end
+
+      context 'state is declined' do
+        before { recipe.update(state: :declined) }
+        it { expect(recipe.available_to_show?).to eq(false) }
+      end
+
+      context 'state is hidden' do
+        before { recipe.update(state: :hidden) }
+        it { expect(recipe.available_to_show?).to eq(false) }
+      end
+
+      context 'state is something else' do
+        before { recipe.update(state: :approved) }
+        it { expect(recipe.available_to_show?).to eq(true) }
       end
     end
 

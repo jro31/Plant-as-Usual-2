@@ -27,6 +27,7 @@ gem 'figaro'
 gem 'state_machines-activerecord'
 gem "slack-notifier"
 gem 'delayed_job_active_record'
+gem 'simple_token_authentication'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
@@ -36,6 +37,7 @@ group :test do
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'database_cleaner-active_record'
+  gem 'rails-controller-testing'
 end
 
 group :development, :test do

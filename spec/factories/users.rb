@@ -8,5 +8,6 @@ FactoryBot.define do
     twitter_handle { 'boy_who_lived' }
     instagram_handle { 'potter_pix' }
     website_url { 'www.dumbledoresarmy.org' }
+    authentication_token { Faker::Internet.password(min_length: 15, max_length: 30, mix_case: true, special_characters: true) }
   end
 end
