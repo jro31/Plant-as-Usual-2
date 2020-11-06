@@ -1043,6 +1043,50 @@ describe Api::V1::RecipesController, type: :controller do
               expect(response).to have_http_status(:ok)
             end
           end
+
+          context 'non-existent ingredient is updated' do
+            let(:params) { { id: recipe.id, recipe: { name: 'Quack then moley', process: 'Do poor bird impression', photo: test_photo_2, ingredients_attributes: [ ingredient_1_params, ingredient_2_params ] } } }
+            let(:ingredient_1_params) { { id: ingredient_1.id, amount: 'Many', unit: 'whole', food: 'Bird people', preparation: 'plucked', optional: false, _destroy: true } }
+            let(:ingredient_2_params) { { id: 9999, amount: '6', unit: nil, food: 'Geese', preparation: 'a laying', optional: true, _destroy: false } }
+            it 'does not update the recipe' do
+              expect(recipe.name).to eq('Food with food on top')
+              expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+              expect(recipe.photo.url).to include('test-photo.jpg')
+              expect(recipe.state).to eq('approved')
+              patch :update, params: params, format: :json
+              expect(recipe.reload.name).to eq('Food with food on top')
+              expect(recipe.process).to eq('Put all the food into a bowl of food, mix well, then top with food')
+              expect(recipe.photo.url).to include('test-photo.jpg')
+              expect(recipe.state).to eq('approved')
+            end
+
+            it 'does not change the number of ingredients' do
+              expect { patch :update, params: params, format: :json }.to change(Ingredient, :count).by(0)
+              expect(Ingredient.count).to eq(3)
+            end
+
+            it 'does not amend or destroy the existing ingredient' do
+              expect(ingredient_1.food).to eq('Green leaves')
+              patch :update, params: params, format: :json
+              expect(ingredient_1.reload.food).to eq('Green leaves')
+            end
+
+            it 'does not add a new ingredient' do
+              expect(Ingredient.last.food).to eq('Fanciful loot')
+              patch :update, params: params, format: :json
+              expect(Ingredient.last.food).to eq('Fanciful loot')
+            end
+
+            it 'returns an error' do
+              patch :update, params: params, format: :json
+              expect(JSON.parse(response.body)).to eq("error"=>"Couldn't find Ingredient with ID=9999 for Recipe with ID=#{recipe.id}")
+            end
+
+            it 'returns 404' do
+              patch :update, params: params, format: :json
+              expect(response).to have_http_status(:not_found)
+            end
+          end
         end
 
         context 'update is not successful' do
