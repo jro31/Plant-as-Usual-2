@@ -69,6 +69,11 @@ describe Api::V1::RecipesController, type: :controller do
               expect(JSON.parse(response.body)['author']['website']).to eq('www.dontsitonme.com')
             end
 
+            it 'returns 200' do
+              post :create, params: params, format: :json
+              expect(response).to have_http_status(:ok)
+            end
+
             context 'mark_as_complete is passed-in' do
               context 'mark_as_complete is true' do
                 let(:params) { { recipe: { name: 'Mushroom car banana', process: 'Scrape mould from yellow boat', photo: test_photo, mark_as_complete: true } } }
@@ -88,6 +93,11 @@ describe Api::V1::RecipesController, type: :controller do
                   expect(JSON.parse(response.body)['ingredients']).to eq([])
                   expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
                   expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
+                end
+
+                it 'returns 200' do
+                  post :create, params: params, format: :json
+                  expect(response).to have_http_status(:ok)
                 end
               end
 
@@ -174,6 +184,11 @@ describe Api::V1::RecipesController, type: :controller do
               expect(JSON.parse(response.body)['author']['instagram_username']).to eq('coffeetableselfies')
               expect(JSON.parse(response.body)['author']['website']).to eq('www.dontsitonme.com')
             end
+
+            it 'returns 200' do
+              post :create, params: params, format: :json
+              expect(response).to have_http_status(:ok)
+            end
           end
         end
 
@@ -227,6 +242,11 @@ describe Api::V1::RecipesController, type: :controller do
             expect(JSON.parse(response.body)['author']['twitter_handle']).to eq('cushiondiaries')
             expect(JSON.parse(response.body)['author']['instagram_username']).to eq('coffeetableselfies')
             expect(JSON.parse(response.body)['author']['website']).to eq('www.dontsitonme.com')
+          end
+
+          it 'returns 200' do
+            post :create, params: params, format: :json
+            expect(response).to have_http_status(:ok)
           end
         end
 
@@ -300,6 +320,11 @@ describe Api::V1::RecipesController, type: :controller do
             expect(JSON.parse(response.body)['author']['instagram_username']).to eq('coffeetableselfies')
             expect(JSON.parse(response.body)['author']['website']).to eq('www.dontsitonme.com')
           end
+
+          it 'returns 200' do
+            post :create, params: params, format: :json
+            expect(response).to have_http_status(:ok)
+          end
         end
       end
 
@@ -308,6 +333,11 @@ describe Api::V1::RecipesController, type: :controller do
         it 'returns an errors hash' do
           post :create, params: params, format: :json
           expect(JSON.parse(response.body)).to eq({'errors' => []})
+        end
+
+        it 'returns 422' do
+          post :create, params: params, format: :json
+          expect(response).to have_http_status(:unprocessable_entity)
         end
       end
     end
@@ -335,16 +365,21 @@ describe Api::V1::RecipesController, type: :controller do
     render_views
     context 'there is one recipe' do
       it 'returns 1 recipe' do
-        get :index, { format: :json }
+        get :index, format: :json
         expect(JSON.parse(response.body).count).to eq(1)
       end
 
       it 'returns the recipe details' do
-        get :index, { format: :json }
+        get :index, format: :json
         expect(JSON.parse(response.body)[0]['id']).to eq(recipe.id)
         expect(JSON.parse(response.body)[0]['name']).to eq('Food with food on top')
         expect(JSON.parse(response.body)[0]['author']['id']).to eq(user.id)
         expect(JSON.parse(response.body)[0]['author']['username']).to eq('steve_the_sofa')
+      end
+
+      it 'returns 200' do
+        get :index, format: :json
+        expect(response).to have_http_status(:ok)
       end
     end
 
@@ -353,12 +388,12 @@ describe Api::V1::RecipesController, type: :controller do
       let!(:recipe_2) { create(:recipe, user: user_2, name: 'Banana') }
       let!(:invalid_recipe) { create(:recipe, state: :incomplete) }
       it 'returns 2 recipes' do
-        get :index, { format: :json }
+        get :index, format: :json
         expect(JSON.parse(response.body).count).to eq(2)
       end
 
       it 'returns the details of both recipes' do
-        get :index, { format: :json }
+        get :index, format: :json
         expect(JSON.parse(response.body)[0]['id']).to eq(recipe.id).or(eq(recipe_2.id))
         expect(JSON.parse(response.body)[0]['name']).to eq('Food with food on top').or(eq('Banana'))
         expect(JSON.parse(response.body)[0]['author']['id']).to eq(user.id).or(eq(user_2.id))
@@ -369,6 +404,11 @@ describe Api::V1::RecipesController, type: :controller do
         expect(JSON.parse(response.body)[1]['author']['id']).to eq(user.id).or(eq(user_2.id))
         expect(JSON.parse(response.body)[1]['author']['username']).to eq('steve_the_sofa').or(eq('larry_the_lamp'))
       end
+
+      it 'returns 200' do
+        get :index, format: :json
+        expect(response).to have_http_status(:ok)
+      end
     end
 
     context 'there are no recipes' do
@@ -377,13 +417,18 @@ describe Api::V1::RecipesController, type: :controller do
       let!(:ingredient_2) { nil }
       let!(:ingredient_3) { nil }
       it 'returns 0 recipes' do
-        get :index, { format: :json }
+        get :index, format: :json
         expect(JSON.parse(response.body).count).to eq(0)
       end
 
       it 'returns an empty array' do
-        get :index, { format: :json }
+        get :index, format: :json
         expect(JSON.parse(response.body)).to eq([])
+      end
+
+      it 'returns 200' do
+        get :index, format: :json
+        expect(response).to have_http_status(:ok)
       end
     end
   end
@@ -409,6 +454,11 @@ describe Api::V1::RecipesController, type: :controller do
           expect(JSON.parse(response.body)['author']['twitter_handle']).to eq(nil)
           expect(JSON.parse(response.body)['author']['instagram_username']).to eq(nil)
           expect(JSON.parse(response.body)['author']['website']).to eq(nil)
+        end
+
+        it 'returns 200' do
+          get :show, params: { id: recipe.id, format: :json }
+          expect(response).to have_http_status(:ok)
         end
       end
 
@@ -437,6 +487,11 @@ describe Api::V1::RecipesController, type: :controller do
           expect(JSON.parse(response.body)['author']['twitter_handle']).to eq(nil)
           expect(JSON.parse(response.body)['author']['instagram_username']).to eq(nil)
           expect(JSON.parse(response.body)['author']['website']).to eq(nil)
+        end
+
+        it 'returns 200' do
+          get :show, params: { id: recipe.id, format: :json }
+          expect(response).to have_http_status(:ok)
         end
       end
 
@@ -479,6 +534,11 @@ describe Api::V1::RecipesController, type: :controller do
           expect(JSON.parse(response.body)['author']['instagram_username']).to eq('coffeetableselfies')
           expect(JSON.parse(response.body)['author']['website']).to eq('www.dontsitonme.com')
         end
+
+        it 'returns 200' do
+          get :show, params: { id: recipe.id, format: :json }
+          expect(response).to have_http_status(:ok)
+        end
       end
     end
 
@@ -486,6 +546,11 @@ describe Api::V1::RecipesController, type: :controller do
       it 'returns an error' do
         get :show, params: { id: 9999, format: :json }
         expect(JSON.parse(response.body)).to eq({'error' => "Couldn't find Recipe with 'id'=9999"})
+      end
+
+      it 'returns 404' do
+        get :show, params: { id: 9999, format: :json }
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -524,6 +589,11 @@ describe Api::V1::RecipesController, type: :controller do
               expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
             end
 
+            it 'returns 200' do
+              patch :update, params: params, format: :json
+              expect(response).to have_http_status(:ok)
+            end
+
             context 'mark_as_complete is passed-in' do
               context 'mark_as_complete is true' do
                 let(:params) { { id: recipe.id, recipe: { name: 'Roman coke', process: 'Pour Coca-cola into glass with Cesar', photo: test_photo_2, mark_as_complete: true } } }
@@ -549,6 +619,11 @@ describe Api::V1::RecipesController, type: :controller do
 
                   expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
                   expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
+                end
+
+                it 'returns 200' do
+                  patch :update, params: params, format: :json
+                  expect(response).to have_http_status(:ok)
                 end
               end
 
@@ -580,6 +655,11 @@ describe Api::V1::RecipesController, type: :controller do
                   expect(recipe.photo.url).to include('test-photo-2.jpg')
                   expect(recipe.state).to eq('incomplete')
                 end
+
+                it 'returns 200' do
+                  patch :update, params: params, format: :json
+                  expect(response).to have_http_status(:ok)
+                end
               end
 
               context 'mark_as_complete is nil' do
@@ -595,6 +675,11 @@ describe Api::V1::RecipesController, type: :controller do
                   expect(recipe.photo.url).to include('test-photo-2.jpg')
                   expect(recipe.state).to eq('incomplete')
                 end
+
+                it 'returns 200' do
+                  patch :update, params: params, format: :json
+                  expect(response).to have_http_status(:ok)
+                end
               end
 
               context 'mark_as_complete is an empty string' do
@@ -609,6 +694,11 @@ describe Api::V1::RecipesController, type: :controller do
                   expect(recipe.process).to eq('Pour boiling water over yolk')
                   expect(recipe.photo.url).to include('test-photo-2.jpg')
                   expect(recipe.state).to eq('incomplete')
+                end
+
+                it 'returns 200' do
+                  patch :update, params: params, format: :json
+                  expect(response).to have_http_status(:ok)
                 end
               end
             end
@@ -689,6 +779,11 @@ describe Api::V1::RecipesController, type: :controller do
                 expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
                 expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
               end
+
+              it 'returns 200' do
+                patch :update, params: params, format: :json
+                expect(response).to have_http_status(:ok)
+              end
             end
 
             context 'multiple ingrdients are added' do
@@ -741,6 +836,11 @@ describe Api::V1::RecipesController, type: :controller do
 
                 expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
                 expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
+              end
+
+              it 'returns 200' do
+                patch :update, params: params, format: :json
+                expect(response).to have_http_status(:ok)
               end
             end
           end
@@ -815,6 +915,11 @@ describe Api::V1::RecipesController, type: :controller do
                 expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
                 expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
               end
+
+              it 'returns 200' do
+                patch :update, params: params, format: :json
+                expect(response).to have_http_status(:ok)
+              end
             end
 
             context 'multiple ingredients are updated' do
@@ -877,6 +982,11 @@ describe Api::V1::RecipesController, type: :controller do
                 expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
                 expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
               end
+
+              it 'returns 200' do
+                patch :update, params: params, format: :json
+                expect(response).to have_http_status(:ok)
+              end
             end
           end
 
@@ -927,6 +1037,11 @@ describe Api::V1::RecipesController, type: :controller do
               expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
               expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
             end
+
+            it 'returns 200' do
+              patch :update, params: params, format: :json
+              expect(response).to have_http_status(:ok)
+            end
           end
         end
 
@@ -942,6 +1057,11 @@ describe Api::V1::RecipesController, type: :controller do
           it 'returns errors' do
             patch :update, params: params, format: :json
             expect(JSON.parse(response.body)).to eq('errors' => [])
+          end
+
+          it 'returns 422' do
+            patch :update, params: params, format: :json
+            expect(response).to have_http_status(:unprocessable_entity)
           end
         end
       end
@@ -972,6 +1092,11 @@ describe Api::V1::RecipesController, type: :controller do
 
           expect(JSON.parse(response.body)['author']['id']).to eq(user.id)
           expect(JSON.parse(response.body)['author']['username']).to eq('steve_the_sofa')
+        end
+
+        it 'returns 200' do
+          patch :update, params: params, format: :json
+          expect(response).to have_http_status(:ok)
         end
       end
 
