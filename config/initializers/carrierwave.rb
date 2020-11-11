@@ -7,4 +7,5 @@ CarrierWave.configure do |config|
   }
   config.fog_directory  = ENV['S3_BUCKET_NAME']
   config.fog_use_ssl_for_aws = true
+  config.fog_public = false
 end
