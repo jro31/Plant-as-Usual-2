@@ -2,5 +2,12 @@
 %html
   %head
     %meta{'http-equiv' => "Content-Type", content: "text/html; charset=utf-8"}
-  %body
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1, shrink-to-fit=no"}
+
+    %link{ href: "https://fonts.googleapis.com/css?family=Muli:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap&subset=latin-ext", rel: "stylesheet", type: "text/css" }
+    %link{ href: "https://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Raleway:400,100,300,700,500", rel: "stylesheet", type: "text/css" }
+
+    = render partial: 'layouts/email/styles'
+  %body{class: @user&.dark_mode ? 'dark-mode' : 'light-mode'}
+    .header
     = yield
