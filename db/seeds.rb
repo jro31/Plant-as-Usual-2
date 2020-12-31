@@ -12,10 +12,10 @@ VEGAN_PROTEIN_SHAKE = "Vegan protein shake".freeze
 SMASHED_AVOCADO_ON_WHOLEWHEAT_TOAST = "Smashed avocado on wholewheat toast".freeze
 WHOLEWHEAT_PITA_BREADS = "Wholewheat pita breads".freeze
 HUMMUS_TOAST = "Hummus toast".freeze
-# OIL_FREE_TAHINI = "Oil-free tahini".freeze
-# CREAMY_MUSHROOM_AND_SUNDRIED_TOMATO_PASTA = "Creamy mushroom and sundried tomato pasta".freeze
-# TOFU_PAD_THAI = "Tofu pad Thai".freeze
-# SMOOTHIE_BOWL = "Smoothie bowl".freeze
+OIL_FREE_TAHINI = "Oil-free tahini".freeze
+CREAMY_MUSHROOM_AND_SUNDRIED_TOMATO_PASTA = "Creamy mushroom and sundried tomato pasta".freeze
+TOFU_PAD_THAI = "Tofu pad Thai".freeze
+SMOOTHIE_BOWL = "Smoothie bowl".freeze
 
 if Rails.env.development?
   puts "Hiring chef..."
@@ -1146,6 +1146,391 @@ if Rails.env.development?
 
   puts "Hummus toast served"
 
+
+  puts "Cleaning tahini tubs..."
+  Recipe.where(name: OIL_FREE_TAHINI).destroy_all
+  puts "Tahini tubs clean"
+
+  puts "Making oil-free tahini..."
+  puts "Writing recipe..."
+  tahini = Recipe.create!(
+    user: user,
+    name: OIL_FREE_TAHINI,
+    process: "Adjust the amount of sesame seeds for the size of the food processor you're using. The electric grinder I use can only fit about a cup, but with a bigger food processor you'll want to adjust accordingly. The bowl needs to be full enough that once broken down, the seeds still get processed.\n\nStart by optionally grilling the sesame seeds in a frying pan. I find this brings out their flavour, and allows them to be processed a little easier. Be careful not to burn them though. Stir them frequently, and only grill them long enough that they are lightly browned.\n\nThen add them to a food processor, and process until liquefied.\n\nStore the tahini refrigerated in an air-tight container. It'll last for a week or two before it goes bad.",
+    state: :approved_for_feature
+  )
+  puts "Recipe written"
+
+  puts "Preparing ingredients..."
+  Ingredient.create!(
+    recipe: tahini,
+    food: "sesame seeds",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:cup]
+  )
+  puts "Ingredients prepped"
+
+  puts "Taking photo..."
+  File.open('app/assets/images/seed_photos/oil_free_tahini.jpg') { |f| tahini.photo = f }
+  tahini.save
+  puts "Photo snapped"
+
+  puts "Oil-free tahini served"
+
+
+  puts "Cleaning pasta dishes... again..."
+  Recipe.where(name: CREAMY_MUSHROOM_AND_SUNDRIED_TOMATO_PASTA).destroy_all
+  puts "Pasta dishes clean"
+
+  puts "Making creamy mushroom and sundried tomato pasta..."
+  puts "Writing recipe..."
+  creamy_mushroom_pasta = Recipe.create!(
+    user: user,
+    name: CREAMY_MUSHROOM_AND_SUNDRIED_TOMATO_PASTA,
+    process: "Heat a dash of olive oil in a frying pan over a medium heat. Add the onion and garlic, and cook until softened; about 5 minutes.\n\nRemove from the heat and put the onion and garlic into a blender with the cashews, lemon juice, nutritional yeast, 470ml of water, and a bit of sea salt. Blend until creamy. It will be quite watery. Set aside.\n\nHeat up another dash of olive oil in the frying pan over a medium-high heat, and add the mushrooms. Season them with salt and pepper, and cook until lightly browned. About 6 minutes.\n\nAdd the sauce from the blender and the sundried tomatoes, reduce the heat to medium, and simmer for about 4 minutes. Optionally add more salt and pepper.\n\nIn the meantime, cook the pasta according to the package instructions and drain.\n\nStir the sauce into the pasta, and optionally garnish with the parsley and vegan parmesan.",
+    state: :approved_for_recipe_of_the_day
+  )
+  puts "Recipe written"
+
+  puts "Preparing ingredients..."
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "wholewheat pasta",
+    amount: '450',
+    unit: Ingredient.inhuman_units[:gram]
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "sundried tomatoes",
+    amount: '200',
+    unit: Ingredient.inhuman_units[:gram],
+    preparation: "chopped"
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "olive oil"
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "onion",
+    amount: '1',
+    preparation: "chopped"
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "garlic",
+    amount: '4',
+    unit: Ingredient.inhuman_units[:clove],
+    preparation: "crushed and chopped"
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "cashews",
+    amount: '120',
+    unit: Ingredient.inhuman_units[:millilitre],
+    preparation: "soaked in hot water for at least 10 minutes"
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "lemon juice",
+    amount: '2',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "nutritional yeast",
+    amount: '2',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "sea salt"
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "mushrooms",
+    amount: '450',
+    unit: Ingredient.inhuman_units[:gram],
+    preparation: "chopped"
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "fresh parsley",
+    preparation: "chopped",
+    optional: true
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "vegan parmesan",
+    optional: true
+  )
+
+  Ingredient.create!(
+    recipe: creamy_mushroom_pasta,
+    food: "black pepper"
+  )
+  puts "Ingredients prepped"
+
+  puts "Taking photo..."
+  File.open('app/assets/images/seed_photos/creamy_mushroom_and_sundried_tomato_pasta.jpg') { |f| creamy_mushroom_pasta.photo = f }
+  creamy_mushroom_pasta.save
+  puts "Photo snapped"
+
+  puts "Creamy mushroom and sundried tomato pasta served"
+
+
+  puts "Cleaning chopsticks..."
+  Recipe.where(name: TOFU_PAD_THAI).destroy_all
+  puts "chopsticks clean"
+
+  puts "Making tofu pad Thai..."
+  puts "Writing recipe..."
+  pad_thai = Recipe.create!(
+    user: user,
+    name: TOFU_PAD_THAI,
+    process: "Before starting, check the packaging for the best way to cook the rice noodles. You'll want them to be cooked by the time you add them to this recipe. That may mean soaking them now, before you begin, but if they require cooking rather than soaking, don't cook them too early as they'll stick together as they cool and will need to be run under water to separate them again.\n\nStart by pre-heating your oven to 200°C.\n\nCut the tofu into small dice, and put them on a baking tray lined with parchment paper. Bake in the oven for around 20 minutes, until lightly browned.\n\nTo make the sauce, mix the tamarind paste, brown sugar, red curry paste, soy sauce, vegetable stock and garlic together in a bowl.\n\nBefore continuing, the tofu should be baked, vegetables chopped, sauce mixed and noodles cooked.\n\nPreheat the sesame oil over a medium-high heat in a wok or large frying pan, then add the onion and sauté until slightly softened.\n\nAdd the red pepper and carrot and sauté a little longer until they too are softened.\n\nNow add the noodles and the sauce, stir to coat everything in the sauce, and cook until all the ingredients are heated through.\n\nAdd the tofu and most of the bean sprouts (save some for serving) and mix until everything is well coated and the last ingredients are heated.\n\nServe immediately with the remaining bean sprouts, and peanuts, cilantro and lime if you're using them.",
+    state: :approved_for_recipe_of_the_day
+  )
+  puts "Recipe written"
+
+  puts "Preparing ingredients..."
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "rice noodles",
+    amount: '200',
+    unit: Ingredient.inhuman_units[:gram]
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "extra firm tofu",
+    amount: '220',
+    unit: Ingredient.inhuman_units[:gram]
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "sesame oil",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "onion",
+    amount: 'Half',
+    preparation: "chopped"
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "red pepper",
+    amount: '1',
+    preparation: "sliced into strips"
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "carrot",
+    amount: '1',
+    preparation: "sliced into strips"
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "bean sprouts",
+    amount: '42',
+    unit: Ingredient.inhuman_units[:gram]
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "tamarind paste",
+    amount: '3',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "brown sugar",
+    amount: '3',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "red curry paste",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "soy sauce",
+    amount: '2',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "vegetable stock",
+    amount: '60',
+    unit: Ingredient.inhuman_units[:millilitre]
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "garlic",
+    amount: '2',
+    unit: Ingredient.inhuman_units[:clove],
+    preparation: "minced"
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "peanuts",
+    amount: '75',
+    unit: Ingredient.inhuman_units[:gram],
+    preparation: "crushed",
+    optional: true
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "fresh cilantro",
+    optional: true
+  )
+
+  Ingredient.create!(
+    recipe: pad_thai,
+    food: "lime",
+    amount: '1',
+    optional: true
+  )
+  puts "Ingredients prepped"
+
+  puts "Taking photo..."
+  File.open('app/assets/images/seed_photos/tofu_pad_thai.jpg') { |f| pad_thai.photo = f }
+  pad_thai.save
+  puts "Photo snapped"
+
+  puts "Tofu pad Thai served"
+
+
+  puts "Cleaning blender..."
+  Recipe.where(name: SMOOTHIE_BOWL).destroy_all
+  puts "Blender clean"
+
+  puts "Making smoothie bowl..."
+  puts "Writing recipe..."
+  smoothie = Recipe.create!(
+    user: user,
+    name: SMOOTHIE_BOWL,
+    process: "Smoothie bowls are great, because you can pretty much throw in any fruit/nut/seed/milk combination that you fancy, and it'll still end up being healthy and tasting great. My one recommendation is to make sure you include at least one 'thickening' fruit. Bananas are great for this, as are avocados and mangos.\n\nTo make this smoothie bowl, I blended together two bananas, some strawberries, raspberries, mango, pineapple, papaya, cashews, almonds, walnuts, brazil nuts, pecans and hemp seeds with just enough soy milk to allow it to blend, but not so much that it wasn't thick. Don't ask me the quantities of each fruit; I have no idea. Just threw what was in my fridge into the blender.\n\nI then topped it with another strawberry or two, some raspberries, sunflower seeds, pumpkin seeds and chia seeds.",
+    state: :approved_for_recipe_of_the_day
+  )
+  puts "Recipe written"
+
+  puts "Preparing ingredients..."
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "bananas",
+    amount: '2'
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "strawberries"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "raspberries"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "mango"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "pineapple"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "papaya"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "cashews"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "almonds"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "walnuts"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "brazil nuts"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "pecans"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "hemp seeds"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "sunflower seeds"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "pumpkin seeds"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "chia seeds"
+  )
+
+  Ingredient.create!(
+    recipe: smoothie,
+    food: "soy milk"
+  )
+  puts "Ingredients prepped"
+
+  puts "Taking photo..."
+  File.open('app/assets/images/seed_photos/smoothie_bowl.jpg') { |f| smoothie.photo = f }
+  smoothie.save
+  puts "Photo snapped"
+
+  puts "Smoothie bowl served"
 
 
   puts "Setting featured recipes..."
