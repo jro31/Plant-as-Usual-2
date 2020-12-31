@@ -6,6 +6,16 @@ STOVE_TOP_MAC_N_CHEESE = "Stove-top mac 'n' cheese".freeze
 OIL_FREE_FRENCH_FRIES_WITH_KETCHUP = "Oil-free French fries with ketchup".freeze
 BLACK_PEPPER_STIR_FRY = "Black pepper stir-fry".freeze
 PASTA_WITH_TOFU_CHEESE_SAUCE = "Pasta with tofu cheese sauce".freeze
+QUINOA_CURRY = "Quinoa curry".freeze
+SPAGHETTI_BOLOGNESE = "Spaghetti bolognese".freeze
+VEGAN_PROTEIN_SHAKE = "Vegan protein shake".freeze
+SMASHED_AVOCADO_ON_WHOLEWHEAT_TOAST = "Smashed avocado on wholewheat toast".freeze
+WHOLEWHEAT_PITA_BREADS = "Wholewheat pita breads".freeze
+HUMMUS_TOAST = "Hummus toast".freeze
+# OIL_FREE_TAHINI = "Oil-free tahini".freeze
+# CREAMY_MUSHROOM_AND_SUNDRIED_TOMATO_PASTA = "Creamy mushroom and sundried tomato pasta".freeze
+# TOFU_PAD_THAI = "Tofu pad Thai".freeze
+# SMOOTHIE_BOWL = "Smoothie bowl".freeze
 
 if Rails.env.development?
   puts "Hiring chef..."
@@ -636,6 +646,505 @@ if Rails.env.development?
   puts "Photo snapped"
 
   puts "Pasta with tofu cheese sauce served"
+
+
+  puts "Cleaning quinoa bowls..."
+  Recipe.where(name: QUINOA_CURRY).destroy_all
+  puts "Quinoa bowls clean"
+
+  puts "Making quinoa curry..."
+  puts "Writing recipe..."
+  quinoa_curry_bowl = Recipe.create!(
+    user: user,
+    name: QUINOA_CURRY,
+    process: "Put the quinoa, onion powder, and half a teaspoon of the curry powder in a pan, add 400ml of water and stir. Bring to the boil, then reduce the heat to medium-low, and simmer covered, until all of the water has been absorbed. Stir frequently to prevent it sticking.\n\nIn the meantime, put the frozen vegetables into a large frying pan, cover, and cook on a medium-low heat until the vegetables have thawed (10-15 mins). You shouldn't need to add any water here, as there will usually be enough melting ice from the vegetables (if they've been stuck at the back of your freezer for months like mine have). If the vegetables start sticking to the pan though, add a few tablespoons of water as needed. Stir occasionally.\n\nWhen the vegetables are softened, add the garlic, ginger powder, and the remaining teaspoon of curry powder and cook about a minute longer. Remove from the heat, and stir in the tahini.\n\nStir the cooked quinoa into the vegetables and serve. Optionally top with sesame seeds.\n\nIf you can't eat it all, it stores quite well in an air-tight container in the fridge, and can either be eaten cold or reheated in the microwave.",
+    state: :approved_for_feature
+  )
+  puts "Recipe written"
+
+  puts "Preparing ingredients..."
+  Ingredient.create!(
+    recipe: quinoa_curry_bowl,
+    food: "quinoa",
+    amount: '200',
+    unit: Ingredient.inhuman_units[:millilitre]
+  )
+
+  Ingredient.create!(
+    recipe: quinoa_curry_bowl,
+    food: "onion powder",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:teaspoon]
+  )
+
+  Ingredient.create!(
+    recipe: quinoa_curry_bowl,
+    food: "curry powder",
+    amount: '1.5',
+    unit: Ingredient.inhuman_units[:teaspoon]
+  )
+
+  Ingredient.create!(
+    recipe: quinoa_curry_bowl,
+    food: "frozen vegetables",
+    amount: '500',
+    unit: Ingredient.inhuman_units[:gram]
+  )
+
+  Ingredient.create!(
+    recipe: quinoa_curry_bowl,
+    food: "garlic",
+    amount: '4-5',
+    unit: Ingredient.inhuman_units[:clove],
+    preparation: "minced"
+  )
+
+  Ingredient.create!(
+    recipe: quinoa_curry_bowl,
+    food: "tahini",
+    amount: '3',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: quinoa_curry_bowl,
+    food: "sesame seeds",
+    optional: true
+  )
+
+  Ingredient.create!(
+    recipe: quinoa_curry_bowl,
+    food: "ginger powder",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:teaspoon]
+  )
+  puts "Ingredients prepped"
+
+  puts "Taking photo..."
+  File.open('app/assets/images/seed_photos/quinoa_curry.jpg') { |f| quinoa_curry_bowl.photo = f }
+  quinoa_curry_bowl.save
+  puts "Photo snapped"
+
+  puts "Quinoa curry served"
+
+
+  puts "Cleaning bolognese jars..."
+  Recipe.where(name: SPAGHETTI_BOLOGNESE).destroy_all
+  puts "Bolognese jars clean"
+
+  puts "Making spaghetti bolognese..."
+  puts "Writing recipe..."
+  spag_bol = Recipe.create!(
+    user: user,
+    name: SPAGHETTI_BOLOGNESE,
+    process: "In a large mixing bowl, mash the tofu with a fork. Now blend the walnuts in a food processor until finely chopped, and add them to the mixing bowl. Blend the mushrooms in the food processor, and add them to the mixing bowl. And lastly add the drained lentils to the mixing bowl. Mix the tofu, walnuts, mushrooms and lentils together and set aside.\n\nIn a large frying pan, sauté the onion in the olive oil until soft. Then add the tofu, walnut, mushroom and lentil mix to the frying pan, along with the garlic, basil, oregano, cayenne pepper and soy sauce, and cook for a few minutes until the mixture is not too wet.\n\nAdd the tomato paste and crushed tomatoes and fry for a few minutes longer, until you reach a bolognese consistency.\n\nStir in the sugar and as much salt and pepper as you feel like.\n\nIn the meantime, cook the spaghetti according to the package instructions. Serve with the bolognese mix on top of the spaghetti, or if you prefer, mixed together.",
+    state: :approved_for_recipe_of_the_day
+  )
+  puts "Recipe written"
+
+  puts "Preparing ingredients..."
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "extra firm tofu",
+    amount: '220',
+    unit: Ingredient.inhuman_units[:gram]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "walnuts",
+    amount: '100',
+    unit: Ingredient.inhuman_units[:gram]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "brown mushrooms",
+    amount: '500',
+    unit: Ingredient.inhuman_units[:gram]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "brown lentils",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:can],
+    preparation: "drained"
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "onion",
+    amount: '1',
+    preparation: "chopped"
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "olive oil",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "garlic",
+    amount: '3',
+    unit: Ingredient.inhuman_units[:clove],
+    preparation: "crushed"
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "dried basil",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:teaspoon]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "oregano",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:teaspoon]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "cayenne pepper",
+    amount: 'Half',
+    unit: Ingredient.inhuman_units[:teaspoon]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "soy sauce",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "tomato paste",
+    amount: '130',
+    unit: Ingredient.inhuman_units[:gram]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "crushed tomatoes",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:can]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "brown sugar",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "sea salt"
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "black pepper"
+  )
+
+  Ingredient.create!(
+    recipe: spag_bol,
+    food: "wholewheat spaghetti",
+    amount: '250',
+    unit: Ingredient.inhuman_units[:gram]
+  )
+  puts "Ingredients prepped"
+
+  puts "Taking photo..."
+  File.open('app/assets/images/seed_photos/spaghetti_bolognese.jpg') { |f| spag_bol.photo = f }
+  spag_bol.save
+  puts "Photo snapped"
+
+  puts "Spaghetti bolognese served"
+
+
+  puts "Cleaning protein shakers..."
+  Recipe.where(name: VEGAN_PROTEIN_SHAKE).destroy_all
+  puts "Protein shakers clean"
+
+  puts "Making protein shake..."
+  puts "Writing recipe..."
+  protein_shake = Recipe.create!(
+    user: user,
+    name: VEGAN_PROTEIN_SHAKE,
+    process: "Add all ingredients to a blender. Blend on a high speed until smooth. Serve. Simple.",
+    state: :approved_for_recipe_of_the_day
+  )
+  puts "Recipe written"
+
+  puts "Preparing ingredients..."
+  Ingredient.create!(
+    recipe: protein_shake,
+    food: "frozen banana",
+    amount: '1',
+    preparation: "cut into blendable-sized pieces"
+  )
+
+  Ingredient.create!(
+    recipe: protein_shake,
+    food: "hemp seeds",
+    amount: '2',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: protein_shake,
+    food: "oats",
+    amount: '60',
+    unit: Ingredient.inhuman_units[:millilitre]
+  )
+
+  Ingredient.create!(
+    recipe: protein_shake,
+    food: "peanut butter",
+    amount: '2',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: protein_shake,
+    food: "chia seeds",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: protein_shake,
+    food: "cacao powder",
+    amount: '2',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: protein_shake,
+    food: "plant-based milk",
+    amount: '470',
+    unit: Ingredient.inhuman_units[:millilitre]
+  )
+
+  Ingredient.create!(
+    recipe: protein_shake,
+    food: "dates",
+    amount: '2',
+    optional: true
+  )
+  puts "Ingredients prepped"
+
+  puts "Taking photo..."
+  File.open('app/assets/images/seed_photos/vegan_protein_shake.jpg') { |f| protein_shake.photo = f }
+  protein_shake.save
+  puts "Photo snapped"
+
+  puts "Protein shake served"
+
+
+  puts "Cleaning avocado smashers..."
+  Recipe.where(name: SMASHED_AVOCADO_ON_WHOLEWHEAT_TOAST).destroy_all
+  puts "Avocado smashers clean"
+
+  puts "Making smashed avo..."
+  puts "Writing recipe..."
+  smashed_avo = Recipe.create!(
+    user: user,
+    name: SMASHED_AVOCADO_ON_WHOLEWHEAT_TOAST,
+    process: "Place the avocado, chilli flakes, garlic, lime juice, salt, and olive oil in a bowl and mash it all together with a fork until you reach your desired consistency.\n\nSpread it on the toast and garnish with the coriander leaves (or anything else you fancy).",
+    state: :approved_for_recipe_of_the_day
+  )
+  puts "Recipe written"
+
+  puts "Preparing ingredients..."
+  Ingredient.create!(
+    recipe: smashed_avo,
+    food: "avocado",
+    amount: '1',
+    preparation: "de-skinned and de-stoned"
+  )
+
+  Ingredient.create!(
+    recipe: smashed_avo,
+    food: "chilli flakes",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:pinch]
+  )
+
+  Ingredient.create!(
+    recipe: smashed_avo,
+    food: "garlic",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:clove],
+    preparation: "crushed and finely chopped"
+  )
+
+  Ingredient.create!(
+    recipe: smashed_avo,
+    food: "lime juice",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: smashed_avo,
+    food: "sea salt"
+  )
+
+  Ingredient.create!(
+    recipe: smashed_avo,
+    food: "olive oil",
+    unit: Ingredient.inhuman_units[:dash]
+  )
+
+  Ingredient.create!(
+    recipe: smashed_avo,
+    food: "wholewheat toast",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:slice]
+  )
+
+  Ingredient.create!(
+    recipe: smashed_avo,
+    food: "fresh coriander",
+    amount: 'A few',
+    unit: Ingredient.inhuman_units[:sprig],
+    preparation: "chopped",
+    optional: true
+  )
+  puts "Ingredients prepped"
+
+  puts "Taking photo..."
+  File.open('app/assets/images/seed_photos/smashed_avocado_on_wholewheat_toast.jpg') { |f| smashed_avo.photo = f }
+  smashed_avo.save
+  puts "Photo snapped"
+
+  puts "Smashed avo served"
+
+
+  puts "Cleaning pita trays..."
+  Recipe.where(name: WHOLEWHEAT_PITA_BREADS).destroy_all
+  puts "Pita trays clean"
+
+  puts "Making pita breads..."
+  puts "Writing recipe..."
+  pita_breads = Recipe.create!(
+    user: user,
+    name: WHOLEWHEAT_PITA_BREADS,
+    process: "In a large bowl, sift together half of the flour, the yeast, and the salt if using. Then pour in the water and start kneading the mixture together.\n\nGradually add-in more flour until the mixture starts cleaning the sides of the bowl (so you probably won't need to use all of it), and continue kneading until the dough is smooth and fleshy; about 5 minutes longer.\n\nNow form the dough into 10 balls, and on a floured surface, with a floured rolling-pin, roll each ball into circles about 15cm in diameter. They should be about half a centimetre thick.\n\nEither on a couple of non-stick baking trays, or on baking trays lined with cooking paper (or even non-stick baking trays lined with cooking paper), place each of the pita breads and allow them to rise for 30 minutes.\n\nIn the meantime, preheat your oven to 260°C. I'm not normally a big fan of preheating ovens; it just seems like a waste of energy, when the food could be sitting in the oven while it's heating up. Like those people that warm up before going jogging, you just want to say to them, what are you doing?\n\nHowever, in this case, do make sure that the over is fully preheated. For the pita breads to rise, the oven needs to be hot enough that the outside of the pitas get sealed with some moisture remaining in the middle. That moisture heating-up with nowhere to escape is what causes the pitas to rise into pockets.\n\nBefore putting them into the oven, flip the pitas over, then place them in the bottom of the oven where they'll be exposed to the instant heat of the heating element. For this reason, if you've got a small oven perhaps cook each of the baking trays separately.\n\nCook the pitas until they rise properly; about 5 minutes. Then remove them from the oven.\n\nThey'll be initially hard, but will soften as they cool.\n\nIf not eating immediately, store them in an air-tight container while still warm.",
+    state: :approved_for_feature
+  )
+  puts "Recipe written"
+
+  puts "Preparing ingredients..."
+  Ingredient.create!(
+    recipe: pita_breads,
+    food: "wholewheat flour",
+    amount: '950',
+    unit: Ingredient.inhuman_units[:millilitre]
+  )
+
+  Ingredient.create!(
+    recipe: pita_breads,
+    food: "dry yeast",
+    amount: '1',
+    unit: Ingredient.inhuman_units[:tablespoon]
+  )
+
+  Ingredient.create!(
+    recipe: pita_breads,
+    food: "warm water",
+    amount: '295',
+    unit: Ingredient.inhuman_units[:millilitre]
+  )
+
+  Ingredient.create!(
+    recipe: pita_breads,
+    food: "salt",
+    amount: 'half',
+    unit: Ingredient.inhuman_units[:teaspoon],
+    optional: true
+  )
+  puts "Ingredients prepped"
+
+  puts "Taking photo..."
+  File.open('app/assets/images/seed_photos/wholewheat_pita_breads.jpg') { |f| pita_breads.photo = f }
+  pita_breads.save
+  puts "Photo snapped"
+
+  puts "Pita breads served"
+
+
+  puts "Cleaning hummus pots..."
+  Recipe.where(name: HUMMUS_TOAST).destroy_all
+  puts "Hummus pots clean"
+
+  puts "Making hummus toast..."
+  puts "Writing recipe..."
+  hummus_on_toast = Recipe.create!(
+    user: user,
+    name: HUMMUS_TOAST,
+    process: "Spread a generous serving of hummus (homemade is best) onto the each slice of wholewheat bread (homemade is best), and add four of the tomato eighths onto each slice.\n\nCook under a preheated grill on a high heat for as long as you can without burning the bread.\n\nThen drizzle with balsamic vinegar,  sprinkle on some parsley, and optionally top with salt and pepper and enjoy.",
+    state: :approved_for_recipe_of_the_day
+  )
+  puts "Recipe written"
+
+  puts "Preparing ingredients..."
+  Ingredient.create!(
+    recipe: hummus_on_toast,
+    food: "wholewheat bread",
+    amount: '2',
+    unit: Ingredient.inhuman_units[:slice]
+  )
+
+  Ingredient.create!(
+    recipe: hummus_on_toast,
+    food: "tomato",
+    amount: '1',
+    preparation: "cut into eighths"
+  )
+
+  Ingredient.create!(
+    recipe: hummus_on_toast,
+    food: "hummus"
+  )
+
+  Ingredient.create!(
+    recipe: hummus_on_toast,
+    food: "dried parsley"
+  )
+
+  Ingredient.create!(
+    recipe: hummus_on_toast,
+    food: "balsamic vinegar"
+  )
+
+  Ingredient.create!(
+    recipe: hummus_on_toast,
+    food: "sea salt",
+    optional: true
+  )
+
+  Ingredient.create!(
+    recipe: hummus_on_toast,
+    food: "black pepper",
+    optional: true
+  )
+  puts "Ingredients prepped"
+
+  puts "Taking photo..."
+  File.open('app/assets/images/seed_photos/hummus_toast.jpg') { |f| hummus_on_toast.photo = f }
+  hummus_on_toast.save
+  puts "Photo snapped"
+
+  puts "Hummus toast served"
 
 
 
